@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa7d50b267ec7347aabbc64a399a655, type: 3}
+  m_Name: StartingDeck_Slice
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Cards.StartingDeckSO
+  _entries:
+  - _card: {fileID: 11400000, guid: c9f448f92d32b1942ac7012464952900, type: 2}
+    _count: 5
+  - _card: {fileID: 11400000, guid: e8847a3c180e9d245bfca9eae769f709, type: 2}
+    _count: 5

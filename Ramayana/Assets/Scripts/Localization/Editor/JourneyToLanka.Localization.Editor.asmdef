@@ -1,0 +1,21 @@
+{
+    "name": "JourneyToLanka.Localization.Editor",
+    "rootNamespace": "JourneyToLanka.Localization.EditorTools",
+    "references": [
+        "JourneyToLanka.Core.Editor",
+        "JourneyToLanka.Localization",
+        "Unity.Localization",
+        "Unity.Localization.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

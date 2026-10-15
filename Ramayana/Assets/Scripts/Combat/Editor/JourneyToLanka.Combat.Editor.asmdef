@@ -1,0 +1,20 @@
+{
+    "name": "JourneyToLanka.Combat.Editor",
+    "rootNamespace": "JourneyToLanka.Combat.EditorTools",
+    "references": [
+        "JourneyToLanka.Combat",
+        "JourneyToLanka.Core",
+        "JourneyToLanka.Core.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

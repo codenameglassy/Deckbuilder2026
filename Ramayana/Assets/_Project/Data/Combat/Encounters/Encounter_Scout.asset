@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 906032d2ad3e92f46b4633ca8e677a8f, type: 3}
+  m_Name: Encounter_Scout
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.CombatEncounterSO
+  _id: encounter_scout
+  _enemies:
+  - {fileID: 11400000, guid: 13e27a7a7c84d5c47bc7efdc64396d23, type: 2}

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b41ffd35a0f778449a81604ccdf418c, type: 3}
+  m_Name: CombatantViewStyle
+  m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatantViewStyleSO
+  _font: {fileID: 0}
+  _fontSize: 5
+  _labelSize: {x: 4, y: 1}
+  _healthColor: {r: 0.95, g: 0.4, b: 0.35, a: 1}
+  _healthOffset: {x: 0, y: 0.9, z: 0}
+  _blockColor: {r: 0.45, g: 0.75, b: 1, a: 1}
+  _blockOffset: {x: 0, y: 1.4, z: 0}
+  _fallenTint: {r: 0.25, g: 0.25, b: 0.25, a: 1}

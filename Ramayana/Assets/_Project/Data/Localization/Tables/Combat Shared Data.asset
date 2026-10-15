@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Combat Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: Combat
+  m_TableCollectionNameGuidString: 6e203325d5cac1447910628b5f6aef55
+  m_Entries:
+  - m_Id: 703774720
+    m_Key: character.rama.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 980598784
+    m_Key: card.type.attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 984793088
+    m_Key: card.type.skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 984793089
+    m_Key: card.strike.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 984793090
+    m_Key: card.strike.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 984793091
+    m_Key: card.strike_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 984793092
+    m_Key: card.strike_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 984793093
+    m_Key: card.guard.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 984793094
+    m_Key: card.guard.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 984793095
+    m_Key: card.guard_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 984793096
+    m_Key: card.guard_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 984793097
+    m_Key: enemy.scout.name
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 8954752895118475559
+  references:
+    version: 2
+    RefIds:
+    - rid: 8954752895118475559
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1792051106899

@@ -1,0 +1,16 @@
+{
+    "name": "JourneyToLanka.Combat",
+    "rootNamespace": "JourneyToLanka.Combat",
+    "references": [
+        "JourneyToLanka.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
