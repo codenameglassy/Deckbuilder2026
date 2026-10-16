@@ -1,14 +1,14 @@
 // The combat model's implementation of ICombatActions, so every card and enemy move resolves through one place:
 // base damage, then damage modifiers in order, then Kavach, then health. CalculateDamage is also what card and
 // intent previews call, so a shown number always matches what lands. DamageDealt reports the source as well,
-// for later rules such as thorns or lifesteal.
+// for later rules such as thorns or lifesteal. It also serves IDamagePreview for enemy intents.
 using System;
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Effects;
 
 namespace JourneyToLanka.Combat.Model
 {
-    public sealed class CombatResolver : ICombatActions
+    public sealed class CombatResolver : ICombatActions, IDamagePreview
     {
         private readonly List<IDamageModifier> _modifiers = new List<IDamageModifier>(8);
 
@@ -44,6 +44,11 @@ namespace JourneyToLanka.Combat.Model
             }
 
             return Math.Max(0, amount);
+        }
+
+        public int PreviewDamage(ICombatant source, ICombatant target, int baseAmount)
+        {
+            return CalculateDamage(source, target, baseAmount);
         }
 
         public void DealDamage(ICombatant source, ICombatant target, int baseAmount)

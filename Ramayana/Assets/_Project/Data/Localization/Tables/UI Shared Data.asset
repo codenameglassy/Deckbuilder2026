@@ -14,7 +14,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
   m_TableCollectionName: UI
   m_TableCollectionNameGuidString: 4f4e5e91da246924490443caafdb6af4
-  m_Entries: []
+  m_Entries:
+  - m_Id: 347475708919808
+    m_Key: ui.combat.prana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475868303360
+    m_Key: ui.combat.draw_pile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475872497664
+    m_Key: ui.combat.discard_pile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475872497665
+    m_Key: ui.combat.end_turn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475876691968
+    m_Key: ui.combat.enemy_turn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475876691969
+    m_Key: ui.combat.victory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475876691970
+    m_Key: ui.combat.defeat
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -1,0 +1,28 @@
+{
+    "name": "JourneyToLanka.CombatUI.Editor",
+    "rootNamespace": "JourneyToLanka.CombatUI.EditorTools",
+    "references": [
+        "JourneyToLanka.Core",
+        "JourneyToLanka.Core.Editor",
+        "JourneyToLanka.CombatScene",
+        "JourneyToLanka.CombatScene.Editor",
+        "JourneyToLanka.CombatUI",
+        "JourneyToLanka.Localization",
+        "JourneyToLanka.Localization.Editor",
+        "Unity.Localization",
+        "Unity.Localization.Editor",
+        "Unity.InputSystem",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

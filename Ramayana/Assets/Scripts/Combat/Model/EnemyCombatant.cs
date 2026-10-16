@@ -1,6 +1,7 @@
 // One enemy in a fight: its definition, field slot, Combatant (health rolled inclusively from the definition's range)
 // and its place in the move pattern. On its turn the enemy drops its own Kavach, performs the current move against
-// the player, then advances the pattern. IntentChanged fires when the next move changes so intent icons can refresh.
+// the player, then advances the pattern. IntentChanged fires when the next move changes so intent icons can refresh,
+// and GetIntent describes that next move against the player with damage previewed through the resolver.
 using System;
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Effects;
@@ -45,6 +46,17 @@ namespace JourneyToLanka.Combat.Model
         public bool IsAlive => Fighter.IsAlive;
 
         public EnemyMoveSO CurrentMove => Definition.GetMove(PatternIndex);
+
+        public MoveIntent GetIntent(IDamagePreview preview, ICombatant player)
+        {
+            EnemyMoveSO move = CurrentMove;
+            if (!IsAlive || move == null)
+            {
+                return default;
+            }
+
+            return move.GetIntent(new IntentContext(preview, Fighter, player));
+        }
 
         public bool TakeTurn(ICombatActions actions, ICombatant player, IReadOnlyList<ICombatant> opponents)
         {

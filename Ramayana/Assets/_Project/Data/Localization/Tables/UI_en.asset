@@ -17,7 +17,35 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 4f4e5e91da246924490443caafdb6af4, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 347475708919808
+    m_Localized: Prana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475868303360
+    m_Localized: Draw
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475872497664
+    m_Localized: Discard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475872497665
+    m_Localized: End Turn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475876691968
+    m_Localized: Enemy Turn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475876691969
+    m_Localized: Victory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347475876691970
+    m_Localized: Defeat
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

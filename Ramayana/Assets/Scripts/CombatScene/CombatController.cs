@@ -2,7 +2,8 @@
 // combatant views, forwards frames from the tick service, and announces the fight on the CombatStarted and
 // CombatEnded channels. Services are resolved in Start because the Bootstrapper installs them in its Awake,
 // and every Awake finishes before any Start, whichever scene loads first.
-// Same-object helpers (the temporary debug input and HUD) listen to CombatBegan, a plain C# event.
+// Enemy views that also carry an EnemyIntentView get it bound to their enemy here.
+// Same-object helpers listen to CombatBegan, a plain C# event.
 using System;
 using JourneyToLanka.Combat;
 using JourneyToLanka.Combat.Flow;
@@ -132,6 +133,10 @@ namespace JourneyToLanka.CombatScene
                 if (i < enemies.Count)
                 {
                     view.Bind(enemies[i].Fighter);
+                    if (view.TryGetComponent(out EnemyIntentView intent))
+                    {
+                        intent.Bind(enemies[i], model);
+                    }
                 }
                 else
                 {

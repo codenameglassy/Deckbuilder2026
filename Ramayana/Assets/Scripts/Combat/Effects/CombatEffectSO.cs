@@ -1,5 +1,6 @@
 // Base for every effect strategy shared by cards and enemy moves (damage, Kavach, and later statuses, draw, heal).
 // Effects are immutable flyweights: all values are authored on the asset and nothing is written at runtime.
+// Each effect also describes itself for enemy intents through AddToIntent; effects with nothing to show keep the default.
 using UnityEngine;
 
 namespace JourneyToLanka.Combat.Effects
@@ -9,6 +10,10 @@ namespace JourneyToLanka.Combat.Effects
         public virtual bool RequiresChosenTarget => false;
 
         public abstract void Apply(in EffectContext context);
+
+        public virtual void AddToIntent(in IntentContext context, ref MoveIntent intent)
+        {
+        }
 
         public static void ApplyAll(CombatEffectSO[] effects, in EffectContext context)
         {
@@ -23,6 +28,23 @@ namespace JourneyToLanka.Combat.Effects
                 if (effect != null)
                 {
                     effect.Apply(context);
+                }
+            }
+        }
+
+        public static void AddAllToIntent(CombatEffectSO[] effects, in IntentContext context, ref MoveIntent intent)
+        {
+            if (effects == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < effects.Length; i++)
+            {
+                CombatEffectSO effect = effects[i];
+                if (effect != null)
+                {
+                    effect.AddToIntent(context, ref intent);
                 }
             }
         }

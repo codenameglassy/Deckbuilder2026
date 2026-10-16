@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59fc21b63d71c254181b26f329adeac3, type: 3}
+  m_Name: CombatHudStyle
+  m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.CombatHudStyleSO
+  _referenceResolution: {x: 1920, y: 1080}
+  _font: {fileID: 0}
+  _handBottomMargin: 24
+  _handMaxWidth: 1300
+  _cardSpacing: 12
+  _handInactiveAlpha: 0.6
+  _cardSize: {x: 200, y: 280}
+  _cardSprite: {fileID: 0}
+  _cardColor: {r: 0.22, g: 0.17, b: 0.12, a: 1}
+  _cardPadding: 12
+  _cardTextColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
+  _cardNameFontSize: 24
+  _cardTypeFontSize: 18
+  _cardDescriptionFontSize: 22
+  _costBadgeSize: 48
+  _costBadgeSprite: {fileID: 0}
+  _costBadgeColor: {r: 0.95, g: 0.7, b: 0.25, a: 1}
+  _costTextColor: {r: 0.15, g: 0.1, b: 0.05, a: 1}
+  _costFontSize: 30
+  _unplayableAlpha: 0.45
+  _highlightedTint: {r: 1, g: 0.95, b: 0.8, a: 1}
+  _pressedTint: {r: 0.8, g: 0.75, b: 0.65, a: 1}
+  _selectedTint: {r: 1, g: 0.9, b: 0.6, a: 1}
+  _disabledTint: {r: 0.6, g: 0.6, b: 0.6, a: 0.6}
+  _tintFadeDuration: 0.08
+  _panelSprite: {fileID: 0}
+  _panelColor: {r: 0.08, g: 0.07, b: 0.06, a: 0.85}
+  _hudTextColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
+  _captionFontSize: 22
+  _valueFontSize: 40
+  _statPanelSize: {x: 160, y: 100}
+  _pranaOffset: {x: 40, y: 150}
+  _drawPileOffset: {x: 40, y: 30}
+  _discardPileOffset: {x: -40, y: 30}
+  _endTurnSize: {x: 240, y: 80}
+  _endTurnOffset: {x: -40, y: 150}
+  _endTurnSprite: {fileID: 0}
+  _endTurnColor: {r: 0.55, g: 0.2, b: 0.12, a: 1}
+  _endTurnTextColor: {r: 0.98, g: 0.94, b: 0.85, a: 1}
+  _endTurnFontSize: 30
+  _bannerSize: {x: 640, y: 150}
+  _bannerColor: {r: 0.05, g: 0.04, b: 0.03, a: 0.9}
+  _bannerFontSize: 72
+  _victoryTextColor: {r: 0.98, g: 0.8, b: 0.3, a: 1}
+  _defeatTextColor: {r: 0.85, g: 0.25, b: 0.2, a: 1}

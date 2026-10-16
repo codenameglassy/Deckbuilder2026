@@ -1,6 +1,6 @@
 // Deals a base amount of damage one or more times to the targets its rule selects.
 // Each hit goes through ICombatActions, so modifiers and Kavach apply per hit, as in the reference build.
-// Hits on a target stop as soon as it falls.
+// Hits on a target stop as soon as it falls. As an intent it shows the previewed damage per hit and the hit count.
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -21,6 +21,14 @@ namespace JourneyToLanka.Combat.Effects
         public TargetRuleSO Targets => _targets;
 
         public override bool RequiresChosenTarget => _targets != null && _targets.RequiresChosenTarget;
+
+        public override void AddToIntent(in IntentContext context, ref MoveIntent intent)
+        {
+            int perHit = context.Preview != null
+                ? context.Preview.PreviewDamage(context.Source, context.Target, _amount)
+                : _amount;
+            intent.AddAttack(perHit, _hits);
+        }
 
         public override void Apply(in EffectContext context)
         {

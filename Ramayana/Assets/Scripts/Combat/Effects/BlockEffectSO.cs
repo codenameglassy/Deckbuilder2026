@@ -1,4 +1,5 @@
 // Grants Kavach to the actor. In the reference build Kavach always goes to whoever plays the card or makes the move.
+// As an intent it shows the Kavach the actor will gain.
 using UnityEngine;
 
 namespace JourneyToLanka.Combat.Effects
@@ -9,6 +10,11 @@ namespace JourneyToLanka.Combat.Effects
         [SerializeField, Min(0)] private int _amount = 5;
 
         public int Amount => _amount;
+
+        public override void AddToIntent(in IntentContext context, ref MoveIntent intent)
+        {
+            intent.AddBlock(_amount);
+        }
 
         public override void Apply(in EffectContext context)
         {
