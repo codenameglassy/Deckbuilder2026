@@ -1,0 +1,26 @@
+{
+    "name": "JourneyToLanka.Run.Tests",
+    "rootNamespace": "JourneyToLanka.Run.Tests",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "JourneyToLanka.Combat",
+        "JourneyToLanka.Combat.Tests",
+        "JourneyToLanka.Run"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -46,6 +46,14 @@ MonoBehaviour:
     m_Localized: Defeat
     m_Metadata:
       m_Items: []
+  - m_Id: 377717018247168
+    m_Localized: Choose a card to carry on
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377717047607296
+    m_Localized: Take nothing
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

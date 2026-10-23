@@ -4,6 +4,7 @@
     "references": [
         "JourneyToLanka.Core",
         "JourneyToLanka.Combat",
+        "JourneyToLanka.Run",
         "Unity.TextMeshPro",
         "Unity.InputSystem"
     ],

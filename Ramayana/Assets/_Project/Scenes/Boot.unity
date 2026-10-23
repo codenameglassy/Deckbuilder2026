@@ -252,6 +252,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1632251357}
   - component: {fileID: 1632251356}
+  - component: {fileID: 1632251359}
+  - component: {fileID: 1632251358}
+  - component: {fileID: 1632251361}
+  - component: {fileID: 1632251360}
   m_Layer: 0
   m_Name: Boot
   m_TagString: Untagged
@@ -273,6 +277,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: JourneyToLanka.Core::JourneyToLanka.Core.Services.Bootstrapper
   _installers:
   - {fileID: 1030453331}
+  - {fileID: 1632251359}
+  - {fileID: 1632251361}
   _bootCompleted: {fileID: 11400000, guid: 4622c53296f60f244aa4e2d32b571b36, type: 2}
 --- !u!4 &1632251357
 Transform:
@@ -290,6 +296,62 @@ Transform:
   - {fileID: 1030453332}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1632251358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632251355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 085a7becb7b93c44ba8b83d4bae38718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.Scenes::JourneyToLanka.Scenes.BootSceneFlow
+  _bootCompleted: {fileID: 11400000, guid: 4622c53296f60f244aa4e2d32b571b36, type: 2}
+  _loadScene: {fileID: 11400000, guid: 43719fe4ee8a34446afd5177d348ee94, type: 2}
+  _firstScene: {fileID: 11400000, guid: 04acc6fb556bef0499e26c791350a312, type: 2}
+--- !u!114 &1632251359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632251355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a848bf0567da4cd49b0e402c3c585cd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.Scenes::JourneyToLanka.Scenes.SceneLoaderInstaller
+--- !u!114 &1632251360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632251355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3852188c0bcb5243bb9301071d901bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.Run::JourneyToLanka.Run.RunDirector
+  _combatEnded: {fileID: 11400000, guid: 0072af096900def41a1021dfb69471ef, type: 2}
+  _loadScene: {fileID: 11400000, guid: 43719fe4ee8a34446afd5177d348ee94, type: 2}
+  _cardRewardOffered: {fileID: 11400000, guid: e111e4130b9dfeb43b3a83ad19e40517, type: 2}
+  _cardRewardChosen: {fileID: 11400000, guid: 5a594a48806a59d4da30fa91e006fde0, type: 2}
+  _resultDelay: 2.5
+--- !u!114 &1632251361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632251355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac04661e9ee3c694183e8eb2d80c83c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.Run::JourneyToLanka.Run.RunServiceInstaller
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,0 +1,26 @@
+{
+    "name": "JourneyToLanka.Run.Editor",
+    "rootNamespace": "JourneyToLanka.Run.EditorTools",
+    "references": [
+        "JourneyToLanka.Core",
+        "JourneyToLanka.Core.Editor",
+        "JourneyToLanka.Combat",
+        "JourneyToLanka.Combat.Editor",
+        "JourneyToLanka.CombatScene",
+        "JourneyToLanka.CombatScene.Editor",
+        "JourneyToLanka.Scenes",
+        "JourneyToLanka.Scenes.Editor",
+        "JourneyToLanka.Run"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

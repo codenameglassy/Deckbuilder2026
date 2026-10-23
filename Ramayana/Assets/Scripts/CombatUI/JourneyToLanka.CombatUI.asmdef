@@ -5,6 +5,7 @@
         "JourneyToLanka.Core",
         "JourneyToLanka.Combat",
         "JourneyToLanka.CombatScene",
+        "JourneyToLanka.Run",
         "JourneyToLanka.Localization",
         "Unity.Localization",
         "Unity.ResourceManager",

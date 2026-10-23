@@ -1,0 +1,23 @@
+{
+    "name": "JourneyToLanka.Scenes.Editor",
+    "rootNamespace": "JourneyToLanka.Scenes.EditorTools",
+    "references": [
+        "JourneyToLanka.Core",
+        "JourneyToLanka.Core.Editor",
+        "JourneyToLanka.Scenes",
+        "Unity.Addressables",
+        "Unity.Addressables.Editor",
+        "Unity.ResourceManager"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

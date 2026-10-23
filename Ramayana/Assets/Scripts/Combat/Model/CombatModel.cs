@@ -3,6 +3,7 @@
 // turn), card play validation and resolution, and one enemy action at a time. It holds no timing: the combat state
 // machine decides when each step runs, and views subscribe to the events of the parts they show.
 // Events raised inside the constructor have no listeners, so views read initial state after construction.
+// Rama comes in as a PlayerSetup, so a run can pass in carried health and its current deck.
 using System;
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Effects;
@@ -17,15 +18,15 @@ namespace JourneyToLanka.Combat.Model
         private readonly int _cardsPerTurn;
 
         public CombatModel(CombatRulesSO rules, PlayerDefinitionSO player, int playerHealth, CombatEncounterSO encounter, CombatRandom random)
+            : this(rules, PlayerSetup.FromDefinition(player, playerHealth), encounter, random)
+        {
+        }
+
+        public CombatModel(CombatRulesSO rules, in PlayerSetup player, CombatEncounterSO encounter, CombatRandom random)
         {
             if (rules == null)
             {
                 throw new ArgumentNullException(nameof(rules));
-            }
-
-            if (player == null)
-            {
-                throw new ArgumentNullException(nameof(player));
             }
 
             if (encounter == null)
@@ -38,15 +39,15 @@ namespace JourneyToLanka.Combat.Model
                 throw new ArgumentNullException(nameof(random));
             }
 
-            if (player.StartingDeck == null)
+            if (player.Deck == null)
             {
-                throw new ArgumentException($"{player.name} has no starting deck.", nameof(player));
+                throw new ArgumentException("The player setup has no deck.", nameof(player));
             }
 
             Random = random;
             _cardsPerTurn = rules.CardsPerTurn;
 
-            Player = new Combatant(player.NameKey, player.MaxHealth, playerHealth);
+            Player = new Combatant(player.NameKey, player.MaxHealth, player.Health);
             _playerSide = new ICombatant[] { Player };
 
             var definitions = encounter.Enemies;
@@ -72,8 +73,9 @@ namespace JourneyToLanka.Combat.Model
             Resolver = new CombatResolver();
             Prana = new PranaPool(rules.PranaPerTurn);
             Deck = new CombatDeck(random, rules.MaxHandSize);
-            Deck.AddStartingDeck(player.StartingDeck);
+            Deck.AddCards(player.Deck);
             Deck.ShuffleDrawPile();
+            Resolver.AttachDeck(Deck);
         }
 
         public event Action<int> PlayerTurnStarted;

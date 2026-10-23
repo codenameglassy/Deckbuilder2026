@@ -66,6 +66,70 @@ MonoBehaviour:
     m_Localized: Nishachar Scout
     m_Metadata:
       m_Items: []
+  - m_Id: 377714044485632
+    m_Localized: Twin Shafts
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714170314752
+    m_Localized: Deal 4 damage twice.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714170314753
+    m_Localized: Twin Shafts+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714170314754
+    m_Localized: Deal 5 damage twice.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714170314755
+    m_Localized: Storm of Arrows
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714170314756
+    m_Localized: Deal 3 damage four times.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509056
+    m_Localized: Storm of Arrows+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509057
+    m_Localized: Deal 4 damage four times.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509058
+    m_Localized: Lakshmana's Watch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509059
+    m_Localized: Gain 8 Kavach. Draw 1.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509060
+    m_Localized: Lakshmana's Watch+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509061
+    m_Localized: Gain 11 Kavach. Draw 1.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509062
+    m_Localized: Sage's Counsel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509063
+    m_Localized: Draw 2 cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509064
+    m_Localized: Sage's Counsel+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509065
+    m_Localized: Draw 3 cards.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdb15bf79f47c214f9f71e915ff48452, type: 3}
+  m_Name: SagesCounsel
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Cards.CardDefinitionSO
+  _id: counsel
+  _nameKey: card.counsel.name
+  _descriptionKey: card.counsel.description
+  _type: {fileID: 11400000, guid: cf700a110075326448c21be2d97b77cb, type: 2}
+  _cost: 0
+  _effects:
+  - {fileID: 11400000, guid: c7aac8b3d4f1eba499999655aab99204, type: 2}
+  _upgradedForm: {fileID: 11400000, guid: 93b4204aac4cac44aa973a8f8111f868, type: 2}

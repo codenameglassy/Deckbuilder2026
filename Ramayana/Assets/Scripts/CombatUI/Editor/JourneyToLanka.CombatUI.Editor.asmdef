@@ -7,6 +7,8 @@
         "JourneyToLanka.CombatScene",
         "JourneyToLanka.CombatScene.Editor",
         "JourneyToLanka.CombatUI",
+        "JourneyToLanka.Run",
+        "JourneyToLanka.Run.Editor",
         "JourneyToLanka.Localization",
         "JourneyToLanka.Localization.Editor",
         "Unity.Localization",

@@ -43,6 +43,14 @@ MonoBehaviour:
     m_Key: ui.combat.defeat
     m_Metadata:
       m_Items: []
+  - m_Id: 377717018247168
+    m_Key: ui.reward.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377717047607296
+    m_Key: ui.reward.skip
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

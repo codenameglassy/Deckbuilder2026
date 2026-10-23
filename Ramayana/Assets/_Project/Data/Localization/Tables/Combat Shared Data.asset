@@ -63,6 +63,70 @@ MonoBehaviour:
     m_Key: enemy.scout.name
     m_Metadata:
       m_Items: []
+  - m_Id: 377714044485632
+    m_Key: card.twin.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714170314752
+    m_Key: card.twin.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714170314753
+    m_Key: card.twin_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714170314754
+    m_Key: card.twin_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714170314755
+    m_Key: card.storm.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714170314756
+    m_Key: card.storm.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509056
+    m_Key: card.storm_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509057
+    m_Key: card.storm_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509058
+    m_Key: card.watch.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509059
+    m_Key: card.watch.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509060
+    m_Key: card.watch_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509061
+    m_Key: card.watch_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509062
+    m_Key: card.counsel.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509063
+    m_Key: card.counsel.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509064
+    m_Key: card.counsel_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 377714174509065
+    m_Key: card.counsel_plus.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

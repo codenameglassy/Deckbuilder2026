@@ -3,6 +3,7 @@
 // stops at the hand limit. A played card waits in the in-play pile while its effects resolve, so a draw effect
 // can never shuffle it back into the deck. CardMoved fires for every single move; a reshuffle fires Reshuffled once.
 using System;
+using System.Collections.Generic;
 using JourneyToLanka.Combat.Cards;
 
 namespace JourneyToLanka.Combat.Model
@@ -81,6 +82,22 @@ namespace JourneyToLanka.Combat.Model
                 for (int copy = 0; copy < entry.Count; copy++)
                 {
                     AddToDrawPile(entry.Card);
+                }
+            }
+        }
+
+        public void AddCards(IReadOnlyList<CardDefinitionSO> cards)
+        {
+            if (cards == null)
+            {
+                throw new ArgumentNullException(nameof(cards));
+            }
+
+            for (int i = 0; i < cards.Count; i++)
+            {
+                if (cards[i] != null)
+                {
+                    AddToDrawPile(cards[i]);
                 }
             }
         }

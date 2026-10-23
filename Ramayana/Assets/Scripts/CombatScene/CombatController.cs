@@ -1,7 +1,10 @@
-// Starts and owns one fight in the scene: builds the CombatModel and CombatFlow from data assets, binds the
+// Starts and owns one fight in the scene: builds the CombatModel and CombatFlow, binds the
 // combatant views, forwards frames from the tick service, and announces the fight on the CombatStarted and
 // CombatEnded channels. Services are resolved in Start because the Bootstrapper installs them in its Awake,
 // and every Awake finishes before any Start, whichever scene loads first.
+// When a run service exists, the fight comes from the active run (its encounter, Rama's carried health and deck,
+// and a seed drawn from the run); with no active run it starts one from its Run Definition. Without a run service
+// or run definition it falls back to its own Player and Encounter fields, so the scene still plays on its own.
 // Enemy views that also carry an EnemyIntentView get it bound to their enemy here.
 // Same-object helpers listen to CombatBegan, a plain C# event.
 using System;
@@ -11,6 +14,7 @@ using JourneyToLanka.Combat.Model;
 using JourneyToLanka.Core.Events;
 using JourneyToLanka.Core.Services;
 using JourneyToLanka.Core.Ticking;
+using JourneyToLanka.Run;
 using UnityEngine;
 
 namespace JourneyToLanka.CombatScene
@@ -24,6 +28,7 @@ namespace JourneyToLanka.CombatScene
         [SerializeField] private PlayerDefinitionSO _player;
         [SerializeField] private CombatEncounterSO _encounter;
         [SerializeField] private CombatPacingSO _pacing;
+        [SerializeField] private RunDefinitionSO _run;
         [SerializeField] private bool _randomizeSeed = true;
         [SerializeField] private int _seed = 2026;
 
@@ -53,14 +58,37 @@ namespace JourneyToLanka.CombatScene
                 return;
             }
 
-            if (!HasRequiredData())
+            if (!Require(_rules, nameof(_rules)) | !Require(_pacing, nameof(_pacing)))
             {
                 enabled = false;
                 return;
             }
 
-            Seed = _randomizeSeed ? Environment.TickCount : _seed;
-            var model = new CombatModel(_rules, _player, _player.MaxHealth, _encounter, new CombatRandom(Seed));
+            int baseSeed = _randomizeSeed ? Environment.TickCount : _seed;
+            RunState run = ResolveRun(baseSeed);
+            CombatEncounterSO encounter;
+            PlayerSetup player;
+
+            if (run != null)
+            {
+                Seed = run.NextCombatSeed();
+                encounter = run.CurrentEncounter;
+                player = run.CreatePlayerSetup();
+            }
+            else
+            {
+                if (!Require(_player, nameof(_player)) | !Require(_encounter, nameof(_encounter)))
+                {
+                    enabled = false;
+                    return;
+                }
+
+                Seed = baseSeed;
+                encounter = _encounter;
+                player = PlayerSetup.FromDefinition(_player, _player.MaxHealth);
+            }
+
+            var model = new CombatModel(_rules, player, encounter, new CombatRandom(Seed));
             _flow = new CombatFlow(model, _pacing);
             _flow.PhaseChanged += HandlePhaseChanged;
 
@@ -150,14 +178,27 @@ namespace JourneyToLanka.CombatScene
             }
         }
 
-        private bool HasRequiredData()
+        private RunState ResolveRun(int seed)
         {
-            bool valid = true;
-            valid &= Require(_rules, nameof(_rules));
-            valid &= Require(_player, nameof(_player));
-            valid &= Require(_encounter, nameof(_encounter));
-            valid &= Require(_pacing, nameof(_pacing));
-            return valid;
+            if (!ServiceLocator.TryGet(out IRunService runs))
+            {
+                return null;
+            }
+
+            if (runs.HasActiveRun && !runs.Current.IsFinished)
+            {
+                return runs.Current;
+            }
+
+            if (_run == null)
+            {
+                return null;
+            }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            Debug.Log($"{name}: new run '{_run.name}' started with seed {seed}.", this);
+#endif
+            return runs.StartNew(_run, seed);
         }
 
         private bool Require(UnityEngine.Object value, string fieldName)

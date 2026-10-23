@@ -1,6 +1,8 @@
 // One card in the hand: frame, Prana cost badge, and localized name, type and description. It presents a
 // CardInstance and reports clicks through Clicked; it never plays cards itself. Pooled: OnTakenFromPool resets
 // it, OnReturnedToPool drops every listener and localization binding. Built by CardViewFactory, styled here.
+// Its text bindings are created on first use, so a view can be bound while its parent is still inactive
+// (before Awake has run), as the reward screen does.
 using System;
 using JourneyToLanka.Combat.Cards;
 using JourneyToLanka.Combat.Model;
@@ -51,9 +53,7 @@ namespace JourneyToLanka.CombatUI
 
         private void Awake()
         {
-            _nameText = new LocalizedText(_name);
-            _typeText = new LocalizedText(_type);
-            _descriptionText = new LocalizedText(_description);
+            EnsureTexts();
             _button.onClick.AddListener(HandleClick);
         }
 
@@ -69,6 +69,7 @@ namespace JourneyToLanka.CombatUI
 
         public void Bind(CardInstance card)
         {
+            EnsureTexts();
             CardId = card.Id;
             CardDefinitionSO definition = card.Definition;
 
@@ -152,6 +153,13 @@ namespace JourneyToLanka.CombatUI
         private void HandleClick()
         {
             Clicked?.Invoke(this);
+        }
+
+        private void EnsureTexts()
+        {
+            _nameText ??= new LocalizedText(_name);
+            _typeText ??= new LocalizedText(_type);
+            _descriptionText ??= new LocalizedText(_description);
         }
 
         private void ClearTexts()
