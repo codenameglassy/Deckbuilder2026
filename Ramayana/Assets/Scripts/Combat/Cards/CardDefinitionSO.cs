@@ -3,7 +3,8 @@
 // Runtime state (which pile, instance id) lives on the combat model's card instance, not here.
 // CollectCardValues gathers the numbers its description pattern shows, from every effect in order.
 // Exhausts sends the card to the exhaust pile once played, out of the deck for the rest of the fight. Rarity decides
-// how often a reward roll offers it.
+// how often a reward roll offers it. Chain is the combo chain the card builds (Kodanda Strike builds the Bow Chain,
+// Vajra Guard the Ring Chain); left empty, playing the card breaks any running chain.
 using System;
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Effects;
@@ -25,6 +26,8 @@ namespace JourneyToLanka.Combat.Cards
         [SerializeField] private CardDefinitionSO _upgradedForm;
         [Tooltip("Once played, the card goes to the exhaust pile for the rest of the fight instead of the discard pile.")]
         [SerializeField] private bool _exhausts;
+        [Tooltip("The combo chain this card builds. Leave empty and playing it breaks any running chain.")]
+        [SerializeField] private ChainKindSO _chain;
 
         public string Id => _id;
 
@@ -44,6 +47,8 @@ namespace JourneyToLanka.Combat.Cards
         public bool CanUpgrade => _upgradedForm != null;
 
         public bool Exhausts => _exhausts;
+
+        public ChainKindSO Chain => _chain;
 
         public bool RequiresChosenTarget => CombatEffectSO.AnyRequiresChosenTarget(_effects);
 

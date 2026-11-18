@@ -6,7 +6,8 @@
 // numbers that are buffed or weakened), the card frame (the Card Frame shader's material and values, the visuals for
 // each card type, the description panel and the type icon), fonts and text sizes, the lifted card's scale while
 // targeting, card motion (draw, play, discard, reshuffle), the rejected-card wiggle and message, panel and button
-// placement, the Prana orbs (their own PranaOrbsStyleSO), Rama's quiver (its own QuiverStyleSO), the End Turn glow
+// placement, the Prana orbs (their own PranaOrbsStyleSO), Rama's quiver (its own QuiverStyleSO), the combo chain bar
+// above the hand (its own ChainBarStyleSO), the End Turn glow
 // when nothing is playable, the threat panel, the turn banner and its timing, and the result banner.
 // Sprites are optional; without one an element draws as a flat colour. A Card Sprite, when set, replaces the shader
 // frame with that sprite tinted by Card Color. Read-only at runtime. In the Editor,
@@ -166,6 +167,9 @@ namespace JourneyToLanka.CombatUI
 
         [Header("Quiver")]
         [SerializeField] private QuiverStyleSO _quiver;
+
+        [Header("Chain Bar")]
+        [SerializeField] private ChainBarStyleSO _chainBar;
 
         [Header("End Turn")]
         [SerializeField] private Vector2 _endTurnSize = new Vector2(240f, 80f);
@@ -358,6 +362,7 @@ namespace JourneyToLanka.CombatUI
         public Vector2 DiscardPileOffset => _discardPileOffset;
         public PranaOrbsStyleSO PranaOrbs => _pranaOrbs;
         public QuiverStyleSO Quiver => _quiver;
+        public ChainBarStyleSO ChainBar => _chainBar;
 
         public Vector2 EndTurnSize => _endTurnSize;
         public Vector2 EndTurnOffset => _endTurnOffset;

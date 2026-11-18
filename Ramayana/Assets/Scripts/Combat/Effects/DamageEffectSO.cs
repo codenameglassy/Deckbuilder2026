@@ -5,6 +5,8 @@
 // the hit count. An optional bonus strategy raises the base of every hit while its condition holds (Piercing Vow's
 // extra damage at 3 Dharma); it adds its own values after those two, and the live number shows the base without it.
 // Intents ignore the bonus, since no enemy move uses one.
+// The context's chain damage percent (Bow Chain) is passed with every hit, so the resolver applies it after every
+// modifier and rounds down per hit; the live card number is scaled the same way. Enemy moves carry a neutral chain.
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -43,7 +45,7 @@ namespace JourneyToLanka.Combat.Effects
             int perHit = context.Preview != null
                 ? context.Preview.PreviewDamage(context.Source, context.Target, _amount)
                 : _amount;
-            values.Add(new CardValue(_amount, perHit));
+            values.Add(new CardValue(_amount, context.Chain.ScaleDamage(perHit)));
             values.Add(CardValue.Fixed(_hits));
             if (_bonus != null)
             {
@@ -64,6 +66,7 @@ namespace JourneyToLanka.Combat.Effects
             {
                 _targets.Collect(context, targets);
                 int amount = _bonus != null ? _amount + _bonus.GetBonus(context) : _amount;
+                int finalPercent = context.Chain.DamagePercent;
 
                 for (int t = 0; t < targets.Count; t++)
                 {
@@ -75,7 +78,7 @@ namespace JourneyToLanka.Combat.Effects
                             break;
                         }
 
-                        context.Actions.DealDamage(context.Source, target, amount);
+                        context.Actions.DealDamage(context.Source, target, amount, finalPercent);
                     }
                 }
             }

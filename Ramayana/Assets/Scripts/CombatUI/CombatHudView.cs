@@ -26,6 +26,8 @@
 // one enemy lives (the same highlight, keys and line as cards); otherwise it fires at once, at the only living enemy
 // or untargeted. Cancelling arrow targeting puts the selection back on the slot. The arrow being considered is
 // previewed on the fighters like a card (it takes priority), with its name and live description above the quiver.
+// The combo chain bar (ChainBarPanel) sits above the hand on its own child canvas: it follows the model's ComboChain
+// during the fight and hides once the fight is over.
 // While the viewer is open the hand, targeting, the quiver and End Turn are blocked. While a special arrow is in
 // flight (CombatFlow.CanPlayerAct is false) presses on the quiver, the arrow keys and End Turn are ignored; nothing
 // dims, since the flight is too short for that to read as anything but a flicker.
@@ -73,6 +75,7 @@ namespace JourneyToLanka.CombatUI
         private HandInputSurface _handInput;
         private PranaPanel _prana;
         private QuiverPanel _quiver;
+        private ChainBarPanel _chainBar;
         private StatPanel _drawPile;
         private StatPanel _discardPile;
         private Button _endTurn;
@@ -153,6 +156,11 @@ namespace JourneyToLanka.CombatUI
                 Debug.LogError($"{name}: the Combat HUD Style has no Quiver style. Run Tools > Journey to Lanka > Create Default Assets > Quiver.", this);
             }
 
+            if (_style != null && _style.ChainBar == null)
+            {
+                Debug.LogError($"{name}: the Combat HUD Style has no Chain Bar style. Run Tools > Journey to Lanka > Create Default Assets > Chain Bar.", this);
+            }
+
             if (_inspectStyle == null)
             {
                 Debug.LogError($"{name}: no Combat Inspect Style assigned. Run Tools > Journey to Lanka > Wire Selected > Combat Inspect.", this);
@@ -177,6 +185,7 @@ namespace JourneyToLanka.CombatUI
             SetCardTypeVisualsListening(true);
             SetPranaOrbsListening(true);
             SetQuiverListening(true);
+            SetChainBarListening(true);
 
             if (_inspectStyle != null)
             {
@@ -211,6 +220,7 @@ namespace JourneyToLanka.CombatUI
             SetCardTypeVisualsListening(false);
             SetPranaOrbsListening(false);
             SetQuiverListening(false);
+            SetChainBarListening(false);
 
             if (_inspectStyle != null)
             {
@@ -279,6 +289,7 @@ namespace JourneyToLanka.CombatUI
             }
 
             _endTurnNudge?.Dispose();
+            _chainBar?.Dispose();
 
             if (_pileViewer != null)
             {
@@ -320,6 +331,9 @@ namespace JourneyToLanka.CombatUI
             _drawPile = StatPanel.Create("DrawPile", hudCanvas, LocalizationTableNames.UI, CombatUIKeys.DrawPile);
             _discardPile = StatPanel.Create("DiscardPile", hudCanvas, LocalizationTableNames.UI, CombatUIKeys.DiscardPile);
             _threat = ThreatPanel.Create(hudCanvas);
+
+            RectTransform chainCanvas = CreateChildCanvas("ChainBarCanvas", false);
+            _chainBar = ChainBarPanel.Create(chainCanvas);
 
             _endTurnImage = UIBuildUtility.CreateImage("EndTurn", hudCanvas, true);
             _endTurn = _endTurnImage.gameObject.AddComponent<Button>();
@@ -407,6 +421,7 @@ namespace JourneyToLanka.CombatUI
 
             _prana.ApplyStyle(_style, _style.PranaOrbs, _style.PranaOffset);
             _quiver.ApplyStyle(_style, _style.Quiver);
+            _chainBar.ApplyStyle(_style, _style.ChainBar);
             _drawPile.ApplyStyle(_style, Vector2.zero, _style.DrawPileOffset);
             _discardPile.ApplyStyle(_style, new Vector2(1f, 0f), _style.DiscardPileOffset);
 
@@ -484,6 +499,21 @@ namespace JourneyToLanka.CombatUI
             }
         }
 
+        private void SetChainBarListening(bool listening)
+        {
+            ChainBarStyleSO chainBar = _style != null ? _style.ChainBar : null;
+            if (chainBar == null)
+            {
+                return;
+            }
+
+            chainBar.Changed -= HandleStyleChanged;
+            if (listening)
+            {
+                chainBar.Changed += HandleStyleChanged;
+            }
+        }
+
         private void SetArrowKeysEnabled(bool enabled)
         {
             for (int i = 0; i < _arrowKeyActions.Length; i++)
@@ -555,6 +585,7 @@ namespace JourneyToLanka.CombatUI
             _hand.Attach(flow);
             _targeting.Attach(flow, controller);
             _quiver.Attach(model, _targeting);
+            _chainBar.Attach(model.Chain);
             _enemyInfo.Attach(flow, controller, _targeting, _cameraAnchor);
             _targetingLine.Attach(_targeting, controller);
             _outcomes.Attach(flow, controller, _targeting);
@@ -591,6 +622,7 @@ namespace JourneyToLanka.CombatUI
             _zoom.HideNow();
             _targeting.Detach();
             _quiver.Detach();
+            _chainBar.Detach();
             _motion.Detach();
             _hand.Detach();
             _flow = null;
@@ -823,6 +855,7 @@ namespace JourneyToLanka.CombatUI
 
             _prana.SetActive(running);
             _quiver.SetActive(running && !over);
+            _chainBar.SetActive(running && !over);
             _drawPile.SetActive(running);
             _discardPile.SetActive(running);
 

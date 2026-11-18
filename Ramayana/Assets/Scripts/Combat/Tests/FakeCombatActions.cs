@@ -1,6 +1,7 @@
 // Test double for ICombatActions: applies raw damage, Kavach, healing and health loss to FakeCombatants and logs
 // every call in order, statuses included. It has no modifiers, Kavach absorption or status rules; those belong to the
 // real combat model and its own tests. GetStatusAmount answers from StatusAmounts, whoever is asked about.
+// A damage call's final percent scales the logged amount (rounded down), so chained effects can be tested here too.
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Effects;
 using JourneyToLanka.Combat.Statuses;
@@ -17,9 +18,15 @@ namespace JourneyToLanka.Combat.Tests
 
         public void DealDamage(ICombatant source, ICombatant target, int baseAmount)
         {
+            DealDamage(source, target, baseAmount, ChainScale.NeutralPercent);
+        }
+
+        public void DealDamage(ICombatant source, ICombatant target, int baseAmount, int finalPercent)
+        {
             var fake = (FakeCombatant)target;
-            fake.Health -= baseAmount;
-            Log.Add("damage:" + fake.Name + ":" + baseAmount);
+            int amount = ChainScale.Apply(baseAmount, finalPercent);
+            fake.Health -= amount;
+            Log.Add("damage:" + fake.Name + ":" + amount);
         }
 
         public void DealUnmodifiedDamage(ICombatant source, ICombatant target, int amount)

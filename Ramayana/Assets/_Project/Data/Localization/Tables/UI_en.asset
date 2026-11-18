@@ -126,6 +126,18 @@ MonoBehaviour:
     m_Localized: '{0} is left behind. Your quiver is full.'
     m_Metadata:
       m_Items: []
+  - m_Id: 12340247844085760
+    m_Localized: x{0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12340247890223104
+    m_Localized: Finisher
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12340247890223105
+    m_Localized: Broken at {0} in a row
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

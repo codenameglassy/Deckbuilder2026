@@ -16,6 +16,11 @@
 // enemy's after its own action (an enemy's Focus lasts through its next action), and every fighter's at the end of
 // the round, after all enemies have acted (Dahan burns, Bhaya and Moha count down). All statuses reach damage
 // through one StatusDamageModifier, added first, and any status change raises the resolver's ModifiersChanged.
+// The combo chain (Bow Chain, Ring Chain) is the model's ComboChain: each played card registers with it before its
+// effects resolve and resolves with the scale it returns, PreviewPlay dry-runs a card with the scale it would get,
+// and the chain resets at the end of the player's turn. Special arrows never touch it. A chain change marks the
+// chain dirty, and once the card has resolved (or the turn has ended) the resolver's ModifiersChanged is raised
+// once, so card text and outcome previews refresh against the new chain.
 using System;
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Arrows;
@@ -32,6 +37,8 @@ namespace JourneyToLanka.Combat.Model
         private readonly int _cardsPerTurn;
         private readonly StatusDamageModifier _statusModifier = new StatusDamageModifier();
         private readonly Action<StatusSet> _statusesChanged;
+        private readonly Action _chainChanged;
+        private bool _chainDirty;
 
         public CombatModel(CombatRulesSO rules, PlayerDefinitionSO player, int playerHealth, CombatEncounterSO encounter, CombatRandom random)
             : this(rules, PlayerSetup.FromDefinition(player, playerHealth), encounter, random)
@@ -102,6 +109,9 @@ namespace JourneyToLanka.Combat.Model
             Resolver.AttachDeck(Deck);
             Resolver.AttachPrana(Prana);
             Quiver = player.Quiver ?? new Quiver(0);
+
+            _chainChanged = HandleChainChanged;
+            Chain.Changed += _chainChanged;
         }
 
         public event Action<int> PlayerTurnStarted;
@@ -130,6 +140,8 @@ namespace JourneyToLanka.Combat.Model
         public Quiver Quiver { get; }
 
         public CombatResolver Resolver { get; }
+
+        public ComboChain Chain { get; } = new ComboChain();
 
         public int TurnNumber { get; private set; }
 
@@ -169,8 +181,10 @@ namespace JourneyToLanka.Combat.Model
 
         public void EndPlayerTurn()
         {
+            Chain.Reset();
             Deck.DiscardHand();
             Player.Statuses.TickOwnerTurnEnd();
+            NotifyIfChainChanged();
         }
 
         public void EndRound()
@@ -249,7 +263,8 @@ namespace JourneyToLanka.Combat.Model
             Deck.BeginPlay(card);
             try
             {
-                card.Definition.ApplyEffects(new EffectContext(Resolver, Player, target, _enemyFighters));
+                ChainScale chain = Chain.Register(card.Definition);
+                card.Definition.ApplyEffects(new EffectContext(Resolver, Player, target, _enemyFighters, chain));
             }
             finally
             {
@@ -264,6 +279,7 @@ namespace JourneyToLanka.Combat.Model
             }
 
             CardPlayed?.Invoke(card, target);
+            NotifyIfChainChanged();
             return true;
         }
 
@@ -291,7 +307,8 @@ namespace JourneyToLanka.Combat.Model
                 target = _enemyFighters[targetIndex];
             }
 
-            card.Definition.ApplyEffects(new EffectContext(outcome, Player, target, _enemyFighters));
+            ChainScale chain = Chain.PeekScale(card.Definition);
+            card.Definition.ApplyEffects(new EffectContext(outcome, Player, target, _enemyFighters, chain));
         }
 
         public ArrowUseCheck CheckArrow(int slot, int targetIndex)
@@ -375,6 +392,22 @@ namespace JourneyToLanka.Combat.Model
 
         private void HandleStatusesChanged(StatusSet statuses)
         {
+            Resolver.NotifyModifiersChanged();
+        }
+
+        private void HandleChainChanged()
+        {
+            _chainDirty = true;
+        }
+
+        private void NotifyIfChainChanged()
+        {
+            if (!_chainDirty)
+            {
+                return;
+            }
+
+            _chainDirty = false;
             Resolver.NotifyModifiersChanged();
         }
 

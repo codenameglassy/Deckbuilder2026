@@ -571,6 +571,22 @@ MonoBehaviour:
     m_Key: arrow.narayana.description
     m_Metadata:
       m_Items: []
+  - m_Id: 12335353594634240
+    m_Key: chain.bow.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12335353900818432
+    m_Key: chain.bow.hint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12335353900818433
+    m_Key: chain.ring.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12335353900818434
+    m_Key: chain.ring.hint
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

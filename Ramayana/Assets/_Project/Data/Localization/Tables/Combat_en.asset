@@ -574,6 +574,22 @@ MonoBehaviour:
     m_Localized: Deal {0} damage.
     m_Metadata:
       m_Items: []
+  - m_Id: 12335353594634240
+    m_Localized: Bow Chain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12335353900818432
+    m_Localized: Play Kodanda Strikes in a row to multiply their damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12335353900818433
+    m_Localized: Ring Chain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12335353900818434
+    m_Localized: Play Vajra Guards in a row to multiply their Kavach.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

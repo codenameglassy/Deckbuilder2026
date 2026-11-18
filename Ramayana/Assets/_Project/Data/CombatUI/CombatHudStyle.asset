@@ -131,6 +131,7 @@ MonoBehaviour:
   _discardPileOffset: {x: -40, y: 30}
   _pranaOrbs: {fileID: 11400000, guid: 8dc167f388a78674ca4ff34e78da85f0, type: 2}
   _quiver: {fileID: 11400000, guid: a9aaa9d102a809b49bb87e5b4664064a, type: 2}
+  _chainBar: {fileID: 11400000, guid: c0a47086586d72343a8e8f9b27daf70a, type: 2}
   _endTurnSize: {x: 240, y: 80}
   _endTurnOffset: {x: -40, y: 150}
   _endTurnSprite: {fileID: 0}

@@ -22,3 +22,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c55143fa752411c4ab0a638ff4031fa5, type: 2}
   _upgradedForm: {fileID: 11400000, guid: fca351020fff6634d9d4612cec9e4028, type: 2}
   _exhausts: 0
+  _chain: {fileID: 11400000, guid: f95ae6d62364ede46bd7b5df95b981aa, type: 2}

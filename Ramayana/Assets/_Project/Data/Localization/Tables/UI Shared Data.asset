@@ -123,6 +123,18 @@ MonoBehaviour:
     m_Key: ui.reward.arrow_left_behind
     m_Metadata:
       m_Items: []
+  - m_Id: 12340247844085760
+    m_Key: ui.chain.multiplier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12340247890223104
+    m_Key: ui.chain.finisher
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12340247890223105
+    m_Key: ui.chain.broken
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

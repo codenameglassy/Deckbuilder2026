@@ -12,7 +12,8 @@
 // the maximum, unmodified damage meets Kavach without modifiers, spending a status (Brahmastra's Dharma) changes only
 // the copy, and GetStatusAmount reads the copy when there is one. Retaining Kavach changes nothing within the card;
 // removing it empties the simulated Kavach. A status gained runs the copy's triggers against this preview, so a
-// Devotion's Kavach shows before the card is played.
+// Devotion's Kavach shows before the card is played. A hit's final percent (the combo chain's multiplier) is applied
+// after the modifiers and rounded down, as the resolver does, so a chained card's ghost numbers match what lands.
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Effects;
 using JourneyToLanka.Combat.Statuses;
@@ -92,6 +93,11 @@ namespace JourneyToLanka.Combat.Model
 
         public void DealDamage(ICombatant source, ICombatant target, int baseAmount)
         {
+            DealDamage(source, target, baseAmount, ChainScale.NeutralPercent);
+        }
+
+        public void DealDamage(ICombatant source, ICombatant target, int baseAmount, int finalPercent)
+        {
             if (!(target is Combatant combatant))
             {
                 return;
@@ -104,7 +110,7 @@ namespace JourneyToLanka.Combat.Model
                 return;
             }
 
-            ApplyHit(index, CalculateDamage(source, target, baseAmount));
+            ApplyHit(index, ChainScale.Apply(CalculateDamage(source, target, baseAmount), finalPercent));
         }
 
         public void DealUnmodifiedDamage(ICombatant source, ICombatant target, int amount)

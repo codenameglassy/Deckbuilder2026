@@ -1,5 +1,6 @@
 // The combat model's implementation of ICombatActions, so every card and enemy move resolves through one place:
-// base damage, then damage modifiers in order, then Kavach, then health. CalculateDamage is also what card and
+// base damage, then damage modifiers in order, then the final percent (the combo chain's multiplier, rounded down),
+// then Kavach, then health. CalculateDamage is also what card and
 // intent previews call, so a shown number always matches what lands. DamageDealt reports the source as well,
 // for later rules such as thorns or lifesteal; health lost with no attacker (Dahan's burn) reports a null source.
 // StatusApplied reports each status change an effect makes, with the amount asked for (negative when spent).
@@ -100,13 +101,19 @@ namespace JourneyToLanka.Combat.Model
 
         public void DealDamage(ICombatant source, ICombatant target, int baseAmount)
         {
+            DealDamage(source, target, baseAmount, ChainScale.NeutralPercent);
+        }
+
+        public void DealDamage(ICombatant source, ICombatant target, int baseAmount, int finalPercent)
+        {
             Combatant combatant = Require(target);
             if (!combatant.IsAlive)
             {
                 return;
             }
 
-            DamageResult result = combatant.TakeDamage(CalculateDamage(source, target, baseAmount));
+            int amount = ChainScale.Apply(CalculateDamage(source, target, baseAmount), finalPercent);
+            DamageResult result = combatant.TakeDamage(amount);
             DamageDealt?.Invoke(source, combatant, result);
         }
 
