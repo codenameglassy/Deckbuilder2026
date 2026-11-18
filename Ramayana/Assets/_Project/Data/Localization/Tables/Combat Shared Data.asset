@@ -127,6 +127,450 @@ MonoBehaviour:
     m_Key: card.counsel_plus.description
     m_Metadata:
       m_Items: []
+  - m_Id: 4014866628075520
+    m_Key: enemy.hound.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986071592960
+    m_Key: status.focus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834112
+    m_Key: status.focus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834113
+    m_Key: status.moha.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834114
+    m_Key: status.moha.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834115
+    m_Key: status.bhaya.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834116
+    m_Key: status.bhaya.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834117
+    m_Key: status.dahan.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834118
+    m_Key: status.dahan.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834119
+    m_Key: status.dharma.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834120
+    m_Key: status.dharma.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631900807168
+    m_Key: card.type.dharma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944512
+    m_Key: card.type.invocation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944513
+    m_Key: card.type.astra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944514
+    m_Key: card.fear.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944515
+    m_Key: card.fear.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944516
+    m_Key: card.fear_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944517
+    m_Key: card.fear_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944518
+    m_Key: card.breakil.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944519
+    m_Key: card.breakil.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944520
+    m_Key: card.breakil_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944521
+    m_Key: card.breakil_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944522
+    m_Key: card.agneya.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944523
+    m_Key: card.agneya.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944524
+    m_Key: card.agneya_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944525
+    m_Key: card.agneya_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944526
+    m_Key: card.herb.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944527
+    m_Key: card.herb.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944528
+    m_Key: card.herb_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944529
+    m_Key: card.herb_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944530
+    m_Key: card.tapasya.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944531
+    m_Key: card.tapasya.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944532
+    m_Key: card.tapasya_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944533
+    m_Key: card.tapasya_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944534
+    m_Key: card.vow.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944535
+    m_Key: card.vow.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944536
+    m_Key: card.vow_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944537
+    m_Key: card.vow_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944538
+    m_Key: card.medit.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944539
+    m_Key: card.medit.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944540
+    m_Key: card.medit_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944541
+    m_Key: card.medit_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944542
+    m_Key: card.pierce.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944543
+    m_Key: card.pierce.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944544
+    m_Key: card.pierce_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944545
+    m_Key: card.pierce_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944546
+    m_Key: card.endure.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944547
+    m_Key: card.endure.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944548
+    m_Key: card.endure_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944549
+    m_Key: card.endure_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944550
+    m_Key: card.brahma.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944551
+    m_Key: card.brahma.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944552
+    m_Key: enemy.yaksha.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944553
+    m_Key: enemy.maya.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897543366565888
+    m_Key: status.focus.short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897543609835520
+    m_Key: status.moha.short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897543609835521
+    m_Key: status.bhaya.short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897543609835522
+    m_Key: status.dahan.short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897543609835523
+    m_Key: status.dharma.short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230548267008
+    m_Key: card.type.power
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536640
+    m_Key: status.exile.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536641
+    m_Key: status.exile.short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536642
+    m_Key: status.exile.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536643
+    m_Key: status.devotion.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536644
+    m_Key: status.devotion.short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536645
+    m_Key: status.devotion.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536646
+    m_Key: status.agni.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536647
+    m_Key: status.agni.short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536648
+    m_Key: status.agni.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536649
+    m_Key: card.exile.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536650
+    m_Key: card.exile.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536651
+    m_Key: card.devotion.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536652
+    m_Key: card.devotion.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536653
+    m_Key: card.agnibless.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536654
+    m_Key: card.agnibless.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536655
+    m_Key: card.vayu.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536656
+    m_Key: card.vayu.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536657
+    m_Key: card.vayu_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536658
+    m_Key: card.vayu_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536659
+    m_Key: card.gale.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536660
+    m_Key: card.gale.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536661
+    m_Key: card.gale_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536662
+    m_Key: card.gale_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536663
+    m_Key: card.windforce.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536664
+    m_Key: card.windforce.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536665
+    m_Key: card.windforce_plus.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536666
+    m_Key: card.windforce_plus.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091861856256
+    m_Key: arrow.agni.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296768
+    m_Key: arrow.agni.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296769
+    m_Key: arrow.vajra.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296770
+    m_Key: arrow.vajra.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296771
+    m_Key: arrow.vayu.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296772
+    m_Key: arrow.vayu.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296773
+    m_Key: arrow.surya.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296774
+    m_Key: arrow.surya.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296775
+    m_Key: arrow.dread.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296776
+    m_Key: arrow.dread.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296777
+    m_Key: arrow.mohana.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296778
+    m_Key: arrow.mohana.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296779
+    m_Key: arrow.indra.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296780
+    m_Key: arrow.indra.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296781
+    m_Key: arrow.shakti.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296782
+    m_Key: arrow.shakti.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296783
+    m_Key: arrow.sanjivani.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296784
+    m_Key: arrow.sanjivani.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296785
+    m_Key: arrow.dharma.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296786
+    m_Key: arrow.dharma.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296787
+    m_Key: arrow.garuda.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296788
+    m_Key: arrow.garuda.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296789
+    m_Key: arrow.narayana.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296790
+    m_Key: arrow.narayana.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

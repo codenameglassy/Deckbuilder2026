@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 940b6c3a18913a94ea5c60a8149ed4b1, type: 3}
+  m_Name: FlatHandLayout
+  m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.FlatHandLayoutSO
+  _hoverZoneExtraTop: 140
+  _spacing: 12
+  _hoverSpread: 40
+  _hoverFalloff: 0.5
+  _hoverRise: 0

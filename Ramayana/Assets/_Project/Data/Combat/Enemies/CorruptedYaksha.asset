@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2baf7cc35d56d0e40ba08bddd0bd544c, type: 3}
+  m_Name: CorruptedYaksha
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Enemies.EnemyDefinitionSO
+  _id: yaksha
+  _nameKey: enemy.yaksha.name
+  _minHealth: 40
+  _maxHealth: 46
+  _moves:
+  - {fileID: 11400000, guid: 4ce939fdffb88134d80cb4f3362c3849, type: 2}
+  - {fileID: 11400000, guid: cce283ff0eb599a4e8cafffd19fb5049, type: 2}
+  - {fileID: 11400000, guid: daf3aba9f57c931439118554103e4988, type: 2}
+  _startMoveIndex: 0

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2baf7cc35d56d0e40ba08bddd0bd544c, type: 3}
+  m_Name: CursedHound
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Enemies.EnemyDefinitionSO
+  _id: hound
+  _nameKey: enemy.hound.name
+  _minHealth: 20
+  _maxHealth: 24
+  _moves:
+  - {fileID: 11400000, guid: f59b0be351661a640b435bc556ad2e05, type: 2}
+  - {fileID: 11400000, guid: 3b324115bf809f54b84e71759d57f618, type: 2}
+  - {fileID: 11400000, guid: 1460e77b448ce9840be2a544f149b1c1, type: 2}
+  _startMoveIndex: 0

@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a0005783fd9c4683d824592ba5613, type: 3}
+  m_Name: TargetingLineStyle
+  m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.TargetingLineStyleSO
+  _material: {fileID: 2100000, guid: 4872087b8ab96af4eb27a69d89af8cc5, type: 2}
+  _segments: 48
+  _widthAtCard: 8
+  _widthAtTarget: 20
+  _glowScale: 3
+  _coreWidth: 0.35
+  _glowFalloff: 2.2
+  _headLength: 60
+  _headWidth: 56
+  _startFade: 0.08
+  _bodyColorAtCard: {r: 1, g: 0.55, b: 0.15, a: 0.95}
+  _bodyColorAtTarget: {r: 1, g: 0.8, b: 0.35, a: 1}
+  _coreColor: {r: 1, g: 0.97, b: 0.86, a: 1}
+  _glowColor: {r: 1, g: 0.5, b: 0.1, a: 0.55}
+  _chevronColor: {r: 1, g: 1, b: 0.9, a: 1}
+  _intensity: 1
+  _chevronSpacing: 34
+  _chevronDuty: 0.35
+  _chevronSlant: 0.9
+  _flowSpeed: 1.6
+  _chevronIntensity: 0.8
+  _shimmerAmount: 0.12
+  _curveRise: 0.45
+  _curvePull: 0.25
+  _curveLift: 0.35
+  _targetOffset: {x: 0, y: 0.6, z: 0}
+  _revealDuration: 0.14
+  _fadeOutDuration: 0.08
+  _snapSmoothTime: 0.06
+  _pulseDuration: 0.25
+  _pulseWiden: 0.35
+  _pulseBrighten: 0.6

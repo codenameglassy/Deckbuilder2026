@@ -1,7 +1,9 @@
 // Scene wiring for the combat UI. Fills only empty serialized fields on the selected objects, with Undo:
 // a CombatHudView gets its style, the CombatController anchor and the CombatStarted channel; a
-// CombatControllerAnchorProvider gets the anchor. If the open scenes have no EventSystem, it adds one with the
-// Input System UI module so keyboard and gamepad navigation work. Assigned values are never replaced.
+// CombatControllerAnchorProvider gets the anchor. Assigned values are never replaced. It also checks the EventSystem:
+// the Boot scene owns the game's only EventSystem (it stays loaded under every gameplay scene), so this tool never adds
+// one. It reports when the open scenes have none (open Boot alongside), more than one, or one without the Input
+// System UI module.
 using JourneyToLanka.CombatScene;
 using JourneyToLanka.CombatScene.EditorTools;
 using JourneyToLanka.Core.EditorTools;
@@ -54,24 +56,31 @@ namespace JourneyToLanka.CombatUI.EditorTools
 
         private static void EnsureEventSystem(AssetBuilderReport report)
         {
-            EventSystem existing = Object.FindAnyObjectByType<EventSystem>();
-            if (existing != null)
+            EventSystem[] eventSystems = Object.FindObjectsByType<EventSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            if (eventSystems.Length == 0)
             {
-                if (existing.GetComponent<InputSystemUIInputModule>() == null)
+                report.AddSkipped("EventSystem (none in the open scenes; the Boot scene owns it, open Boot alongside this scene)");
+                return;
+            }
+
+            if (eventSystems.Length > 1)
+            {
+                for (int i = 0; i < eventSystems.Length; i++)
                 {
-                    report.AddSkipped($"EventSystem '{existing.name}' has no Input System UI Input Module; replace its input module");
-                }
-                else
-                {
-                    report.AddExisted("EventSystem");
+                    report.AddSkipped($"EventSystem '{eventSystems[i].name}' in scene '{eventSystems[i].gameObject.scene.name}' (keep only the one in Boot)");
                 }
 
                 return;
             }
 
-            var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
-            Undo.RegisterCreatedObjectUndo(eventSystem, "Create EventSystem");
-            report.AddCreated("EventSystem (Input System UI Input Module)");
+            EventSystem existing = eventSystems[0];
+            if (existing.GetComponent<InputSystemUIInputModule>() == null)
+            {
+                report.AddSkipped($"EventSystem '{existing.name}' has no Input System UI Input Module; replace its input module");
+                return;
+            }
+
+            report.AddExisted("EventSystem");
         }
 
         private static void Wire(Object owner, string propertyPath, Object value, AssetBuilderReport report)

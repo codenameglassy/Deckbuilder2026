@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: KavachShards
+  m_Shader: {fileID: 4800000, guid: 621ab49dac71c114d9dc7c50e06734be, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _Age: 0
+    - _CameraPush: 0.3
+    - _Count: 0
+    - _Drag: 2.5
+    - _FadePower: 1.2
+    - _Gravity: 7
+    - _Intensity: 1
+    - _Lifetime: 0.7
+    - _LifetimeJitter: 0.4
+    - _Seed: 0
+    - _SparkSize: 0.12
+    - _SpeedMax: 5
+    - _SpeedMin: 2
+    - _Spread: 3.14
+    - _Stretch: 0
+    - _UpBias: 0.5
+    m_Colors:
+    - _Color: {r: 0.5, g: 1.8, b: 2.4, a: 1}
+    - _Direction: {r: 0, g: 0, b: 0, a: 0}
+    - _HotColor: {r: 2.5, g: 4.5, b: 5, a: 1}
+    - _Origin: {r: 0, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

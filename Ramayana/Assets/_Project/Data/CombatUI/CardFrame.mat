@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CardFrame
+  m_Shader: {fileID: 4800000, guid: 7f760d96c2f1a3c4e96cc2717ab5ea91, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AccentTint: 0.14
+    - _BandHeight: 0.25
+    - _BandStrength: 0.9
+    - _BorderWidth: 0.03
+    - _ColorMask: 15
+    - _CornerRadius: 0.07
+    - _GlowStrength: 0.4
+    - _GlowWidth: 0.06
+    - _Sheen: 0.08
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _TrimInset: 0.016
+    - _TrimWidth: 0.006
+    m_Colors:
+    - _Accent: {r: 0.86, g: 0.32999998, b: 0.17999998, a: 1}
+    - _BodyBottom: {r: 0.11999995, g: 0.09499996, b: 0.07499998, a: 1}
+    - _BodyTop: {r: 0.24999997, g: 0.19999996, b: 0.14999998, a: 1}
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _TrimColor: {r: 0.95, g: 0.78, b: 0.41999996, a: 0.85}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

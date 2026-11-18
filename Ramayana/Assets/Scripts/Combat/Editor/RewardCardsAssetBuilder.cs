@@ -1,7 +1,8 @@
-// Creates the first reward cards from the reference build's chapter one pool that the current effects can express,
-// with their upgraded forms: Twin Shafts, Storm of Arrows, Lakshmana's Watch and Sage's Counsel, plus the draw
-// effects they need, and the slice reward pool that lists them. Values come from the reference build. Values are
-// set only on assets this run creates; references and lists are filled only while empty. Runs after Combat.
+// Creates the first cards beyond Strike and Guard with their upgraded forms: Twin Shafts (a starter in the reference
+// build's chapter one deck), and the reward cards Storm of Arrows, Lakshmana's Watch and Sage's Counsel (which
+// Exhausts, in both forms), plus the draw effects they need, and the slice reward pool listing the three reward
+// cards. Values come from the reference build. Values are set only on assets this run creates; references and lists
+// are filled only while empty. Runs after Combat.
 using JourneyToLanka.Combat.Cards;
 using JourneyToLanka.Combat.Effects;
 using JourneyToLanka.Core.EditorTools;
@@ -43,19 +44,19 @@ namespace JourneyToLanka.Combat.EditorTools
             DrawCardsEffectSO draw2 = Draw("Draw_2", 2, report);
             DrawCardsEffectSO draw3 = Draw("Draw_3", 3, report);
 
-            CardDefinitionSO twinPlus = Card("TwinShaftsPlus", "twin_plus", 1, attack, null, report, damage5x2);
-            CardDefinitionSO twin = Card("TwinShafts", "twin", 1, attack, twinPlus, report, damage4x2);
-            CardDefinitionSO stormPlus = Card("StormOfArrowsPlus", "storm_plus", 2, attack, null, report, damage4x4);
-            CardDefinitionSO storm = Card("StormOfArrows", "storm", 2, attack, stormPlus, report, damage3x4);
-            CardDefinitionSO watchPlus = Card("LakshmanasWatchPlus", "watch_plus", 1, skill, null, report, block11, draw1);
-            CardDefinitionSO watch = Card("LakshmanasWatch", "watch", 1, skill, watchPlus, report, block8, draw1);
-            CardDefinitionSO counselPlus = Card("SagesCounselPlus", "counsel_plus", 0, skill, null, report, draw3);
-            CardDefinitionSO counsel = Card("SagesCounsel", "counsel", 0, skill, counselPlus, report, draw2);
+            CardDefinitionSO twinPlus = Card("TwinShaftsPlus", "twin_plus", 1, attack, false, null, report, damage5x2);
+            Card("TwinShafts", "twin", 1, attack, false, twinPlus, report, damage4x2);
+            CardDefinitionSO stormPlus = Card("StormOfArrowsPlus", "storm_plus", 2, attack, false, null, report, damage4x4);
+            CardDefinitionSO storm = Card("StormOfArrows", "storm", 2, attack, false, stormPlus, report, damage3x4);
+            CardDefinitionSO watchPlus = Card("LakshmanasWatchPlus", "watch_plus", 1, skill, false, null, report, block11, draw1);
+            CardDefinitionSO watch = Card("LakshmanasWatch", "watch", 1, skill, false, watchPlus, report, block8, draw1);
+            CardDefinitionSO counselPlus = Card("SagesCounselPlus", "counsel_plus", 0, skill, true, null, report, draw3);
+            CardDefinitionSO counsel = Card("SagesCounsel", "counsel", 0, skill, true, counselPlus, report, draw2);
 
             CardRewardPoolSO pool = AssetBuilderSerialization.LoadOrCreateConfigured<CardRewardPoolSO>(SlicePoolPath, report, null);
             if (pool != null)
             {
-                AssetBuilderSerialization.FillObjectArrayIfEmpty(pool, "_cards", new Object[] { twin, storm, watch, counsel }, report);
+                AssetBuilderSerialization.FillObjectArrayIfEmpty(pool, "_cards", new Object[] { storm, watch, counsel }, report);
             }
         }
 
@@ -85,7 +86,7 @@ namespace JourneyToLanka.Combat.EditorTools
                 so => AssetBuilderSerialization.SetInt(so, "_count", count));
         }
 
-        private static CardDefinitionSO Card(string fileName, string id, int cost, CardTypeSO type,
+        private static CardDefinitionSO Card(string fileName, string id, int cost, CardTypeSO type, bool exhausts,
             CardDefinitionSO upgradedForm, AssetBuilderReport report, params CombatEffectSO[] effects)
         {
             CardDefinitionSO card = AssetBuilderSerialization.LoadOrCreateConfigured<CardDefinitionSO>(
@@ -95,6 +96,7 @@ namespace JourneyToLanka.Combat.EditorTools
                     AssetBuilderSerialization.SetString(so, "_nameKey", "card." + id + ".name");
                     AssetBuilderSerialization.SetString(so, "_descriptionKey", "card." + id + ".description");
                     AssetBuilderSerialization.SetInt(so, "_cost", cost);
+                    AssetBuilderSerialization.Require(so, "_exhausts").boolValue = exhausts;
                 });
 
             if (card == null)

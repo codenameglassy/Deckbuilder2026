@@ -17,6 +17,8 @@ MonoBehaviour:
   _descriptionKey: card.guard.description
   _type: {fileID: 11400000, guid: cf700a110075326448c21be2d97b77cb, type: 2}
   _cost: 1
+  _rarity: 1
   _effects:
   - {fileID: 11400000, guid: c55143fa752411c4ab0a638ff4031fa5, type: 2}
   _upgradedForm: {fileID: 11400000, guid: fca351020fff6634d9d4612cec9e4028, type: 2}
+  _exhausts: 0

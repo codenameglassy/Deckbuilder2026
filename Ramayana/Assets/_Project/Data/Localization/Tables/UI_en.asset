@@ -54,6 +54,78 @@ MonoBehaviour:
     m_Localized: Take nothing
     m_Metadata:
       m_Items: []
+  - m_Id: 4068095693078528
+    m_Localized: Your Turn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4068096615825408
+    m_Localized: Incoming
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4068096615825409
+    m_Localized: Kavach
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4068096615825410
+    m_Localized: You take
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4100530170413056
+    m_Localized: Not enough Prana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4100530606620672
+    m_Localized: Choose a target
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300214456320
+    m_Localized: Draw Pile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099392
+    m_Localized: Discard Pile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099393
+    m_Localized: No cards here
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099394
+    m_Localized: Close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099395
+    m_Localized: Health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099396
+    m_Localized: Kavach
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099397
+    m_Localized: Attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099398
+    m_Localized: Defend
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5840097198129152
+    m_Localized: Lethal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569418434560000
+    m_Localized: Quiver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569418518446080
+    m_Localized: '{0} goes into your quiver.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569418518446081
+    m_Localized: '{0} is left behind. Your quiver is full.'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

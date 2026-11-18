@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdb15bf79f47c214f9f71e915ff48452, type: 3}
+  m_Name: VowOfTheExile
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Cards.CardDefinitionSO
+  _id: exile
+  _nameKey: card.exile.name
+  _descriptionKey: card.exile.description
+  _type: {fileID: 11400000, guid: 02f2f6bb5adeca24b8245f77390968ea, type: 2}
+  _cost: 2
+  _rarity: 3
+  _effects:
+  - {fileID: 11400000, guid: d2855c02dffd44349b3e59af40f77caf, type: 2}
+  _upgradedForm: {fileID: 0}
+  _exhausts: 1

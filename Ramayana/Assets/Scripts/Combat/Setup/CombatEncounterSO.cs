@@ -1,7 +1,9 @@
-// A fight as authored data: the enemies that appear, in field order. Field order is also acting order.
-// The reference build never puts more than three enemies in one fight.
+// A fight as authored data: the enemies that appear, in field order (field order is also acting order), and the
+// rarity odds of the card reward for winning it. Elite fights point at the elite odds; an encounter without odds
+// uses its run's default. The reference build never puts more than three enemies in one fight.
 using System;
 using System.Collections.Generic;
+using JourneyToLanka.Combat.Cards;
 using JourneyToLanka.Combat.Enemies;
 using UnityEngine;
 
@@ -14,10 +16,14 @@ namespace JourneyToLanka.Combat
 
         [SerializeField] private string _id;
         [SerializeField] private EnemyDefinitionSO[] _enemies = Array.Empty<EnemyDefinitionSO>();
+        [Tooltip("Rarity odds of the card reward for winning this fight. Leave empty to use the run's default odds.")]
+        [SerializeField] private CardRewardOddsSO _rewardOdds;
 
         public string Id => _id;
 
         public IReadOnlyList<EnemyDefinitionSO> Enemies => _enemies;
+
+        public CardRewardOddsSO RewardOdds => _rewardOdds;
 
         private void OnValidate()
         {

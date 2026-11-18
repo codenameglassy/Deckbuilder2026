@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f2a563a807aab843b32180696faffaa, type: 3}
+  m_Name: FanHandLayout
+  m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.FanHandLayoutSO
+  _hoverZoneExtraTop: 140
+  _spacingFactor: 0.78
+  _arcRadius: 2000
+  _tiltScale: 1
+  _maxTilt: 12
+  _hoverSpread: 60
+  _hoverFalloff: 0.55
+  _hoverRise: 24
+  _straightenHovered: 1

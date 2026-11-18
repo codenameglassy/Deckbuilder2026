@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d414ae4e311bd124c94f2a6afc6f0086, type: 3}
+  m_Name: DevotionTrigger
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Statuses.StatusGainedBlockTriggerSO
+  _status: {fileID: 11400000, guid: 5fcc23637ad236840b2ae5b82b94ddc9, type: 2}
+  _blockPerStack: 2

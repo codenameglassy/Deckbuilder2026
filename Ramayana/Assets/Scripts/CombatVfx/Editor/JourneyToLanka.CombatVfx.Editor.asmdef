@@ -1,0 +1,26 @@
+{
+    "name": "JourneyToLanka.CombatVfx.Editor",
+    "rootNamespace": "JourneyToLanka.CombatVfx.EditorTools",
+    "references": [
+        "JourneyToLanka.Core",
+        "JourneyToLanka.Core.Editor",
+        "JourneyToLanka.Combat",
+        "JourneyToLanka.Combat.Editor",
+        "JourneyToLanka.CombatScene",
+        "JourneyToLanka.CombatScene.Editor",
+        "JourneyToLanka.CombatUI",
+        "JourneyToLanka.CombatUI.Editor",
+        "JourneyToLanka.CombatVfx"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -6,7 +6,8 @@
         "JourneyToLanka.Core.Editor",
         "JourneyToLanka.Combat",
         "JourneyToLanka.Combat.Editor",
-        "JourneyToLanka.CombatScene"
+        "JourneyToLanka.CombatScene",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [
         "Editor"

@@ -131,6 +131,9 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
+  - component: {fileID: 330585550}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -256,6 +259,47 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.PhysicsRaycaster
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
+--- !u!114 &330585549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82dd86bde5d31d4fb48f022623c471f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatCameraShake
+--- !u!114 &330585550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 491d5f040a906fb4e8f3b037b4468b43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatCameraAnchorProvider
+  _anchor: {fileID: 11400000, guid: d70b816e01fcec8428526dbe13c00e9a, type: 2}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,6 +440,7 @@ GameObject:
   - component: {fileID: 586209136}
   - component: {fileID: 586209135}
   - component: {fileID: 586209134}
+  - component: {fileID: 586209139}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -416,7 +461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatantView
   _style: {fileID: 11400000, guid: 94ce120c698d40141a314200934cfe2b, type: 2}
-  _body: {fileID: 1058872129}
+  _body: {fileID: 586209136}
   _damageNumbers: {fileID: 1294695839}
 --- !u!65 &586209135
 BoxCollider:
@@ -511,6 +556,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &586209139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586209133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 464c3b85f20c9064cb256a630c8f043d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.KavachShellTarget
+  _entries:
+  - _source: {fileID: 586209136}
+    _shellMesh: {fileID: 4300000, guid: 29b39c1f0d89dda409a791c4c07efeab, type: 2}
 --- !u!1 &598712136
 GameObject:
   m_ObjectHideFlags: 0
@@ -743,6 +803,107 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &662482476
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 662482478}
+  - component: {fileID: 662482477}
+  - component: {fileID: 662482479}
+  - component: {fileID: 662482480}
+  - component: {fileID: 662482481}
+  - component: {fileID: 662482482}
+  m_Layer: 0
+  m_Name: Combat VFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &662482477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662482476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8667209747316ef43891df416aaf4f19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.QuadVfxSpawner
+  _style: {fileID: 11400000, guid: d25be94375dd47e4a89a86099a05ba5e, type: 2}
+--- !u!4 &662482478
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662482476}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &662482479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662482476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8f392d547da9c40ae8d43ce58ce2b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.SparkBurstSpawner
+  _style: {fileID: 11400000, guid: d25be94375dd47e4a89a86099a05ba5e, type: 2}
+--- !u!114 &662482480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662482476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00ac4db9417b7dc4a8b3b239487d0003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.KavachShellPresenter
+  _style: {fileID: 11400000, guid: d25be94375dd47e4a89a86099a05ba5e, type: 2}
+--- !u!114 &662482481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662482476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 896feefc32b44ec42b99bf7a0231f1c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.PrefabVfxSpawner
+  _style: {fileID: 11400000, guid: d25be94375dd47e4a89a86099a05ba5e, type: 2}
+--- !u!114 &662482482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662482476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c76ac0b1e774725459245bfeae0d217e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.StatusAuraPresenter
+  _style: {fileID: 11400000, guid: d25be94375dd47e4a89a86099a05ba5e, type: 2}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,6 +967,8 @@ GameObject:
   - component: {fileID: 1058872130}
   - component: {fileID: 1058872128}
   - component: {fileID: 1058872133}
+  - component: {fileID: 1058872134}
+  - component: {fileID: 1058872135}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -915,7 +1078,7 @@ Transform:
   m_GameObject: {fileID: 1058872127}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.25, y: 0.982, z: 0.5}
+  m_LocalPosition: {x: 4, y: 0.982, z: 1.75}
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -934,6 +1097,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.EnemyIntentView
   _style: {fileID: 11400000, guid: e4ae5296260e0ce4884a06a0c686ecda, type: 2}
+--- !u!114 &1058872134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058872127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85c5d42f2346af84ca869c2d49ae54b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.EnemyTargetView
+  _style: {fileID: 11400000, guid: d621bfce1af63154f955494a485e8fc7, type: 2}
+--- !u!114 &1058872135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058872127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 464c3b85f20c9064cb256a630c8f043d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.KavachShellTarget
+  _entries:
+  - _source: {fileID: 1058872129}
+    _shellMesh: {fileID: 4300000, guid: 29b39c1f0d89dda409a791c4c07efeab, type: 2}
 --- !u!1 &1294695838
 GameObject:
   m_ObjectHideFlags: 0
@@ -1013,6 +1204,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.CombatHudView
   _style: {fileID: 11400000, guid: 60b297be6560a8a4d8af008025811b52, type: 2}
+  _inspectStyle: {fileID: 11400000, guid: be97efbb66194d14a8c2e83c5f8055b9, type: 2}
+  _targetingLineStyle: {fileID: 11400000, guid: 5b3a0650fb0a3104988b1e2d0ccca624, type: 2}
+  _cameraAnchor: {fileID: 11400000, guid: d70b816e01fcec8428526dbe13c00e9a, type: 2}
   _controllerAnchor: {fileID: 11400000, guid: 1378193f5159eef43bee40a343e5e491, type: 2}
   _combatStarted: {fileID: 11400000, guid: a954ecbb9693d964fba723bf8b323add, type: 2}
 --- !u!114 &1402421275
@@ -1098,6 +1292,178 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1499536626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1499536633}
+  - component: {fileID: 1499536632}
+  - component: {fileID: 1499536628}
+  - component: {fileID: 1499536631}
+  - component: {fileID: 1499536627}
+  - component: {fileID: 1499536630}
+  - component: {fileID: 1499536629}
+  - component: {fileID: 1499536634}
+  m_Layer: 0
+  m_Name: Enemy (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1499536627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499536626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2f7f0a9f9a820841b1e854d97a08bc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatantView
+  _style: {fileID: 11400000, guid: 94ce120c698d40141a314200934cfe2b, type: 2}
+  _body: {fileID: 1499536628}
+  _damageNumbers: {fileID: 1294695839}
+--- !u!23 &1499536628
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499536626}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1499536629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499536626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85c5d42f2346af84ca869c2d49ae54b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.EnemyTargetView
+  _style: {fileID: 11400000, guid: d621bfce1af63154f955494a485e8fc7, type: 2}
+--- !u!114 &1499536630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499536626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93cb6db48f8a888428b11f12f21d68b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.EnemyIntentView
+  _style: {fileID: 11400000, guid: e4ae5296260e0ce4884a06a0c686ecda, type: 2}
+--- !u!65 &1499536631
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499536626}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1499536632
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499536626}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1499536633
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499536626}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.08, y: 0.982, z: 0.20000005}
+  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1499536634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499536626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 464c3b85f20c9064cb256a630c8f043d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.KavachShellTarget
+  _entries:
+  - _source: {fileID: 1499536628}
+    _shellMesh: {fileID: 4300000, guid: 29b39c1f0d89dda409a791c4c07efeab, type: 2}
 --- !u!1 &1932480949
 GameObject:
   m_ObjectHideFlags: 0
@@ -1109,6 +1475,9 @@ GameObject:
   - component: {fileID: 1932480953}
   - component: {fileID: 1932480952}
   - component: {fileID: 1932480954}
+  - component: {fileID: 1932480956}
+  - component: {fileID: 1932480955}
+  - component: {fileID: 1932480957}
   m_Layer: 0
   m_Name: CombatController
   m_TagString: Untagged
@@ -1138,6 +1507,7 @@ MonoBehaviour:
   _playerView: {fileID: 586209134}
   _enemyViews:
   - {fileID: 1058872128}
+  - {fileID: 1499536627}
   _combatStarted: {fileID: 11400000, guid: a954ecbb9693d964fba723bf8b323add, type: 2}
   _combatEnded: {fileID: 11400000, guid: 0072af096900def41a1021dfb69471ef, type: 2}
 --- !u!4 &1932480953
@@ -1168,6 +1538,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatControllerAnchorProvider
   _anchor: {fileID: 11400000, guid: 1378193f5159eef43bee40a343e5e491, type: 2}
+--- !u!114 &1932480955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932480949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a1990f623b1f734c9a71d769b3524e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.HitStop
+--- !u!114 &1932480956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932480949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e6a5ce98441f14eb20eedeb26cbd6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatImpactDirector
+  _style: {fileID: 11400000, guid: 149efb22d0f212545a82b7ac58e7c151, type: 2}
+  _hitStop: {fileID: 1932480955}
+  _cameraShake: {fileID: 330585549}
+--- !u!114 &1932480957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932480949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe8220e91a1ad8143b282feb3655f614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.CombatVfxDirector
+  _style: {fileID: 11400000, guid: d25be94375dd47e4a89a86099a05ba5e, type: 2}
+  _quads: {fileID: 662482477}
+  _sparks: {fileID: 662482479}
+  _kavach: {fileID: 662482480}
+  _accents: {fileID: 662482481}
+  _auras: {fileID: 662482482}
+  _cameraAnchor: {fileID: 11400000, guid: d70b816e01fcec8428526dbe13c00e9a, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1178,7 +1594,9 @@ SceneRoots:
   - {fileID: 660724560}
   - {fileID: 586209138}
   - {fileID: 1058872132}
+  - {fileID: 1499536633}
   - {fileID: 1932480953}
   - {fileID: 1402421278}
   - {fileID: 1294695840}
   - {fileID: 598712141}
+  - {fileID: 662482478}

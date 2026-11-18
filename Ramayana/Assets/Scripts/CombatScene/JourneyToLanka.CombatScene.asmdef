@@ -5,8 +5,11 @@
         "JourneyToLanka.Core",
         "JourneyToLanka.Combat",
         "JourneyToLanka.Run",
+        "JourneyToLanka.Localization",
+        "Unity.Localization",
         "Unity.TextMeshPro",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

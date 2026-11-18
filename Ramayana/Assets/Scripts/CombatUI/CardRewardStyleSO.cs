@@ -1,5 +1,5 @@
 // Visual values for the card reward screen: draw order over the combat HUD, the dimmed backdrop, the title,
-// card spacing and the Take Nothing button. Cards themselves use the Combat HUD style so they match the hand.
+// card spacing, the Take Nothing button and the line reporting a dropped special arrow. Cards themselves use the Combat HUD style so they match the hand.
 // Read-only at runtime; in the Editor, Changed lets the screen re-apply it live.
 using System;
 using TMPro;
@@ -33,6 +33,12 @@ namespace JourneyToLanka.CombatUI
         [SerializeField] private Color _skipTextColor = new Color(0.96f, 0.91f, 0.8f);
         [SerializeField, Min(1f)] private float _skipFontSize = 28f;
 
+        [Header("Arrow Drop")]
+        [SerializeField] private Vector2 _arrowLineOffset = new Vector2(0f, -350f);
+        [SerializeField] private Vector2 _arrowLineSize = new Vector2(1100f, 48f);
+        [SerializeField, Min(1f)] private float _arrowLineFontSize = 28f;
+        [SerializeField] private Color _arrowLineColor = new Color(0.96f, 0.91f, 0.8f);
+
         public event Action Changed;
 
         public int SortingOrder => _sortingOrder;
@@ -51,6 +57,10 @@ namespace JourneyToLanka.CombatUI
         public Color SkipColor => _skipColor;
         public Color SkipTextColor => _skipTextColor;
         public float SkipFontSize => _skipFontSize;
+        public Vector2 ArrowLineOffset => _arrowLineOffset;
+        public Vector2 ArrowLineSize => _arrowLineSize;
+        public float ArrowLineFontSize => _arrowLineFontSize;
+        public Color ArrowLineColor => _arrowLineColor;
 
         private void OnDisable()
         {

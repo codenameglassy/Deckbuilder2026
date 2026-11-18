@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06137fd2bf4deac4a9a3210e703d034e, type: 3}
+  m_Name: CombatInspectStyle
+  m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.CombatInspectStyleSO
+  _zoomDelay: 0.08
+  _zoomScale: 1.45
+  _zoomLift: 16
+  _zoomDuration: 0.12
+  _zoomScreenMargin: 24
+  _viewerBackdropColor: {r: 0, g: 0, b: 0, a: 0.75}
+  _viewerPanelSprite: {fileID: 0}
+  _viewerPanelColor: {r: 0.08, g: 0.07, b: 0.06, a: 0.96}
+  _viewerPanelSize: {x: 1560, y: 900}
+  _viewerPadding: 32
+  _viewerHeaderHeight: 72
+  _viewerTitleFontSize: 44
+  _viewerTitleColor: {r: 0.98, g: 0.85, b: 0.45, a: 1}
+  _viewerCountFontSize: 36
+  _viewerCountColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
+  _viewerColumns: 6
+  _viewerSpacing: {x: 24, y: 24}
+  _viewerScrollSensitivity: 40
+  _viewerEmptyFontSize: 32
+  _viewerEmptyColor: {r: 0.75, g: 0.7, b: 0.62, a: 1}
+  _viewerCloseSize: {x: 220, y: 64}
+  _viewerCloseSprite: {fileID: 0}
+  _viewerCloseColor: {r: 0.55, g: 0.2, b: 0.12, a: 1}
+  _viewerCloseTextColor: {r: 0.98, g: 0.94, b: 0.85, a: 1}
+  _viewerCloseFontSize: 28
+  _viewerFadeDuration: 0.15
+  _infoOffset: {x: 0, y: 3.1, z: 0}
+  _infoWorldScale: 0.01
+  _infoWidth: 260
+  _infoPadding: 12
+  _infoSpacing: 2
+  _infoBackgroundSprite: {fileID: 0}
+  _infoBackgroundColor: {r: 0.08, g: 0.07, b: 0.06, a: 0.92}
+  _infoNameFontSize: 28
+  _infoNameColor: {r: 0.98, g: 0.85, b: 0.45, a: 1}
+  _infoRowFontSize: 24
+  _infoRowHeight: 32
+  _infoTextColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
+  _infoHealthColor: {r: 0.95, g: 0.4, b: 0.35, a: 1}
+  _infoKavachColor: {r: 0.45, g: 0.75, b: 1, a: 1}
+  _infoAttackColor: {r: 1, g: 0.45, b: 0.35, a: 1}
+  _infoDefendColor: {r: 0.45, g: 0.75, b: 1, a: 1}

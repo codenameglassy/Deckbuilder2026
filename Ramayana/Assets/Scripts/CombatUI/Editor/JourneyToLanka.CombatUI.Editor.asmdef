@@ -4,6 +4,8 @@
     "references": [
         "JourneyToLanka.Core",
         "JourneyToLanka.Core.Editor",
+        "JourneyToLanka.Combat",
+        "JourneyToLanka.Combat.Editor",
         "JourneyToLanka.CombatScene",
         "JourneyToLanka.CombatScene.Editor",
         "JourneyToLanka.CombatUI",

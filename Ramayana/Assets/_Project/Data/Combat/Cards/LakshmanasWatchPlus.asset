@@ -17,7 +17,9 @@ MonoBehaviour:
   _descriptionKey: card.watch_plus.description
   _type: {fileID: 11400000, guid: cf700a110075326448c21be2d97b77cb, type: 2}
   _cost: 1
+  _rarity: 1
   _effects:
   - {fileID: 11400000, guid: 08df930fe2752054b97cb74fb5d74313, type: 2}
   - {fileID: 11400000, guid: f3fc3d0803c697143b6e5a12d9e82212, type: 2}
   _upgradedForm: {fileID: 0}
+  _exhausts: 0

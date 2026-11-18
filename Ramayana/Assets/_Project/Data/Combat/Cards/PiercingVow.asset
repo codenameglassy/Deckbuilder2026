@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdb15bf79f47c214f9f71e915ff48452, type: 3}
+  m_Name: PiercingVow
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Cards.CardDefinitionSO
+  _id: pierce
+  _nameKey: card.pierce.name
+  _descriptionKey: card.pierce.description
+  _type: {fileID: 11400000, guid: 21a69aea9c25d5f4587636a121885e78, type: 2}
+  _cost: 1
+  _rarity: 1
+  _effects:
+  - {fileID: 11400000, guid: 4d2737dfe16b6e34f96acc8eb24a6b9e, type: 2}
+  _upgradedForm: {fileID: 11400000, guid: 0c18745fe6de96047a894a006582e61f, type: 2}
+  _exhausts: 0

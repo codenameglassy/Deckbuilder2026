@@ -13,10 +13,59 @@ MonoBehaviour:
   m_Name: CombatantViewStyle
   m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatantViewStyleSO
   _font: {fileID: 0}
-  _fontSize: 5
-  _labelSize: {x: 4, y: 1}
-  _healthColor: {r: 0.95, g: 0.4, b: 0.35, a: 1}
-  _healthOffset: {x: 0, y: 0.9, z: 0}
-  _blockColor: {r: 0.45, g: 0.75, b: 1, a: 1}
-  _blockOffset: {x: 0, y: 1.4, z: 0}
+  _barOffset: {x: 0, y: 0.9, z: 0}
+  _barWorldScale: 0.01
+  _barSize: {x: 120, y: 20}
+  _barBorder: 2
+  _barBorderColor: {r: 0.05, g: 0.04, b: 0.03, a: 0.95}
+  _barBackgroundColor: {r: 0.18, g: 0.06, b: 0.05, a: 0.95}
+  _barFillColor: {r: 0.82, g: 0.22, b: 0.18, a: 1}
+  _barTrailColor: {r: 1, g: 0.85, b: 0.5, a: 1}
+  _barTextColor: {r: 0.98, g: 0.95, b: 0.88, a: 1}
+  _barFontSize: 15
+  _trailDelay: 0.25
+  _trailDuration: 0.45
+  _kavachFillColor: {r: 0.35, g: 0.6, b: 0.95, a: 1}
+  _kavachBorderColor: {r: 0.6, g: 0.85, b: 1, a: 1}
+  _kavachBadgeSize: {x: 30, y: 30}
+  _kavachBadgeGap: 4
+  _kavachBadgeSprite: {fileID: 0}
+  _kavachBadgeColor: {r: 0.3, g: 0.55, b: 0.9, a: 1}
+  _kavachTextColor: {r: 0.98, g: 0.95, b: 0.88, a: 1}
+  _kavachFontSize: 17
+  _kavachPunchScale: 0.35
+  _kavachPunchDuration: 0.25
   _fallenTint: {r: 0.25, g: 0.25, b: 0.25, a: 1}
+  _flashColor: {r: 1, g: 0.35, b: 0.3, a: 1}
+  _flashDuration: 0.18
+  _shakeDuration: 0.25
+  _shakeStrength: 0.12
+  _shakeFrequency: 40
+  _blockPulseScale: 0.12
+  _blockPulseDuration: 0.2
+  _lungeDistance: 0.9
+  _lungeWindBack: 0.25
+  _lungeWindBackShare: 0.45
+  _lungeReturnDuration: 0.25
+  _thrustDistance: 0.45
+  _thrustDuration: 0.08
+  _thrustReturnDuration: 0.18
+  _damageNumberOffset: {x: 0, y: 0.6, z: -0.6}
+  _previewLossColor: {r: 1, g: 0.95, b: 0.75, a: 0.95}
+  _previewLossDimAlpha: 0.35
+  _previewTextColor: {r: 1, g: 0.88, b: 0.5, a: 1}
+  _previewKavachTextColor: {r: 0.8, g: 0.93, b: 1, a: 1}
+  _lethalColor: {r: 1, g: 0.2, b: 0.14, a: 1}
+  _lethalTagFontSize: 16
+  _lethalTagOffset: {x: 0, y: 20}
+  _previewPulseDuration: 0.45
+  _statusChipSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
+  _statusChipSize: {x: 26, y: 26}
+  _statusChipSpacing: 4
+  _statusRowOffset: {x: 0, y: -6}
+  _statusLabelColor: {r: 0.1, g: 0.07, b: 0.05, a: 1}
+  _statusLabelFontSize: 9
+  _statusCountBadgeSize: {x: 16, y: 16}
+  _statusCountBadgeColor: {r: 0.08, g: 0.06, b: 0.05, a: 0.92}
+  _statusCountColor: {r: 0.98, g: 0.95, b: 0.88, a: 1}
+  _statusCountFontSize: 12

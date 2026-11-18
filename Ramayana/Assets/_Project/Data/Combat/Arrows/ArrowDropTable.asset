@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbd215cb4fdc9cf41bd010cd46c4d46e, type: 3}
+  m_Name: ArrowDropTable
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Arrows.ArrowDropTableSO
+  _startChance: 40
+  _chanceStep: 10
+  _minChance: 10
+  _maxChance: 90
+  _commonWeight: 62
+  _uncommonWeight: 30
+  _rareWeight: 8
+  _arrows:
+  - {fileID: 11400000, guid: 96dcd6a6c8685ff45b35ca5ffb787de6, type: 2}
+  - {fileID: 11400000, guid: fbbb0f02dea56024eb190e1e21ac5c8c, type: 2}
+  - {fileID: 11400000, guid: 7fd491490e8faa24daf95e3bbc8f1953, type: 2}
+  - {fileID: 11400000, guid: 420d0f442a9fb494a89e0f9a5e3d55f9, type: 2}
+  - {fileID: 11400000, guid: 6d981bc1215be6d44995e96e73d9ed67, type: 2}
+  - {fileID: 11400000, guid: b2c9f463bac09f14d9a848838c4d8364, type: 2}
+  - {fileID: 11400000, guid: db561c46743c0c0458a4e5c6a519b8e3, type: 2}
+  - {fileID: 11400000, guid: 66442aa59569fa848acc9b4714bcfbae, type: 2}
+  - {fileID: 11400000, guid: 134ed21fe0ef37640a797169069808e9, type: 2}
+  - {fileID: 11400000, guid: 4fbac75788a5bf44d984659722c52f2d, type: 2}
+  - {fileID: 11400000, guid: 285f7ff2311a00f4c9ea12e28bb7ede9, type: 2}
+  - {fileID: 11400000, guid: 847660b5df9602f418ccb55211b905a6, type: 2}

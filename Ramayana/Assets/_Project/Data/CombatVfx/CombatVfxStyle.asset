@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1945417baadf0f640b41a92e773ba2b4, type: 3}
+  m_Name: CombatVfxStyle
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.CombatVfxStyleSO
+  _quadMesh: {fileID: 4300000, guid: 55a14fc3a16ef1e4695ff5c2713d8637, type: 2}
+  _hitLibrary: {fileID: 11400000, guid: 5d23c124bea19b14d963912977c9fbe4, type: 2}
+  _defaultHit: {fileID: 11400000, guid: 464bdf144fbfeab488ddbfb9e9a47251, type: 2}
+  _impactStyle: {fileID: 11400000, guid: 149efb22d0f212545a82b7ac58e7c151, type: 2}
+  _kavach: {fileID: 11400000, guid: acd1eb342e604e544859c8da7ea102f5, type: 2}
+  _statuses: {fileID: 11400000, guid: 0f21472971e1a624db74ad0361ebc338, type: 2}
+  _impactHeight: 0.6
+  _surfaceOffset: 0.05
+  _castHeight: 0
+  _castLift: 0.03
+  _heavySize: 1.35
+  _heavyDuration: 1.2
+  _heavyIntensity: 1.4
+  _killSize: 1.8
+  _killDuration: 1.5
+  _killIntensity: 2
+  _quadPrewarmPerLook: 6
+  _quadMaxPerLook: 12
+  _sparkBurstsPerLook: 8
+  _accentInstancesPerPrefab: 3
+  _accentMaxActive: 12
+  _auraInstancesPerPrefab: 4
+  _missileLaunchHeight: 0.7
+  _missileLaunchForward: 0.4
+  _missileArc: 0.6
+  _stripAccentScripts: 1
+  _disableAccentLights: 1
+  _accentLinger: 3

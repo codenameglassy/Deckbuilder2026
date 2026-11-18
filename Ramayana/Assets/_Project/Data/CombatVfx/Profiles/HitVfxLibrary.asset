@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c750e12247394445be094eca84447d1, type: 3}
+  m_Name: HitVfxLibrary
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.HitVfxLibrarySO
+  _cardTypes:
+  - _key: {fileID: 11400000, guid: 21a69aea9c25d5f4587636a121885e78, type: 2}
+    _profile: {fileID: 11400000, guid: fbc57feb24c7bcb4796f36f85bf8db7b, type: 2}
+  - _key: {fileID: 11400000, guid: cf700a110075326448c21be2d97b77cb, type: 2}
+    _profile: {fileID: 11400000, guid: c17ce1666c5841f4d91cefe5befc086b, type: 2}
+  - _key: {fileID: 11400000, guid: 873fce57cd0ddbe459b6e954220007ed, type: 2}
+    _profile: {fileID: 11400000, guid: 7f11469d1134dd545b8085a577ba2285, type: 2}
+  - _key: {fileID: 11400000, guid: 3c3a86bfba69e174c8341d78e718a868, type: 2}
+    _profile: {fileID: 11400000, guid: 1b8c0baf4b1e5f14fa05e540b4ad0040, type: 2}
+  - _key: {fileID: 11400000, guid: 99083f55e56cb0f49ac4dea85da9522f, type: 2}
+    _profile: {fileID: 11400000, guid: 30f84639aebbc814e8f54711719d069f, type: 2}
+  - _key: {fileID: 11400000, guid: 02f2f6bb5adeca24b8245f77390968ea, type: 2}
+    _profile: {fileID: 11400000, guid: db5c8558078ca9846839e87d3794dc85, type: 2}
+  _cardDefault: {fileID: 11400000, guid: 464bdf144fbfeab488ddbfb9e9a47251, type: 2}
+  _enemies: []
+  _enemyDefault: {fileID: 11400000, guid: eec98dabd75b49c4fb9d32679fa3f6ad, type: 2}
+  _arrows:
+  - _key: {fileID: 11400000, guid: 96dcd6a6c8685ff45b35ca5ffb787de6, type: 2}
+    _profile: {fileID: 11400000, guid: 317818d91743ae54fb272fac4d7a8bf0, type: 2}
+  - _key: {fileID: 11400000, guid: fbbb0f02dea56024eb190e1e21ac5c8c, type: 2}
+    _profile: {fileID: 11400000, guid: b0133463a4ef0d240b7e8fcd8812fe73, type: 2}
+  - _key: {fileID: 11400000, guid: 7fd491490e8faa24daf95e3bbc8f1953, type: 2}
+    _profile: {fileID: 11400000, guid: 8a979a2a7b0bc3e43aaf7b2e1fa1784e, type: 2}
+  - _key: {fileID: 11400000, guid: 420d0f442a9fb494a89e0f9a5e3d55f9, type: 2}
+    _profile: {fileID: 11400000, guid: 70f71876972c3c64da958ab97983d7fb, type: 2}
+  - _key: {fileID: 11400000, guid: 6d981bc1215be6d44995e96e73d9ed67, type: 2}
+    _profile: {fileID: 11400000, guid: f2816dfbb9889dc4ca2afe95c4b00e05, type: 2}
+  - _key: {fileID: 11400000, guid: b2c9f463bac09f14d9a848838c4d8364, type: 2}
+    _profile: {fileID: 11400000, guid: 2068d1c1853b8d948ba6cf588820595c, type: 2}
+  - _key: {fileID: 11400000, guid: db561c46743c0c0458a4e5c6a519b8e3, type: 2}
+    _profile: {fileID: 11400000, guid: 4760d167013ca7141a9861016083a569, type: 2}
+  - _key: {fileID: 11400000, guid: 66442aa59569fa848acc9b4714bcfbae, type: 2}
+    _profile: {fileID: 11400000, guid: 7458cec7b53463f47a391eef4c0713ed, type: 2}
+  - _key: {fileID: 11400000, guid: 134ed21fe0ef37640a797169069808e9, type: 2}
+    _profile: {fileID: 11400000, guid: a0c2d335f1bfe4140b3d0845ce950406, type: 2}
+  - _key: {fileID: 11400000, guid: 4fbac75788a5bf44d984659722c52f2d, type: 2}
+    _profile: {fileID: 11400000, guid: c6d37debddbd992418377e47fc5f2eb4, type: 2}
+  - _key: {fileID: 11400000, guid: 285f7ff2311a00f4c9ea12e28bb7ede9, type: 2}
+    _profile: {fileID: 11400000, guid: d388805442c83184391e20d43b360d06, type: 2}
+  - _key: {fileID: 11400000, guid: 847660b5df9602f418ccb55211b905a6, type: 2}
+    _profile: {fileID: 11400000, guid: 7ac7a0341e6a7a249b4dd7099fda31f9, type: 2}
+  _arrowDefault: {fileID: 11400000, guid: 71bdefb80f8cdd142a3b898a955a174f, type: 2}
+  _roundEnd: {fileID: 11400000, guid: eef88da27ac897d4591f9ccb6bcfdd21, type: 2}

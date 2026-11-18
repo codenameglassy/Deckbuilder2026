@@ -1,5 +1,8 @@
-// Plain C# holder for the active run. Starting a new run while one is active ends the old one first.
+// Plain C# holder for the active run. Starting a new run while one is active ends the old one first. When the player
+// definition's dev starting deck is in use (Editor and Development builds only), each new run logs a warning naming
+// the deck, so a test deck is never mistaken for the real one.
 using System;
+using UnityEngine;
 
 namespace JourneyToLanka.Run
 {
@@ -17,6 +20,7 @@ namespace JourneyToLanka.Run
         {
             EndRun();
             Current = new RunState(definition, seed);
+            WarnIfDevDeck(definition);
             RunStarted?.Invoke(Current);
             return Current;
         }
@@ -31,6 +35,16 @@ namespace JourneyToLanka.Run
             RunState ended = Current;
             Current = null;
             RunEnded?.Invoke(ended);
+        }
+
+        private static void WarnIfDevDeck(RunDefinitionSO definition)
+        {
+            if (definition.Player.UsesDevStartingDeck)
+            {
+                Debug.LogWarning($"Run started with the dev starting deck {definition.Player.StartingDeck.name}. " +
+                                 $"Clear Dev Starting Deck on {definition.Player.name} to play the real deck.",
+                    definition.Player);
+            }
         }
     }
 }

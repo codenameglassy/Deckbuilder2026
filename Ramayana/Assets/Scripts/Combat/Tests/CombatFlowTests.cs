@@ -1,6 +1,6 @@
-// EditMode tests for CombatFlow: the turn cycle, command validation per phase, enemy pacing, field-order enemy
-// actions that skip the fallen, victory and defeat, the shared command pipeline, and a full seeded fight
-// played by a simple bot that must end the same way every time.
+// EditMode tests for CombatFlow: the turn cycle, command validation per phase, enemy pacing including the windup
+// and its EnemyActionStarted announcement, field-order enemy actions that skip the fallen, victory and defeat, the
+// shared command pipeline, and a full seeded fight played by a simple bot that must end the same way every time.
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Cards;
 using JourneyToLanka.Combat.Enemies;
@@ -99,6 +99,59 @@ namespace JourneyToLanka.Combat.Tests
             flow.Tick(0.2f);
             Assert.IsTrue(flow.IsPlayerTurn);
             Assert.AreEqual(2, flow.Model.TurnNumber);
+        }
+
+        [Test]
+        public void EnemyWindup_AnnouncesTheAction_ThenResolvesItAfterTheWindup()
+        {
+            EnemyDefinitionSO attacker = _assets.Enemy(30, 30, 0, _assets.Move(_assets.Damage(7)));
+            CombatFlow flow = CreateFlow(SliceDeck(), 78, Pacing(0.5f, 1f, 0.5f, 0.3f), attacker);
+            var started = new List<int>();
+            flow.EnemyActionStarted += started.Add;
+            flow.Begin();
+            flow.EndTurn();
+
+            flow.Tick(0.6f);
+            CollectionAssert.AreEqual(new[] { 0 }, started, "Did not announce after the start delay.");
+            Assert.AreEqual(78, flow.Model.Player.Health, "Acted before the windup.");
+
+            flow.Tick(0.2f);
+            Assert.AreEqual(78, flow.Model.Player.Health, "Acted before the windup ended.");
+
+            flow.Tick(0.2f);
+            Assert.AreEqual(71, flow.Model.Player.Health, "Did not act after the windup.");
+            CollectionAssert.AreEqual(new[] { 0 }, started, "Announced the same action twice.");
+
+            flow.Tick(0.4f);
+            Assert.IsTrue(flow.IsEnemyTurn, "Returned to the player before the end delay.");
+
+            flow.Tick(0.2f);
+            Assert.IsTrue(flow.IsPlayerTurn);
+        }
+
+        [Test]
+        public void EnemyActionStarted_PrecedesEachAction_InFieldOrder_SkippingTheFallen()
+        {
+            EnemyDefinitionSO first = _assets.Enemy(30, 30, 0, _assets.Move(_assets.Damage(3)));
+            EnemyDefinitionSO fragile = _assets.Enemy(6, 6, 0, _assets.Move(_assets.Damage(5)));
+            EnemyDefinitionSO third = _assets.Enemy(30, 30, 0, _assets.Move(_assets.Damage(7)));
+            CombatFlow flow = CreateFlow(OnlyDeck(_strike), 78, Pacing(0f, 0f, 0f, 0.1f), first, fragile, third);
+            var events = new List<string>();
+            flow.EnemyActionStarted += index => events.Add("start:" + index);
+            flow.Commands.Executed += command =>
+            {
+                if (command is EnemyActCommand act)
+                {
+                    events.Add("act:" + act.EnemyIndex);
+                }
+            };
+
+            flow.Begin();
+            flow.PlayCard(flow.Model.Deck.Hand[0].Id, 1);
+            flow.EndTurn();
+            TickUntilPlayerTurn(flow);
+
+            CollectionAssert.AreEqual(new[] { "start:0", "act:0", "start:2", "act:2" }, events);
         }
 
         [Test]
@@ -282,11 +335,12 @@ namespace JourneyToLanka.Combat.Tests
             return new CombatFlow(model, pacing);
         }
 
-        private CombatPacingSO Pacing(float startDelay, float actionInterval, float endDelay)
+        private CombatPacingSO Pacing(float startDelay, float actionInterval, float endDelay, float windup = 0f)
         {
             CombatPacingSO pacing = _assets.Create<CombatPacingSO>();
             using var serializedObject = new SerializedObject(pacing);
             serializedObject.FindProperty("_enemyTurnStartDelay").floatValue = startDelay;
+            serializedObject.FindProperty("_enemyWindup").floatValue = windup;
             serializedObject.FindProperty("_enemyActionInterval").floatValue = actionInterval;
             serializedObject.FindProperty("_enemyTurnEndDelay").floatValue = endDelay;
             serializedObject.ApplyModifiedPropertiesWithoutUndo();

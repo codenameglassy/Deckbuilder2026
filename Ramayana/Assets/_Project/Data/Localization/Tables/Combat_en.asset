@@ -35,7 +35,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 984793090
-    m_Localized: Deal 6 damage.
+    m_Localized: Deal {0} damage.
     m_Metadata:
       m_Items: []
   - m_Id: 984793091
@@ -43,7 +43,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 984793092
-    m_Localized: Deal 8 damage.
+    m_Localized: Deal {0} damage.
     m_Metadata:
       m_Items: []
   - m_Id: 984793093
@@ -51,7 +51,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 984793094
-    m_Localized: Gain 5 Kavach.
+    m_Localized: Gain {0} Kavach.
     m_Metadata:
       m_Items: []
   - m_Id: 984793095
@@ -59,7 +59,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 984793096
-    m_Localized: Gain 8 Kavach.
+    m_Localized: Gain {0} Kavach.
     m_Metadata:
       m_Items: []
   - m_Id: 984793097
@@ -71,7 +71,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 377714170314752
-    m_Localized: Deal 4 damage twice.
+    m_Localized: Deal {0} damage twice.
     m_Metadata:
       m_Items: []
   - m_Id: 377714170314753
@@ -79,7 +79,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 377714170314754
-    m_Localized: Deal 5 damage twice.
+    m_Localized: Deal {0} damage twice.
     m_Metadata:
       m_Items: []
   - m_Id: 377714170314755
@@ -87,7 +87,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 377714170314756
-    m_Localized: Deal 3 damage four times.
+    m_Localized: Deal {0} damage {1} times.
     m_Metadata:
       m_Items: []
   - m_Id: 377714174509056
@@ -95,7 +95,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 377714174509057
-    m_Localized: Deal 4 damage four times.
+    m_Localized: Deal {0} damage {1} times.
     m_Metadata:
       m_Items: []
   - m_Id: 377714174509058
@@ -103,7 +103,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 377714174509059
-    m_Localized: Gain 8 Kavach. Draw 1.
+    m_Localized: Gain {0} Kavach. Draw {1}.
     m_Metadata:
       m_Items: []
   - m_Id: 377714174509060
@@ -111,7 +111,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 377714174509061
-    m_Localized: Gain 11 Kavach. Draw 1.
+    m_Localized: Gain {0} Kavach. Draw {1}.
     m_Metadata:
       m_Items: []
   - m_Id: 377714174509062
@@ -119,7 +119,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 377714174509063
-    m_Localized: Draw 2 cards.
+    m_Localized: Draw {0} cards. Exhausts.
     m_Metadata:
       m_Items: []
   - m_Id: 377714174509064
@@ -127,7 +127,451 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 377714174509065
-    m_Localized: Draw 3 cards.
+    m_Localized: Draw {0} cards. Exhausts.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4014866628075520
+    m_Localized: Cursed Hound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986071592960
+    m_Localized: Focus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834112
+    m_Localized: Each hit deals extra damage equal to Focus. Ends after the holder's turn.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834113
+    m_Localized: Moha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834114
+    m_Localized: Deals 25% less damage. Lasts one round per stack, up to 3.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834115
+    m_Localized: Bhaya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834116
+    m_Localized: Takes 25% more damage. Lasts one round per stack, up to 3.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834117
+    m_Localized: Dahan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834118
+    m_Localized: At the end of each round, loses health equal to Dahan, ignoring Kavach. Then Dahan halves.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834119
+    m_Localized: Dharma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6567986335834120
+    m_Localized: Builds up over the fight and does not fade. Some cards grow stronger with it or spend it.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631900807168
+    m_Localized: Dharma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944512
+    m_Localized: Invocation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944513
+    m_Localized: Astra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944514
+    m_Localized: Terror of the Bow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944515
+    m_Localized: Deal {1} damage. Apply {0} Bhaya.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944516
+    m_Localized: Terror of the Bow+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944517
+    m_Localized: Deal {1} damage. Apply {0} Bhaya.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944518
+    m_Localized: Break the Illusion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944519
+    m_Localized: Apply {0} Moha. Gain {1} Kavach.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944520
+    m_Localized: Break the Illusion+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944521
+    m_Localized: Apply {0} Moha. Gain {1} Kavach.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944522
+    m_Localized: Agneyastra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944523
+    m_Localized: Deal {1} damage. Apply {0} Dahan.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944524
+    m_Localized: Agneyastra+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944525
+    m_Localized: Deal {1} damage. Apply {0} Dahan.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944526
+    m_Localized: Sanjeevani Leaf
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944527
+    m_Localized: Heal {0} health. Exhausts.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944528
+    m_Localized: Sanjeevani Leaf+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944529
+    m_Localized: Heal {0} health. Exhausts.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944530
+    m_Localized: Tapasya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944531
+    m_Localized: Gain {0} Focus this turn.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944532
+    m_Localized: Tapasya+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944533
+    m_Localized: Gain {0} Focus this turn.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944534
+    m_Localized: Vow of Dharma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944535
+    m_Localized: Gain {0} Dharma.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944536
+    m_Localized: Vow of Dharma+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944537
+    m_Localized: Gain {0} Dharma.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944538
+    m_Localized: Meditation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944539
+    m_Localized: Gain {0} Dharma. Draw {1}.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944540
+    m_Localized: Meditation+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944541
+    m_Localized: Gain {0} Dharma. Draw {1}.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944542
+    m_Localized: Piercing Vow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944543
+    m_Localized: Deal {0} damage. With {2} or more Dharma, deal {3} more.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944544
+    m_Localized: Piercing Vow+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944545
+    m_Localized: Deal {0} damage. With {2} or more Dharma, deal {3} more.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944546
+    m_Localized: Ancient Endurance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944547
+    m_Localized: Gain {0} Kavach. It is not cleared next turn.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944548
+    m_Localized: Ancient Endurance+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944549
+    m_Localized: Gain {0} Kavach. It is not cleared next turn.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944550
+    m_Localized: Brahmastra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944551
+    m_Localized: Spend all Dharma. Deal {0} damage, plus {1} per Dharma spent. Exhausts.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944552
+    m_Localized: Corrupted Yaksha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6572631946944553
+    m_Localized: Maya-Marich
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897543366565888
+    m_Localized: FOC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897543609835520
+    m_Localized: MOH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897543609835521
+    m_Localized: BHY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897543609835522
+    m_Localized: DAH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897543609835523
+    m_Localized: DHR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230548267008
+    m_Localized: Power
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536640
+    m_Localized: Vow of the Exile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536641
+    m_Localized: EXL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536642
+    m_Localized: At the start of each of your turns, gain 1 Dharma. Lasts the whole fight.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536643
+    m_Localized: Devotion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536644
+    m_Localized: DEV
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536645
+    m_Localized: Whenever you gain Dharma, gain 2 Kavach for each Dharma gained. Lasts the whole fight.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536646
+    m_Localized: Blessing of Agni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536647
+    m_Localized: AGN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536648
+    m_Localized: Each of your hits deals 2 extra damage. Lasts the whole fight.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536649
+    m_Localized: Vow of the Exile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536650
+    m_Localized: Each turn, gain 1 Dharma.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536651
+    m_Localized: Devotion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536652
+    m_Localized: Whenever you gain Dharma, gain 2 Kavach for each one.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536653
+    m_Localized: Blessing of Agni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536654
+    m_Localized: Your attacks deal {0} extra damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536655
+    m_Localized: Vayavyastra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536656
+    m_Localized: Remove the enemy's Kavach, then deal {0} damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536657
+    m_Localized: Vayavyastra+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536658
+    m_Localized: Remove the enemy's Kavach, then deal {0} damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536659
+    m_Localized: Gale Arrow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536660
+    m_Localized: Remove the enemy's Kavach, then deal {0} damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536661
+    m_Localized: Gale Arrow+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536662
+    m_Localized: Remove the enemy's Kavach, then deal {0} damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536663
+    m_Localized: Windforce Volley
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536664
+    m_Localized: Deal {0} damage {1} times.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536665
+    m_Localized: Windforce Volley+
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7254230791536666
+    m_Localized: Deal {0} damage {1} times.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091861856256
+    m_Localized: Arrow of Agni
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296768
+    m_Localized: Deal {0} damage, then apply {2} Dahan.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296769
+    m_Localized: Vajra Arrow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296770
+    m_Localized: Gain {0} Kavach.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296771
+    m_Localized: Arrow of Vayu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296772
+    m_Localized: Draw {0} cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296773
+    m_Localized: Arrow of Surya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296774
+    m_Localized: Gain {0} Prana.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296775
+    m_Localized: Arrow of Dread
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296776
+    m_Localized: Apply {0} Bhaya.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296777
+    m_Localized: Mohana Arrow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296778
+    m_Localized: Apply {0} Moha to all enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296779
+    m_Localized: Arrow of Indra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296780
+    m_Localized: Deal {0} damage to all enemies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296781
+    m_Localized: Arrow of Shakti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296782
+    m_Localized: Gain {0} Focus this turn.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296783
+    m_Localized: Sanjivani Arrow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296784
+    m_Localized: Heal {0}% of your maximum health.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296785
+    m_Localized: Arrow of Dharma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296786
+    m_Localized: Gain {0} Dharma.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296787
+    m_Localized: Arrow of Garuda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296788
+    m_Localized: Clear your Moha and draw {0} cards.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296789
+    m_Localized: Arrow of Narayana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569091979296790
+    m_Localized: Deal {0} damage.
     m_Metadata:
       m_Items: []
   references:

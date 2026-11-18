@@ -17,6 +17,8 @@ MonoBehaviour:
   _descriptionKey: card.twin_plus.description
   _type: {fileID: 11400000, guid: 21a69aea9c25d5f4587636a121885e78, type: 2}
   _cost: 1
+  _rarity: 1
   _effects:
   - {fileID: 11400000, guid: 7132b956394cbd44b862f592bd772979, type: 2}
   _upgradedForm: {fileID: 0}
+  _exhausts: 0

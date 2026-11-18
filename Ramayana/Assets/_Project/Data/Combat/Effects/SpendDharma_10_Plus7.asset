@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 356c6d882f8354045becdd2a957d12be, type: 3}
+  m_Name: SpendDharma_10_Plus7
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Effects.SpendStatusDamageEffectSO
+  _status: {fileID: 11400000, guid: 5fcc23637ad236840b2ae5b82b94ddc9, type: 2}
+  _baseDamage: 10
+  _damagePerStack: 7
+  _targets: {fileID: 11400000, guid: 191e752599a15dc4e8b9bf94b6873ed2, type: 2}

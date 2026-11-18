@@ -1,6 +1,9 @@
 // Serialized-property helpers for default asset builders, alongside AssetBuilderUtility.
 // Values are written only into assets the current run created, and arrays are filled only while empty,
 // so running a builder twice changes nothing and hand-edited data is never overwritten.
+// AppendObjectsIfMissing is the one exception for lists that keep growing with content (a reward pool gaining new
+// cards): it adds only the entries not already in the list, at the end, and never removes, reorders or replaces any,
+// so it is still safe to run any number of times.
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -78,6 +81,54 @@ namespace JourneyToLanka.Core.EditorTools
                 (element, index) => element.objectReferenceValue = values[index], report);
         }
 
+        public static void AppendObjectsIfMissing(Object owner, string propertyPath, Object[] values, AssetBuilderReport report)
+        {
+            if (owner == null)
+            {
+                report.AddSkipped($"{propertyPath} (owner is missing)");
+                return;
+            }
+
+            string label = $"{owner.name}.{propertyPath}";
+            using var serializedObject = new SerializedObject(owner);
+            SerializedProperty array = serializedObject.FindProperty(propertyPath);
+            if (array == null || !array.isArray || array.propertyType == SerializedPropertyType.String)
+            {
+                report.AddSkipped($"{label} (no array field with this name)");
+                return;
+            }
+
+            int added = 0;
+            for (int i = 0; i < values.Length; i++)
+            {
+                Object value = values[i];
+                if (value == null)
+                {
+                    report.AddSkipped($"{label} (entry {i} to append is missing)");
+                    continue;
+                }
+
+                if (ContainsObject(array, value))
+                {
+                    continue;
+                }
+
+                int index = array.arraySize;
+                array.arraySize = index + 1;
+                array.GetArrayElementAtIndex(index).objectReferenceValue = value;
+                added++;
+            }
+
+            if (added == 0)
+            {
+                return;
+            }
+
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(owner);
+            report.AddWired($"{label} -> {added} entries appended");
+        }
+
         public static void SetInt(SerializedObject serializedObject, string propertyPath, int value)
         {
             Require(serializedObject, propertyPath).intValue = value;
@@ -110,6 +161,19 @@ namespace JourneyToLanka.Core.EditorTools
             }
 
             return property;
+        }
+
+        private static bool ContainsObject(SerializedProperty array, Object value)
+        {
+            for (int i = 0; i < array.arraySize; i++)
+            {
+                if (array.GetArrayElementAtIndex(i).objectReferenceValue == value)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

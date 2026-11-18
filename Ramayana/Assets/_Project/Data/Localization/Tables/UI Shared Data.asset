@@ -51,6 +51,78 @@ MonoBehaviour:
     m_Key: ui.reward.skip
     m_Metadata:
       m_Items: []
+  - m_Id: 4068095693078528
+    m_Key: ui.combat.your_turn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4068096615825408
+    m_Key: ui.combat.threat_incoming
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4068096615825409
+    m_Key: ui.combat.threat_kavach
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4068096615825410
+    m_Key: ui.combat.threat_taken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4100530170413056
+    m_Key: ui.combat.not_enough_prana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4100530606620672
+    m_Key: ui.combat.choose_target
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300214456320
+    m_Key: ui.combat.draw_pile_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099392
+    m_Key: ui.combat.discard_pile_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099393
+    m_Key: ui.combat.pile_empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099394
+    m_Key: ui.combat.close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099395
+    m_Key: ui.combat.info_health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099396
+    m_Key: ui.combat.info_kavach
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099397
+    m_Key: ui.combat.intent_attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4331300919099398
+    m_Key: ui.combat.intent_defend
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5840097198129152
+    m_Key: ui.combat.lethal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569418434560000
+    m_Key: ui.quiver.caption
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569418518446080
+    m_Key: ui.reward.arrow_kept
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7569418518446081
+    m_Key: ui.reward.arrow_left_behind
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

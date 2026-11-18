@@ -17,6 +17,8 @@ MonoBehaviour:
   _descriptionKey: card.strike.description
   _type: {fileID: 11400000, guid: 21a69aea9c25d5f4587636a121885e78, type: 2}
   _cost: 1
+  _rarity: 1
   _effects:
   - {fileID: 11400000, guid: 9f624a77e773a57408b5ae7ca4989faf, type: 2}
   _upgradedForm: {fileID: 11400000, guid: 38e9ee1a4193e3a49b45105e32694be3, type: 2}
+  _exhausts: 0

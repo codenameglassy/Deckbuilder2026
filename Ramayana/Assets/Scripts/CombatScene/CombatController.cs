@@ -5,7 +5,9 @@
 // When a run service exists, the fight comes from the active run (its encounter, Rama's carried health and deck,
 // and a seed drawn from the run); with no active run it starts one from its Run Definition. Without a run service
 // or run definition it falls back to its own Player and Encounter fields, so the scene still plays on its own.
-// Enemy views that also carry an EnemyIntentView get it bound to their enemy here.
+// Enemy views that also carry an EnemyIntentView or EnemyTargetView get them bound to their enemy here;
+// GetEnemyTarget hands the target views to the targeting UI, and PlayerView and GetEnemyView let same-object
+// presentation helpers (such as CombatImpactDirector) move the fighters' stand-ins.
 // Same-object helpers listen to CombatBegan, a plain C# event.
 using System;
 using JourneyToLanka.Combat;
@@ -42,12 +44,25 @@ namespace JourneyToLanka.CombatScene
 
         private ITickService _ticks;
         private CombatFlow _flow;
+        private EnemyTargetView[] _enemyTargets = Array.Empty<EnemyTargetView>();
 
         public event Action<CombatFlow> CombatBegan;
 
         public CombatFlow Flow => _flow;
 
         public int Seed { get; private set; }
+
+        public CombatantView PlayerView => _playerView;
+
+        public CombatantView GetEnemyView(int enemyIndex)
+        {
+            return enemyIndex >= 0 && enemyIndex < _enemyViews.Length ? _enemyViews[enemyIndex] : null;
+        }
+
+        public EnemyTargetView GetEnemyTarget(int enemyIndex)
+        {
+            return enemyIndex >= 0 && enemyIndex < _enemyTargets.Length ? _enemyTargets[enemyIndex] : null;
+        }
 
         private void Start()
         {
@@ -150,6 +165,7 @@ namespace JourneyToLanka.CombatScene
             }
 
             var enemies = model.Enemies;
+            _enemyTargets = new EnemyTargetView[enemies.Count];
             for (int i = 0; i < _enemyViews.Length; i++)
             {
                 CombatantView view = _enemyViews[i];
@@ -164,6 +180,12 @@ namespace JourneyToLanka.CombatScene
                     if (view.TryGetComponent(out EnemyIntentView intent))
                     {
                         intent.Bind(enemies[i], model);
+                    }
+
+                    if (view.TryGetComponent(out EnemyTargetView target))
+                    {
+                        target.Bind(i);
+                        _enemyTargets[i] = target;
                     }
                 }
                 else

@@ -1,5 +1,7 @@
-// One floating damage number: pops in, rises and fades over the style's duration. Pooled by DamageNumberSpawner,
-// which advances every active number from one tick, so numbers have no Update of their own.
+// One floating damage number, or a short text popup such as "Bhaya 2": pops in, rises and fades over the style's
+// duration. Pooled by DamageNumberSpawner, which advances every active one from one tick, so they have no Update of
+// their own. Text popups are written from a caller-owned StringBuilder, so playing one allocates nothing.
+using System.Text;
 using JourneyToLanka.Core.Pooling;
 using TMPro;
 using UnityEngine;
@@ -30,15 +32,25 @@ namespace JourneyToLanka.CombatScene
 
         public void Play(Vector3 worldPosition, int value, Color color, CombatFeedbackStyleSO style)
         {
+            _label.SetText("{0}", (float)value);
+            Begin(worldPosition, color, style.NumberFontSize, style);
+        }
+
+        public void PlayText(Vector3 worldPosition, StringBuilder text, Color color, float fontSize, CombatFeedbackStyleSO style)
+        {
+            _label.SetText(text);
+            Begin(worldPosition, color, fontSize, style);
+        }
+
+        private void Begin(Vector3 worldPosition, Color color, float fontSize, CombatFeedbackStyleSO style)
+        {
             if (style.NumberFont != null)
             {
                 _label.font = style.NumberFont;
             }
 
-            _label.fontSize = style.NumberFontSize;
+            _label.fontSize = fontSize;
             _label.color = color;
-            _label.SetText("{0}", (float)value);
-
             _start = worldPosition;
             _duration = style.NumberDuration;
             _rise = style.NumberRise;

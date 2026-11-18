@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f138449f65594f478154e9556d2215c, type: 3}
+  m_Name: QuiverStyle
+  m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.QuiverStyleSO
+  _offset: {x: 40, y: 418}
+  _padding: 10
+  _captionGap: 4
+  _slotSize: 72
+  _slotSpacing: 12
+  _slotSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
+  _slotColor: {r: 0.16, g: 0.13, b: 0.1, a: 0.95}
+  _emptySlotColor: {r: 0.16, g: 0.13, b: 0.1, a: 0.45}
+  _arrowIconFraction: 0.72
+  _fallbackArrowSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
+  _inactiveAlpha: 0.55
+  _highlightColor: {r: 1, g: 0.85, b: 0.45, a: 0.9}
+  _highlightThickness: 5
+  _punchScale: 0.12
+  _punchDuration: 0.18
+  _showKeyHints: 1
+  _keyHintFontSize: 16
+  _keyHintColor: {r: 0.96, g: 0.91, b: 0.8, a: 0.8}
+  _keyHintOffset: {x: 4, y: -2}
+  _tooltipWidth: 340
+  _tooltipOffset: {x: 0, y: 10}
+  _tooltipPadding: 12
+  _tooltipSpacing: 4
+  _tooltipNameFontSize: 26
+  _tooltipDescriptionFontSize: 20

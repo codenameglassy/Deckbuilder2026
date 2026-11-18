@@ -1,8 +1,9 @@
 // Creates the combat slice data under Assets/_Project/Data/Combat: card types, targeting rules, effects,
 // Kodanda Strike and Vajra Guard with their upgraded forms, the Nishachar Scout and its three moves,
-// the first encounter, the slice starting deck (5 Strike, 5 Guard), the combat rules and the player definition.
-// Values come from the reference build's balance pass. They are set only on assets this run creates;
-// references and lists are filled only while empty, and existing data is never changed.
+// the first encounter, the starting deck asset (left empty here and filled by the Starting Deck builder, which runs
+// once every starter card exists), the combat rules and the player definition. Values come from the reference
+// build's balance pass. They are set only on assets this run creates; references and lists are filled only while
+// empty, and existing data is never changed.
 using JourneyToLanka.Combat.Cards;
 using JourneyToLanka.Combat.Effects;
 using JourneyToLanka.Combat.Enemies;
@@ -54,9 +55,9 @@ namespace JourneyToLanka.Combat.EditorTools
             BlockEffectSO block6 = Block("Block_6", 6, report);
 
             CardDefinitionSO strikePlus = Card("KodandaStrikePlus", "strike_plus", 1, attackType, null, report, damage8);
-            CardDefinitionSO strike = Card("KodandaStrike", "strike", 1, attackType, strikePlus, report, damage6);
+            Card("KodandaStrike", "strike", 1, attackType, strikePlus, report, damage6);
             CardDefinitionSO guardPlus = Card("VajraGuardPlus", "guard_plus", 1, skillType, null, report, block8);
-            CardDefinitionSO guard = Card("VajraGuard", "guard", 1, skillType, guardPlus, report, block5);
+            Card("VajraGuard", "guard", 1, skillType, guardPlus, report, block5);
 
             EnemyMoveSO scoutAttack7 = Move("NishacharScout_Attack7", "scout_attack_7", report, damage7);
             EnemyMoveSO scoutAttack4x2 = Move("NishacharScout_Attack4x2", "scout_attack_4x2", report, damage4x2);
@@ -70,7 +71,6 @@ namespace JourneyToLanka.Combat.EditorTools
             AssetBuilderSerialization.FillObjectArrayIfEmpty(encounter, "_enemies", new UnityEngine.Object[] { scout }, report);
 
             StartingDeckSO deck = AssetBuilderSerialization.LoadOrCreateConfigured<StartingDeckSO>(StartingDeckPath, report, null);
-            FillDeck(deck, report, strike, 5, guard, 5);
 
             AssetBuilderSerialization.LoadOrCreateConfigured<CombatRulesSO>(CombatRulesPath, report, so =>
             {
@@ -160,25 +160,6 @@ namespace JourneyToLanka.Combat.EditorTools
                 });
             AssetBuilderSerialization.FillObjectArrayIfEmpty(enemy, "_moves", moves, report);
             return enemy;
-        }
-
-        private static void FillDeck(StartingDeckSO deck, AssetBuilderReport report,
-            CardDefinitionSO firstCard, int firstCount, CardDefinitionSO secondCard, int secondCount)
-        {
-            if (firstCard == null || secondCard == null)
-            {
-                report.AddSkipped($"{StartingDeckPath} entries (a card definition is missing)");
-                return;
-            }
-
-            CardDefinitionSO[] cards = { firstCard, secondCard };
-            int[] counts = { firstCount, secondCount };
-
-            AssetBuilderSerialization.FillArrayIfEmpty(deck, "_entries", cards.Length, (element, index) =>
-            {
-                AssetBuilderSerialization.RequireRelative(element, "_card").objectReferenceValue = cards[index];
-                AssetBuilderSerialization.RequireRelative(element, "_count").intValue = counts[index];
-            }, report);
         }
     }
 }

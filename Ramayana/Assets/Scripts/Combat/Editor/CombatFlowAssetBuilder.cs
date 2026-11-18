@@ -1,5 +1,7 @@
 // Creates the combat pacing profile next to the other combat data. Values are set only when this run creates
-// the asset, so tuned timings are never overwritten. Runs after the Combat builder.
+// the asset, so tuned timings are never overwritten (an older asset picks up the windup and the arrow flight at their
+// default values).
+// Runs after the Combat builder.
 using JourneyToLanka.Combat.Flow;
 using JourneyToLanka.Core.EditorTools;
 using UnityEditor;
@@ -22,8 +24,10 @@ namespace JourneyToLanka.Combat.EditorTools
             AssetBuilderSerialization.LoadOrCreateConfigured<CombatPacingSO>(PacingPath, report, so =>
             {
                 AssetBuilderSerialization.Require(so, "_enemyTurnStartDelay").floatValue = 0.5f;
+                AssetBuilderSerialization.Require(so, "_enemyWindup").floatValue = 0.2f;
                 AssetBuilderSerialization.Require(so, "_enemyActionInterval").floatValue = 0.8f;
                 AssetBuilderSerialization.Require(so, "_enemyTurnEndDelay").floatValue = 0.5f;
+                AssetBuilderSerialization.Require(so, "_arrowFlight").floatValue = 0.45f;
             });
         }
     }

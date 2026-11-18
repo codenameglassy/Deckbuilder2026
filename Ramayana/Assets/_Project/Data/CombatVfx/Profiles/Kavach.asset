@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56184dd293b923949ac3017779837bc7, type: 3}
+  m_Name: Kavach
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.KavachVfxProfileSO
+  _shellMaterial: {fileID: 2100000, guid: 4b00100f1eeedcd4b8e67d7e96736b8d, type: 2}
+  _thickness: 0.09
+  _color: {r: 0.25, g: 0.95, b: 1.5, a: 1}
+  _rimColor: {r: 0.6, g: 1.9, b: 2.5, a: 1}
+  _rimPower: 3.2
+  _fill: 0.05
+  _patternDensity: 2.4
+  _patternWidth: 0.035
+  _patternStrength: 0.7
+  _shimmerSpeed: 0.6
+  _softFade: 0.05
+  _fullBlock: 20
+  _minStrength: 0.4
+  _fadeSpeed: 6
+  _gainFlash: 1
+  _flashDecay: 4
+  _gainSwell: 1.5
+  _swellDecay: 5
+  _rippleColor: {r: 2, g: 4, b: 5, a: 1}
+  _rippleDuration: 0.45
+  _rippleBand: 0.3
+  _rippleReach: 2.2
+  _rippleStrengthPerBlock: 0.12
+  _rippleMinStrength: 0.4
+  _shatterDuration: 0.35
+  _shardDensity: 2.5
+  _breakColor: {r: 2.5, g: 4.5, b: 5, a: 1}
+  _shards:
+    _material: {fileID: 2100000, guid: dd612491d08f8144ab665dbea4f46d94, type: 2}
+    _count: 28
+    _maxCount: 64
+    _lifetime: 0.7
+    _lifetimeJitter: 0.4
+    _speedMin: 2
+    _speedMax: 5
+    _drag: 2.5
+    _gravity: 7
+    _spread: 65
+    _upBias: 0.5
+    _hotColor: {r: 2.5, g: 4.5, b: 5, a: 1}
+    _color: {r: 0.5, g: 1.8, b: 2.4, a: 1}
+    _intensity: 1
+    _sparkSize: 0.12
+    _stretch: 0
+    _fadePower: 1.2
+    _cameraPush: 0.3
+  _gainAccent:
+    _prefab: {fileID: 3331781087710591031, guid: 606949094cec9e941b3cb9ea21b238cc, type: 3}
+    _height: 0
+    _onCameraSurface: 0
+    _offset: {x: 0, y: 0, z: 0}
+    _scale: 1
+    _scaleWithHit: 0
+    _alignToBlow: 0
+    _tint: {r: 1, g: 1, b: 1, a: 1}
+    _maxDuration: 3
+  _breakAccent:
+    _prefab: {fileID: 4823694615501282493, guid: 7d62da926ec90d9418dffacae2c63ff9, type: 3}
+    _height: 0.65
+    _onCameraSurface: 1
+    _offset: {x: 0, y: 0, z: 0}
+    _scale: 1
+    _scaleWithHit: 0
+    _alignToBlow: 0
+    _tint: {r: 1, g: 1, b: 1, a: 1}
+    _maxDuration: 3

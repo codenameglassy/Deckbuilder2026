@@ -1,11 +1,20 @@
 // Spawns pooled floating damage numbers and animates every active one from a single tick. Combatant views call
-// Spawn when their fighter loses health (red) or Kavach absorbs damage (blue, offset to the side). The template is
-// built in code and the pool is prewarmed at start, so a fight never instantiates numbers mid-play.
+// Spawn when their fighter loses health (red) or Kavach absorbs damage (blue, offset to the side), SpawnHeal when it
+// is healed (green), and SpawnStatus when a status is applied ("Bhaya 2", the new total, in the status's colour) or
+// spent ("Dharma -3"), a little above the numbers, and SpawnArrow when Rama fires a special arrow (its name, larger,
+// in the arrow's colour, higher still). Status and arrow names come from their localization keys through one cached
+// LocalizedString per asset (LocalizedNameCache), and popup text is built in one reused StringBuilder, so a popup
+// allocates nothing once each status or arrow has been named. The template is built in code and the pool is
+// prewarmed at start, so a fight never instantiates numbers mid-play.
 // Without a tick service (Play mode not started from Boot) it spawns nothing.
 using System.Collections.Generic;
+using System.Text;
+using JourneyToLanka.Combat.Arrows;
+using JourneyToLanka.Combat.Statuses;
 using JourneyToLanka.Core.Pooling;
 using JourneyToLanka.Core.Services;
 using JourneyToLanka.Core.Ticking;
+using JourneyToLanka.Localization;
 using TMPro;
 using UnityEngine;
 
@@ -19,6 +28,8 @@ namespace JourneyToLanka.CombatScene
         [SerializeField, Min(0)] private int _prewarmCount = 8;
 
         private readonly List<DamageNumber> _active = new List<DamageNumber>(16);
+        private readonly LocalizedNameCache _names = new LocalizedNameCache(LocalizationTableNames.Combat);
+        private readonly StringBuilder _text = new StringBuilder(32);
         private ComponentPool<DamageNumber> _pool;
         private ITickService _ticks;
         private bool _registered;
@@ -61,6 +72,7 @@ namespace JourneyToLanka.CombatScene
         private void OnDestroy()
         {
             _pool?.Dispose();
+            _names.Dispose();
         }
 
         public void Spawn(Vector3 worldPosition, int value, bool blocked)
@@ -73,6 +85,61 @@ namespace JourneyToLanka.CombatScene
             DamageNumber number = _pool.Get();
             Vector3 position = blocked ? worldPosition + _style.BlockedSideOffset : worldPosition;
             number.Play(position, value, blocked ? _style.BlockedColor : _style.HealthLossColor, _style);
+            _active.Add(number);
+            SetRegistered(true);
+        }
+
+        public void SpawnHeal(Vector3 worldPosition, int value)
+        {
+            if (_style == null || _ticks == null || value <= 0 || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            DamageNumber number = _pool.Get();
+            number.Play(worldPosition, value, _style.HealColor, _style);
+            _active.Add(number);
+            SetRegistered(true);
+        }
+
+        public void SpawnStatus(Vector3 worldPosition, StatusDefinitionSO status, int amount, int total)
+        {
+            if (_style == null || _ticks == null || status == null || amount == 0 || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            _text.Clear();
+            _text.Append(_names.Get(status, status.NameKey, status.Id));
+            _text.Append(' ');
+            if (amount < 0)
+            {
+                _text.Append('-');
+                AppendNumber(_text, -amount);
+            }
+            else
+            {
+                AppendNumber(_text, total);
+            }
+
+            DamageNumber number = _pool.Get();
+            number.PlayText(worldPosition + _style.StatusPopupOffset, _text, status.Color, _style.StatusPopupFontSize, _style);
+            _active.Add(number);
+            SetRegistered(true);
+        }
+
+        public void SpawnArrow(Vector3 worldPosition, ArrowDefinitionSO arrow)
+        {
+            if (_style == null || _ticks == null || arrow == null || !isActiveAndEnabled)
+            {
+                return;
+            }
+
+            _text.Clear();
+            _text.Append(_names.Get(arrow, arrow.NameKey, arrow.Id));
+
+            DamageNumber number = _pool.Get();
+            number.PlayText(worldPosition + _style.ArrowPopupOffset, _text, arrow.Color, _style.ArrowPopupFontSize, _style);
             _active.Add(number);
             SetRegistered(true);
         }
@@ -92,6 +159,22 @@ namespace JourneyToLanka.CombatScene
             if (_active.Count == 0)
             {
                 SetRegistered(false);
+            }
+        }
+
+        private static void AppendNumber(StringBuilder text, int value)
+        {
+            if (value <= 0)
+            {
+                text.Append('0');
+                return;
+            }
+
+            int start = text.Length;
+            while (value > 0)
+            {
+                text.Insert(start, (char)('0' + value % 10));
+                value /= 10;
             }
         }
 

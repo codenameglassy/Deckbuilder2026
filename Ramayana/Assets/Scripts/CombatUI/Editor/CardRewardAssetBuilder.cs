@@ -1,4 +1,5 @@
-// Creates the card reward screen's style and seeds its English UI text (the title and Take Nothing).
+// Creates the card reward screen's style and seeds its English UI text (the title, Take Nothing, and the lines that
+// report a dropped special arrow kept in the quiver or left behind).
 // Existing assets and edited text are never changed. Runs after the Combat UI builders.
 using System.Collections.Generic;
 using JourneyToLanka.Core.EditorTools;
@@ -16,6 +17,8 @@ namespace JourneyToLanka.CombatUI.EditorTools
         {
             new KeyValuePair<string, string>(CardRewardKeys.Title, "Choose a card to carry on"),
             new KeyValuePair<string, string>(CardRewardKeys.Skip, "Take nothing"),
+            new KeyValuePair<string, string>(CardRewardKeys.ArrowKept, "{0} goes into your quiver."),
+            new KeyValuePair<string, string>(CardRewardKeys.ArrowLeftBehind, "{0} is left behind. Your quiver is full."),
         };
 
         [MenuItem(AssetBuilderConstants.MenuRoot + "Card Reward", priority = AssetBuilderConstants.FeatureMenuPriority + 18)]

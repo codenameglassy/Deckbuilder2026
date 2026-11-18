@@ -1,8 +1,11 @@
-// Creates the vertical slice run: Rama with the slice starting deck, three Nishachar Scout fights in a row, played
-// in the registered combat scene, with the slice reward pool after each won fight. It also creates the
-// CardRewardOffered and CardRewardChosen channels. References are filled only while empty.
+// Creates the vertical slice run: Rama with the slice starting deck, then a Nishachar Scout, two Cursed Hounds and
+// a second Scout, played in the registered combat scene, with the slice reward pool after each won fight, the normal
+// card reward odds as the run's default, and the special-arrow drop table. It also creates the CardRewardOffered and
+// CardRewardChosen channels. References and lists are filled only while empty, so an existing run keeps its
+// encounters.
 // The combat scene is taken from Data/Scenes when exactly one Scene Definition exists there; otherwise assign it.
 using JourneyToLanka.Combat;
+using JourneyToLanka.Combat.Arrows;
 using JourneyToLanka.Combat.EditorTools;
 using JourneyToLanka.Combat.Cards;
 using JourneyToLanka.Core.EditorTools;
@@ -21,8 +24,6 @@ namespace JourneyToLanka.Run.EditorTools
         public const string ChannelsFolder = Root + "/Channels";
         public const string CardRewardOfferedPath = ChannelsFolder + "/CardRewardOffered.asset";
         public const string CardRewardChosenPath = ChannelsFolder + "/CardRewardChosen.asset";
-
-        private const int SliceEncounterCount = 3;
 
         [MenuItem(AssetBuilderConstants.MenuRoot + "Run", priority = AssetBuilderConstants.FeatureMenuPriority + 17)]
         private static void BuildFromMenu()
@@ -49,23 +50,38 @@ namespace JourneyToLanka.Run.EditorTools
                 AssetDatabase.LoadAssetAtPath<PlayerDefinitionSO>(CombatAssetBuilder.PlayerPath), report);
 
             var scout = AssetDatabase.LoadAssetAtPath<CombatEncounterSO>(CombatAssetBuilder.ScoutEncounterPath);
-            if (scout != null)
+            var hounds = AssetDatabase.LoadAssetAtPath<CombatEncounterSO>(ChapterOneEnemiesAssetBuilder.HoundsEncounterPath);
+            if (scout != null && hounds != null)
             {
-                var encounters = new Object[SliceEncounterCount];
-                for (int i = 0; i < encounters.Length; i++)
-                {
-                    encounters[i] = scout;
-                }
-
-                AssetBuilderSerialization.FillObjectArrayIfEmpty(run, "_encounters", encounters, report);
+                AssetBuilderSerialization.FillObjectArrayIfEmpty(run, "_encounters", new Object[] { scout, hounds, scout }, report);
             }
             else
             {
-                report.AddSkipped($"{CombatAssetBuilder.ScoutEncounterPath} (missing, run the Combat builder first)");
+                report.AddSkipped("Run encounters (Scout or Hounds encounter missing, run the Combat builders first)");
             }
 
             AssetBuilderUtility.WireAssetFieldIfNull(run, "_rewardPool",
                 AssetDatabase.LoadAssetAtPath<CardRewardPoolSO>(RewardCardsAssetBuilder.SlicePoolPath), report);
+
+            var rewardOdds = AssetDatabase.LoadAssetAtPath<CardRewardOddsSO>(CardRarityAssetBuilder.NormalOddsPath);
+            if (rewardOdds != null)
+            {
+                AssetBuilderUtility.WireAssetFieldIfNull(run, "_rewardOdds", rewardOdds, report);
+            }
+            else
+            {
+                report.AddSkipped($"{SliceRunPath} reward odds ({CardRarityAssetBuilder.NormalOddsPath} missing, run Card Rarity first)");
+            }
+
+            var arrowDrops = AssetDatabase.LoadAssetAtPath<ArrowDropTableSO>(ArrowsAssetBuilder.DropTablePath);
+            if (arrowDrops != null)
+            {
+                AssetBuilderUtility.WireAssetFieldIfNull(run, "_arrowDrops", arrowDrops, report);
+            }
+            else
+            {
+                report.AddSkipped($"{SliceRunPath} arrow drops ({ArrowsAssetBuilder.DropTablePath} missing, run Special Arrows first)");
+            }
 
             SceneDefinitionSO combatScene = FindSingleSceneDefinition();
             if (combatScene != null)

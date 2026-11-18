@@ -2,7 +2,16 @@
 // action going through one CommandProcessor so input, AI and later replays share a single pipeline.
 // It is plain C# with no timing source of its own: the scene owner calls Begin once, forwards frames to Tick from
 // its ITickable, and calls Stop when the fight is torn down. One flow runs one fight and is never restarted.
+// Special arrows fire through the same pipeline (FireArrow), and victory is checked after them as after a card.
 // Victory is checked after each card and defeat after each enemy action; if both sides fall at once, defeat takes priority.
+// When every enemy has acted the round ends (statuses tick, Dahan burns) and the outcome is checked again before the
+// next player turn, since a burn can finish a fight.
+// EnemyActionStarted fires when an enemy begins its action, one windup (CombatPacingSO) before the action resolves,
+// so views can play an attack that lands exactly when the damage does. Arrows work the same way: a fired arrow is
+// loosed (ArrowLoosed, with the arrow still in its quiver slot), flies for the pacing's arrow flight, then resolves
+// and ArrowLanded follows its effects, so its damage, hit-stop and hit effects land with it. While it flies the player
+// cannot act (CanPlayerAct is false), so nothing changes between loosing and landing. Both are presentation timing
+// only: commands are unchanged, and with no flight time an arrow is loosed and lands in the same call.
 using System;
 using JourneyToLanka.Combat.Model;
 using JourneyToLanka.Core.Commands;
@@ -48,6 +57,17 @@ namespace JourneyToLanka.Combat.Flow
 
         public event Action<CombatPhase> PhaseChanged;
 
+        // Enemy slot index. Raised one windup before that enemy's EnemyActCommand is submitted.
+        public event Action<int> EnemyActionStarted;
+
+        // Quiver slot and target index (-1 for untargeted arrows). Raised when an arrow is loosed, one arrow flight
+        // before it resolves; the arrow is still in Model.Quiver at that slot.
+        public event Action<int, int> ArrowLoosed;
+
+        // The same slot and target index as ArrowLoosed. Raised once the arrow has resolved (after the model's
+        // ArrowFired) and before the outcome is checked; the arrow has left the quiver.
+        public event Action<int, int> ArrowLanded;
+
         public CombatModel Model { get; }
 
         public CombatPacingSO Pacing { get; }
@@ -61,6 +81,11 @@ namespace JourneyToLanka.Combat.Flow
         public bool IsEnemyTurn => Phase == CombatPhase.EnemyTurn;
 
         public bool IsOver => Phase == CombatPhase.Victory || Phase == CombatPhase.Defeat;
+
+        public bool IsArrowInFlight => _playerTurn.IsArrowInFlight;
+
+        // True on the player's turn while no special arrow is in flight: the only time player commands are accepted.
+        public bool CanPlayerAct => IsPlayerTurn && !IsArrowInFlight;
 
         public void Begin()
         {
@@ -90,6 +115,11 @@ namespace JourneyToLanka.Combat.Flow
             return _commands.Submit(new PlayCardCommand(this, cardInstanceId, targetIndex));
         }
 
+        public CommandSubmitResult FireArrow(int slot, int targetIndex)
+        {
+            return _commands.Submit(new FireArrowCommand(this, slot, targetIndex));
+        }
+
         public CommandSubmitResult EndTurn()
         {
             return _commands.Submit(_endTurnCommand);
@@ -111,6 +141,11 @@ namespace JourneyToLanka.Combat.Flow
             _machine.ChangeState(_playerTurn);
         }
 
+        internal void AnnounceEnemyAction(int enemyIndex)
+        {
+            EnemyActionStarted?.Invoke(enemyIndex);
+        }
+
         internal void SubmitEnemyAction(int enemyIndex)
         {
             _commands.Submit(_enemyActCommands[enemyIndex]);
@@ -119,6 +154,28 @@ namespace JourneyToLanka.Combat.Flow
         internal void ResolvePlayCard(int cardInstanceId, int targetIndex)
         {
             Model.TryPlayCard(cardInstanceId, targetIndex);
+            CheckOutcome();
+        }
+
+        internal void LooseArrow(int slot, int targetIndex)
+        {
+            float flight = Pacing.ArrowFlight;
+            if (flight > 0f)
+            {
+                // The flight starts before the announcement, so a listener already sees the player unable to act.
+                _playerTurn.BeginFlight(slot, targetIndex, flight);
+                ArrowLoosed?.Invoke(slot, targetIndex);
+                return;
+            }
+
+            ArrowLoosed?.Invoke(slot, targetIndex);
+            ResolveFireArrow(slot, targetIndex);
+        }
+
+        internal void ResolveFireArrow(int slot, int targetIndex)
+        {
+            Model.TryFireArrow(slot, targetIndex);
+            ArrowLanded?.Invoke(slot, targetIndex);
             CheckOutcome();
         }
 
@@ -132,6 +189,12 @@ namespace JourneyToLanka.Combat.Flow
         {
             Model.EnemyTakeTurn(enemyIndex);
             CheckOutcome();
+        }
+
+        internal bool ResolveRoundEnd()
+        {
+            Model.EndRound();
+            return CheckOutcome();
         }
 
         internal bool CheckOutcome()

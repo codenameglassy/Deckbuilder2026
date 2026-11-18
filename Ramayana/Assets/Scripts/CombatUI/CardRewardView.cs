@@ -2,8 +2,11 @@
 // button. It opens when the run director raises CardRewardOffered, reads the offer from the active run, and answers
 // on CardRewardChosen with the chosen index (or -1). It only presents and forwards the choice; the run applies it.
 // Cards are pooled CardViews styled by the Combat HUD style. Keyboard, mouse and gamepad all work: left and right
-// move between cards, down reaches Take Nothing, and Escape or the east face button takes nothing.
+// move between cards, down reaches Take Nothing, and Escape or the east face button takes nothing. Under Take Nothing
+// a line reports the special arrow the fight dropped, if any (RunState.LastArrowDrop), and whether it went into the
+// quiver or was left behind because the quiver was full (RewardArrowLine).
 using System.Collections.Generic;
+using JourneyToLanka.Combat.Arrows;
 using JourneyToLanka.Combat.Cards;
 using JourneyToLanka.Combat.Model;
 using JourneyToLanka.Core.Events;
@@ -42,6 +45,8 @@ namespace JourneyToLanka.CombatUI
         private Button _skip;
         private TextMeshProUGUI _skipLabel;
         private LocalizedText _skipText;
+        private TextMeshProUGUI _arrowLabel;
+        private RewardArrowLine _arrowLine;
         private ComponentPool<CardView> _pool;
         private InputAction _cancelAction;
         private bool _open;
@@ -94,6 +99,7 @@ namespace JourneyToLanka.CombatUI
             _pool?.Dispose();
             _titleText?.Clear();
             _skipText?.Clear();
+            _arrowLine?.Dispose();
         }
 
         private void Build()
@@ -124,6 +130,9 @@ namespace JourneyToLanka.CombatUI
             UIBuildUtility.Stretch(_skipLabel.rectTransform);
             _skipText = new LocalizedText(_skipLabel);
             _skipText.Set(LocalizationTableNames.UI, CardRewardKeys.Skip);
+
+            _arrowLabel = UIBuildUtility.CreateText("ArrowDrop", _panel, TextAlignmentOptions.Center);
+            _arrowLine = new RewardArrowLine(_arrowLabel);
 
             RectTransform templates = UIBuildUtility.CreateRect("Templates", transform);
             templates.gameObject.SetActive(false);
@@ -184,6 +193,10 @@ namespace JourneyToLanka.CombatUI
             _skip.colors = CardView.CreateTint(_cardStyle);
             UIBuildUtility.StyleText(_skipLabel, _style.Font, _style.SkipFontSize, _style.SkipTextColor);
 
+            UIBuildUtility.Place(_arrowLabel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                _style.ArrowLineOffset, _style.ArrowLineSize);
+            UIBuildUtility.StyleText(_arrowLabel, _style.Font, _style.ArrowLineFontSize, _style.ArrowLineColor);
+
             for (int i = 0; i < _shown.Count; i++)
             {
                 _shown[i].ApplyStyle(_cardStyle);
@@ -202,13 +215,18 @@ namespace JourneyToLanka.CombatUI
                 return;
             }
 
-            Open(runs.Current.PendingReward);
+            RunState run = runs.Current;
+            Open(run.PendingReward, run.LastArrowDrop, run.LastArrowKept);
         }
 
-        private void Open(IReadOnlyList<CardDefinitionSO> cards)
+        private void Open(IReadOnlyList<CardDefinitionSO> cards, ArrowDefinitionSO droppedArrow, bool arrowKept)
         {
             Close();
             _panel.gameObject.SetActive(true);
+            if (droppedArrow != null)
+            {
+                _arrowLine.Show(droppedArrow, arrowKept);
+            }
 
             for (int i = 0; i < cards.Count; i++)
             {
@@ -246,6 +264,7 @@ namespace JourneyToLanka.CombatUI
             }
 
             _shown.Clear();
+            _arrowLine?.Hide();
             _cancelAction?.Disable();
             if (_panel != null)
             {

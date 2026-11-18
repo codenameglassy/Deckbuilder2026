@@ -17,6 +17,8 @@ MonoBehaviour:
   _descriptionKey: card.storm.description
   _type: {fileID: 11400000, guid: 21a69aea9c25d5f4587636a121885e78, type: 2}
   _cost: 2
+  _rarity: 2
   _effects:
   - {fileID: 11400000, guid: 309e6ff31863d654a8acf009b0dac64d, type: 2}
   _upgradedForm: {fileID: 11400000, guid: 42cf1679bf38e314389b503b33e0a1c5, type: 2}
+  _exhausts: 0

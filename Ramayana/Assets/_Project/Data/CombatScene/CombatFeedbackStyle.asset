@@ -22,7 +22,7 @@ MonoBehaviour:
   _numberPopScale: 1.35
   _intentFont: {fileID: 0}
   _intentFontSize: 5
-  _intentOffset: {x: 0, y: 2, z: 0}
+  _intentOffset: {x: 0, y: 1.15, z: 0}
   _intentRowSpacing: 0.6
   _intentLabelSize: {x: 3, y: 0.8}
   _attackColor: {r: 1, g: 0.45, b: 0.35, a: 1}
@@ -30,3 +30,4 @@ MonoBehaviour:
   _attackIcon: {fileID: 0}
   _defendIcon: {fileID: 0}
   _intentIconSize: 0.5
+  _statusIntentSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}

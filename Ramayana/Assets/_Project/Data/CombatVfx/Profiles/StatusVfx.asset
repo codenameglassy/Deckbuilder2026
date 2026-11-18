@@ -1,0 +1,184 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4296caafb11745e4a9b7a7ef53476993, type: 3}
+  m_Name: StatusVfx
+  m_EditorClassIdentifier: JourneyToLanka.CombatVfx::JourneyToLanka.CombatVfx.StatusVfxProfileSO
+  _entries:
+  - _status: {fileID: 11400000, guid: 871201c2ec69af947b3bf39d46e402db, type: 2}
+    _aura:
+      _prefab: {fileID: 5606478119714902438, guid: d49a658b59673114b8a438c260428ec7, type: 3}
+      _height: 0
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 0.8
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 0.9150943, g: 0.5999911, b: 0.5999911, a: 1}
+      _maxDuration: 3
+    _applyAccent:
+      _prefab: {fileID: 0}
+      _height: 0
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 1
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 1.5
+  - _status: {fileID: 11400000, guid: de925e295c74364418cdf7cdfbc41452, type: 2}
+    _aura:
+      _prefab: {fileID: 5024470894249938529, guid: a09b31f4341026c49b2cf6cea8479419, type: 3}
+      _height: 0.2
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 0.85
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 3
+    _applyAccent:
+      _prefab: {fileID: 0}
+      _height: 0
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 1
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 1.5
+  - _status: {fileID: 11400000, guid: 5252d05b02922c042979aab0c3a014aa, type: 2}
+    _aura:
+      _prefab: {fileID: 1842112902970220, guid: a968112194abc8f40b4c04a190e0816e, type: 3}
+      _height: 0.5
+      _onCameraSurface: 1
+      _offset: {x: 0, y: 0.25, z: 0}
+      _scale: 2
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 3
+    _applyAccent:
+      _prefab: {fileID: 0}
+      _height: 0
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 1
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 1.5
+  - _status: {fileID: 11400000, guid: b96a952a2687e004e9c6b685e89d8067, type: 2}
+    _aura:
+      _prefab: {fileID: 1731173506153324, guid: 0cead53e87f84244f89103723e50ed7d, type: 3}
+      _height: 0.1
+      _onCameraSurface: 1
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 2
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 3
+    _applyAccent:
+      _prefab: {fileID: 1117963138859732, guid: 00f33c39964fa154b9b082dc73e7eca2, type: 3}
+      _height: 0
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 1
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 1.5
+  - _status: {fileID: 11400000, guid: 5fcc23637ad236840b2ae5b82b94ddc9, type: 2}
+    _aura:
+      _prefab: {fileID: 1336599754335101577, guid: 6f832c5adbd045a4a8b2e7bc29d3d8a7, type: 3}
+      _height: 0
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 0.85
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 3
+    _applyAccent:
+      _prefab: {fileID: 0}
+      _height: 0
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 1
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 1.5
+  - _status: {fileID: 11400000, guid: 2d3b849b7cd2e8a4a8fde4eab944abc9, type: 2}
+    _aura:
+      _prefab: {fileID: 5465305912183750490, guid: 04802550e55f9984598226d7da5da5f8, type: 3}
+      _height: 0.35
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 2
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 0.5248172, g: 0.9528302, b: 0.28315237, a: 1}
+      _maxDuration: 3
+    _applyAccent:
+      _prefab: {fileID: 1558547209356840, guid: 8fb9af5dc0b6bdd4a9b6a5051bff73d2, type: 3}
+      _height: 0
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 1
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 1.5
+  - _status: {fileID: 11400000, guid: a07374b66f4a1db4281d820b9cebf280, type: 2}
+    _aura:
+      _prefab: {fileID: 484303760593850642, guid: e82df0cde06892643ab5fe7cd9a2eee7, type: 3}
+      _height: 0.5
+      _onCameraSurface: 1
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 0.55
+      _scaleWithHit: 1
+      _alignToBlow: 0
+      _tint: {r: 0.8396226, g: 0.48713955, b: 0.77488077, a: 1}
+      _maxDuration: 3
+    _applyAccent:
+      _prefab: {fileID: 1558547209356840, guid: 8fb9af5dc0b6bdd4a9b6a5051bff73d2, type: 3}
+      _height: 0
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 1
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 0.9622642, g: 0.28595585, b: 0.87761235, a: 1}
+      _maxDuration: 1.5
+  - _status: {fileID: 11400000, guid: 852310c38ed990d4484abfd4e861bf38, type: 2}
+    _aura:
+      _prefab: {fileID: 5606478119714902438, guid: d49a658b59673114b8a438c260428ec7, type: 3}
+      _height: 0.5
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 0.8
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 3
+    _applyAccent:
+      _prefab: {fileID: 1558547209356840, guid: 8fb9af5dc0b6bdd4a9b6a5051bff73d2, type: 3}
+      _height: 0
+      _onCameraSurface: 0
+      _offset: {x: 0, y: 0, z: 0}
+      _scale: 1
+      _scaleWithHit: 0
+      _alignToBlow: 0
+      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _maxDuration: 1.5
+  _maxAurasPerFighter: 2

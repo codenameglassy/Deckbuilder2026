@@ -15,9 +15,11 @@ MonoBehaviour:
   _id: run_slice
   _player: {fileID: 11400000, guid: c838cff51f120ad408e457d75e0d5174, type: 2}
   _encounters:
-  - {fileID: 11400000, guid: 067d5201435b2c2408ff64625da55186, type: 2}
+  - {fileID: 11400000, guid: a15cf39c63eb83b45a28fba4a8d4687c, type: 2}
   - {fileID: 11400000, guid: 067d5201435b2c2408ff64625da55186, type: 2}
   - {fileID: 11400000, guid: 067d5201435b2c2408ff64625da55186, type: 2}
   _combatScene: {fileID: 11400000, guid: 04acc6fb556bef0499e26c791350a312, type: 2}
   _rewardPool: {fileID: 11400000, guid: f21f880de08458547ada97133497095a, type: 2}
   _rewardChoices: 3
+  _rewardOdds: {fileID: 11400000, guid: 7ada6b18a5023404a90e754767570b56, type: 2}
+  _arrowDrops: {fileID: 11400000, guid: 801aeab469a322141aee5ed3d9696c30, type: 2}

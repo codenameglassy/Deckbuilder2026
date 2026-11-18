@@ -16,8 +16,32 @@ MonoBehaviour:
   _font: {fileID: 0}
   _handBottomMargin: 24
   _handMaxWidth: 1300
-  _cardSpacing: 12
   _handInactiveAlpha: 0.6
+  _handLayout: {fileID: 11400000, guid: 5992e464cbab7714db459de2d0f2e117, type: 2}
+  _handSharpness: 16
+  _liftedCardRise: 40
+  _cardGlowMaterial: {fileID: 2100000, guid: c0bb8ffe2b61db8489b4352c6d3073d5, type: 2}
+  _cardGlowColor: {r: 1, g: 0.78, b: 0.35, a: 1}
+  _cardGlowSpread: 18
+  _cardGlowStrength: 0.9
+  _cardGlowPulseAmount: 0.35
+  _cardGlowPulseSpeed: 0.8
+  _cardGlowFadeDuration: 0.2
+  _handSpringFrequency: 4.5
+  _handSpringDamping: 0.72
+  _reflowStagger: 0.025
+  _drawArcHeight: 140
+  _drawFlipPoint: 0.45
+  _drawFlipWidth: 0.16
+  _drawLandSwell: 0.1
+  _sweepArcHeight: 90
+  _sweepSpin: 160
+  _playLineHeight: 360
+  _dragScale: 1
+  _dragArmedScale: 1.1
+  _dragSharpness: 28
+  _dragTiltPerSpeed: 0.01
+  _dragMaxTilt: 12
   _cardSize: {x: 200, y: 280}
   _cardSprite: {fileID: 0}
   _cardColor: {r: 0.22, g: 0.17, b: 0.12, a: 1}
@@ -26,12 +50,71 @@ MonoBehaviour:
   _cardNameFontSize: 24
   _cardTypeFontSize: 18
   _cardDescriptionFontSize: 22
+  _cardValueBuffedColor: {r: 0.5, g: 0.95, b: 0.45, a: 1}
+  _cardValueWeakenedColor: {r: 1, g: 0.45, b: 0.38, a: 1}
   _costBadgeSize: 48
   _costBadgeSprite: {fileID: 0}
   _costBadgeColor: {r: 0.95, g: 0.7, b: 0.25, a: 1}
   _costTextColor: {r: 0.15, g: 0.1, b: 0.05, a: 1}
   _costFontSize: 30
+  _costUnaffordableBadgeColor: {r: 0.72, g: 0.18, b: 0.14, a: 1}
+  _costUnaffordableTextColor: {r: 1, g: 0.92, b: 0.86, a: 1}
   _unplayableAlpha: 0.45
+  _targetingCardScale: 1.12
+  _cardFrameMaterial: {fileID: 2100000, guid: 8475f330874bd5c40bd0e4cd2898ff28, type: 2}
+  _cardTypeVisuals:
+  - {fileID: 11400000, guid: b5ef3404bf2ebd14ba81d22f7ec2f232, type: 2}
+  - {fileID: 11400000, guid: 79da936fb22942041b709231d140350a, type: 2}
+  - {fileID: 11400000, guid: 79ed0201cdb285142b82d83d5883f489, type: 2}
+  - {fileID: 11400000, guid: 65dc877ee1ea13649bc9679a05d012cf, type: 2}
+  - {fileID: 11400000, guid: 7fbb43642f1399a459b702a74b5cf191, type: 2}
+  - {fileID: 11400000, guid: d4c8e10900c61af44b4b9e3335f90f62, type: 2}
+  _defaultCardTypeVisuals: {fileID: 11400000, guid: 69a98a16579fc354e92528629dde55bd, type: 2}
+  _frameBodyTopColor: {r: 0.25, g: 0.2, b: 0.15, a: 1}
+  _frameBodyBottomColor: {r: 0.12, g: 0.095, b: 0.075, a: 1}
+  _frameAccentTint: 0.14
+  _frameCornerRadius: 0.07
+  _frameBorderWidth: 0.03
+  _frameTrimColor: {r: 0.95, g: 0.78, b: 0.42, a: 0.85}
+  _frameTrimWidth: 0.006
+  _frameTrimInset: 0.016
+  _frameBandStrength: 0.9
+  _frameGlowWidth: 0.06
+  _frameGlowStrength: 0.4
+  _frameSheen: 0.08
+  _descriptionPanelSprite: {fileID: 0}
+  _descriptionPanelColor: {r: 0, g: 0, b: 0, a: 0.28}
+  _descriptionPanelPadding: 2
+  _typeIconSize: 22
+  _cardBackSprite: {fileID: 0}
+  _cardBackColor: {r: 0.45, g: 0.16, b: 0.1, a: 1}
+  _drawDuration: 0.35
+  _drawStagger: 0.09
+  _drawStartScale: 0.35
+  _playZoneOffset: {x: 0, y: 80}
+  _playScale: 1.15
+  _playRiseDuration: 0.18
+  _playHold: 0.12
+  _toPileDuration: 0.3
+  _pileArrivalScale: 0.25
+  _pileArrivalAlpha: 0.3
+  _sweepDuration: 0.3
+  _sweepStagger: 0.04
+  _exhaustDuration: 0.3
+  _reshuffleCardCount: 6
+  _reshuffleDuration: 0.3
+  _reshuffleStagger: 0.05
+  _pilePunchScale: 0.15
+  _pilePunchDuration: 0.2
+  _rejectAngle: 6
+  _rejectDuration: 0.3
+  _toastOffset: {x: 0, y: 360}
+  _toastSize: {x: 520, y: 64}
+  _toastFontSize: 30
+  _toastTextColor: {r: 1, g: 0.8, b: 0.6, a: 1}
+  _toastFadeIn: 0.1
+  _toastHold: 0.9
+  _toastFadeOut: 0.25
   _highlightedTint: {r: 1, g: 0.95, b: 0.8, a: 1}
   _pressedTint: {r: 0.8, g: 0.75, b: 0.65, a: 1}
   _selectedTint: {r: 1, g: 0.9, b: 0.6, a: 1}
@@ -46,12 +129,40 @@ MonoBehaviour:
   _pranaOffset: {x: 40, y: 150}
   _drawPileOffset: {x: 40, y: 30}
   _discardPileOffset: {x: -40, y: 30}
+  _pranaOrbs: {fileID: 11400000, guid: 8dc167f388a78674ca4ff34e78da85f0, type: 2}
+  _quiver: {fileID: 11400000, guid: a9aaa9d102a809b49bb87e5b4664064a, type: 2}
   _endTurnSize: {x: 240, y: 80}
   _endTurnOffset: {x: -40, y: 150}
   _endTurnSprite: {fileID: 0}
   _endTurnColor: {r: 0.55, g: 0.2, b: 0.12, a: 1}
   _endTurnTextColor: {r: 0.98, g: 0.94, b: 0.85, a: 1}
   _endTurnFontSize: 30
+  _endTurnGlowColor: {r: 0.95, g: 0.55, b: 0.2, a: 1}
+  _endTurnPulseScale: 1.06
+  _endTurnPulseDuration: 0.7
+  _threatPanelSize: {x: 260, y: 132}
+  _threatPanelOffset: {x: 40, y: 270}
+  _threatPadding: 12
+  _threatCaptionFontSize: 22
+  _threatValueFontSize: 28
+  _threatIncomingColor: {r: 1, g: 0.45, b: 0.35, a: 1}
+  _threatKavachColor: {r: 0.45, g: 0.75, b: 1, a: 1}
+  _threatTakenColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
+  _threatLethalColor: {r: 1, g: 0.2, b: 0.15, a: 1}
+  _threatPreviewColor: {r: 1, g: 0.88, b: 0.5, a: 1}
+  _threatPunchScale: 0.3
+  _threatPunchDuration: 0.25
+  _turnBannerSize: {x: 900, y: 120}
+  _turnBannerOffset: {x: 0, y: 160}
+  _turnBannerSprite: {fileID: 0}
+  _turnBannerColor: {r: 0.05, g: 0.04, b: 0.03, a: 0.85}
+  _turnBannerFontSize: 56
+  _playerTurnTextColor: {r: 0.98, g: 0.85, b: 0.45, a: 1}
+  _enemyTurnTextColor: {r: 0.9, g: 0.35, b: 0.28, a: 1}
+  _turnBannerStartScale: 0.85
+  _turnBannerFadeIn: 0.18
+  _turnBannerHold: 0.6
+  _turnBannerFadeOut: 0.3
   _bannerSize: {x: 640, y: 150}
   _bannerColor: {r: 0.05, g: 0.04, b: 0.03, a: 0.9}
   _bannerFontSize: 72

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdb15bf79f47c214f9f71e915ff48452, type: 3}
+  m_Name: AncientEndurance
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Cards.CardDefinitionSO
+  _id: endure
+  _nameKey: card.endure.name
+  _descriptionKey: card.endure.description
+  _type: {fileID: 11400000, guid: cf700a110075326448c21be2d97b77cb, type: 2}
+  _cost: 1
+  _rarity: 2
+  _effects:
+  - {fileID: 11400000, guid: c8ca5c55cb30c4341a8929ed06a59291, type: 2}
+  _upgradedForm: {fileID: 11400000, guid: 6aad5a547e46cf0408ebaa68b5227764, type: 2}
+  _exhausts: 0

@@ -1,8 +1,10 @@
-// Everything a fight needs to know about Rama: name key, maximum and current health, and the deck as a flat card
-// list. A run builds it from its own state so health and new cards carry between fights; FromDefinition builds a
-// fresh one from the player definition for standalone fights and tests.
+// Everything a fight needs to know about Rama: name key, maximum and current health, the deck as a flat card list,
+// and his quiver of special arrows. A run builds it from its own state so health, new cards and arrows carry between
+// fights (the fight fires from the run's own quiver); FromDefinition builds a fresh one from the player definition
+// for standalone fights and tests. A setup with no quiver fights with an empty one.
 using System;
 using System.Collections.Generic;
+using JourneyToLanka.Combat.Arrows;
 using JourneyToLanka.Combat.Cards;
 
 namespace JourneyToLanka.Combat.Model
@@ -10,11 +12,17 @@ namespace JourneyToLanka.Combat.Model
     public readonly struct PlayerSetup
     {
         public PlayerSetup(string nameKey, int maxHealth, int health, IReadOnlyList<CardDefinitionSO> deck)
+            : this(nameKey, maxHealth, health, deck, null)
+        {
+        }
+
+        public PlayerSetup(string nameKey, int maxHealth, int health, IReadOnlyList<CardDefinitionSO> deck, Quiver quiver)
         {
             NameKey = nameKey;
             MaxHealth = maxHealth;
             Health = health;
             Deck = deck;
+            Quiver = quiver;
         }
 
         public string NameKey { get; }
@@ -24,6 +32,8 @@ namespace JourneyToLanka.Combat.Model
         public int Health { get; }
 
         public IReadOnlyList<CardDefinitionSO> Deck { get; }
+
+        public Quiver Quiver { get; }
 
         public static PlayerSetup FromDefinition(PlayerDefinitionSO player, int health)
         {
@@ -39,7 +49,7 @@ namespace JourneyToLanka.Combat.Model
 
             var deck = new List<CardDefinitionSO>(player.StartingDeck.TotalCount);
             ExpandDeck(player.StartingDeck, deck);
-            return new PlayerSetup(player.NameKey, player.MaxHealth, health, deck);
+            return new PlayerSetup(player.NameKey, player.MaxHealth, health, deck, player.CreateQuiver());
         }
 
         public static void ExpandDeck(StartingDeckSO deck, List<CardDefinitionSO> results)

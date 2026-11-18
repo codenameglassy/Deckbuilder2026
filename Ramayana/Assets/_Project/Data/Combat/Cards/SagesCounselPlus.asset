@@ -17,6 +17,8 @@ MonoBehaviour:
   _descriptionKey: card.counsel_plus.description
   _type: {fileID: 11400000, guid: cf700a110075326448c21be2d97b77cb, type: 2}
   _cost: 0
+  _rarity: 2
   _effects:
   - {fileID: 11400000, guid: 8e45bdcf6d082274daf8c7870f2a41cb, type: 2}
   _upgradedForm: {fileID: 0}
+  _exhausts: 1

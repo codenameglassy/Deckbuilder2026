@@ -1,6 +1,7 @@
 // Plays one card from the hand at an enemy slot (ignored by untargeted cards). The card instance id and target
 // index are the whole command, so a recorded list of them replays a fight exactly from the same seed.
-// Valid only on the player's turn and only when CombatModel.CheckPlay says the card is playable right now.
+// Valid only while the player can act (their turn, with no special arrow in flight) and only when
+// CombatModel.CheckPlay says the card is playable right now.
 using JourneyToLanka.Combat.Model;
 using JourneyToLanka.Core.Commands;
 
@@ -23,7 +24,7 @@ namespace JourneyToLanka.Combat.Flow
 
         public bool CanExecute()
         {
-            return _flow.IsPlayerTurn && _flow.Model.CheckPlay(CardInstanceId, TargetIndex) == CardPlayCheck.Playable;
+            return _flow.CanPlayerAct && _flow.Model.CheckPlay(CardInstanceId, TargetIndex) == CardPlayCheck.Playable;
         }
 
         public void Execute()

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bfd230d26c63646a17092773aec8ae, type: 3}
+  m_Name: TargetMarkerStyle
+  m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.TargetMarkerStyleSO
+  _material: {fileID: 2100000, guid: 97e8068f2e55a0745a368ff02c457b75, type: 2}
+  _color: {r: 1, g: 0.8, b: 0.3, a: 1}
+  _offset: {x: 0, y: -0.49, z: 0}
+  _scale: {x: 1.6, y: 0.02, z: 1.6}

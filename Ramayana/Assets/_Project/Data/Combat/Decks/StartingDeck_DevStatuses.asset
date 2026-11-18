@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa7d50b267ec7347aabbc64a399a655, type: 3}
+  m_Name: StartingDeck_DevStatuses
+  m_EditorClassIdentifier: JourneyToLanka.Combat::JourneyToLanka.Combat.Cards.StartingDeckSO
+  _entries:
+  - _card: {fileID: 11400000, guid: 67306d4a8c8cc1d479fc0229a8e904c9, type: 2}
+    _count: 2
+  - _card: {fileID: 11400000, guid: d9a0c9f57db9111498f6ad29c10b676d, type: 2}
+    _count: 2
+  - _card: {fileID: 11400000, guid: ad5d0790771351144ad242e144ee4f49, type: 2}
+    _count: 1
+  - _card: {fileID: 11400000, guid: a24013c9154551545b6397a5f7261c43, type: 2}
+    _count: 2
+  - _card: {fileID: 11400000, guid: fd08d1101995df544adc4b9a28ccfe43, type: 2}
+    _count: 2
+  - _card: {fileID: 11400000, guid: 39bfb5dcf4bfc724e89918985400d7bf, type: 2}
+    _count: 1
+  - _card: {fileID: 11400000, guid: 6bd947baf8da5924789b78dbfca9326e, type: 2}
+    _count: 1
+  - _card: {fileID: 11400000, guid: b7ad28345b511664094918fb2df4fa49, type: 2}
+    _count: 1
+  - _card: {fileID: 11400000, guid: 0fc8ee861a36ff144ae4e6cf5841ba89, type: 2}
+    _count: 1
+  - _card: {fileID: 11400000, guid: 6fab5441bd98bd347be4de716062f133, type: 2}
+    _count: 1
+  - _card: {fileID: 11400000, guid: 44b271ef0293e2243948c341b2dbdf43, type: 2}
+    _count: 1
+  - _card: {fileID: 11400000, guid: 139caa8d712a2f343b6c29dc572f26b2, type: 2}
+    _count: 1
+  - _card: {fileID: 11400000, guid: e42618d3a70698b45ba5539845c938b8, type: 2}
+    _count: 1

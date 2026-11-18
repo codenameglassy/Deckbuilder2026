@@ -1,6 +1,8 @@
 // Builder helpers for Unity Localization: create a string table collection if missing, make sure it has a table
 // for every project locale, and seed entries. Seeding fills only keys that are missing or empty, so text
-// edited in the Localization Tables window is never overwritten.
+// edited in the Localization Tables window is never overwritten. When a builder's default text changes (card
+// descriptions gaining number placeholders), ReplaceEntriesIfUnchanged moves an entry from the old default to the
+// new one only while it still holds the exact old default, so edited text is still never touched.
 using System.Collections.Generic;
 using JourneyToLanka.Core.EditorTools;
 using UnityEditor;
@@ -88,6 +90,49 @@ namespace JourneyToLanka.Localization.EditorTools
             if (existed > 0)
             {
                 report.AddExisted($"{tableName} ({localeId.Code}): {existed} entries");
+            }
+        }
+
+        public static void ReplaceEntriesIfUnchanged(string tableName, LocaleIdentifier localeId,
+            IReadOnlyList<(string Key, string OldValue, string NewValue)> updates, AssetBuilderReport report)
+        {
+            StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection(tableName);
+            if (collection == null || !(collection.GetTable(localeId) is StringTable table))
+            {
+                return;
+            }
+
+            int replaced = 0;
+            int kept = 0;
+            for (int i = 0; i < updates.Count; i++)
+            {
+                (string key, string oldValue, string newValue) = updates[i];
+                StringTableEntry entry = table.GetEntry(key);
+                if (entry == null || entry.Value == newValue)
+                {
+                    continue;
+                }
+
+                if (entry.Value == oldValue)
+                {
+                    entry.Value = newValue;
+                    replaced++;
+                }
+                else
+                {
+                    kept++;
+                }
+            }
+
+            if (replaced > 0)
+            {
+                EditorUtility.SetDirty(table);
+                report.AddWired($"{tableName} ({localeId.Code}): {replaced} entries moved to the new default text");
+            }
+
+            if (kept > 0)
+            {
+                report.AddSkipped($"{tableName} ({localeId.Code}): {kept} edited entries kept as they are");
             }
         }
     }

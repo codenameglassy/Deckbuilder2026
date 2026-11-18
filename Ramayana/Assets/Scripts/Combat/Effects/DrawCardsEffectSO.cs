@@ -1,6 +1,7 @@
 // Draws cards for the actor, through ICardActions when the actions in the context provide them (the combat model
 // does; enemy moves have no deck, so the effect does nothing there). Drawing follows the deck rules: reshuffle
-// the discard pile when the draw pile runs out, stop at the hand limit.
+// the discard pile when the draw pile runs out, stop at the hand limit. On a card it adds one value, the cards drawn.
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JourneyToLanka.Combat.Effects
@@ -11,6 +12,11 @@ namespace JourneyToLanka.Combat.Effects
         [SerializeField, Min(1)] private int _count = 1;
 
         public int Count => _count;
+
+        public override void AddCardValues(in CardTextContext context, List<CardValue> values)
+        {
+            values.Add(CardValue.Fixed(_count));
+        }
 
         public override void Apply(in EffectContext context)
         {
