@@ -1,5 +1,7 @@
 // Scene wiring for the card reward screen. Fills only empty serialized fields on a selected CardRewardView, with
 // Undo: its style, the Combat HUD style for the cards, and the CardRewardOffered and CardRewardChosen channels.
+// It also saves the view's canvas as Screen Space Overlay at the style's sort order, so player builds draw the
+// reward screen above the combat HUD (see UICanvasWiring).
 using JourneyToLanka.Core.EditorTools;
 using JourneyToLanka.Core.Events;
 using JourneyToLanka.Run.EditorTools;
@@ -38,6 +40,12 @@ namespace JourneyToLanka.CombatUI.EditorTools
                 Wire(view, "_cardStyle", AssetDatabase.LoadAssetAtPath<CombatHudStyleSO>(CombatUIAssetBuilder.StylePath), report);
                 Wire(view, "_rewardOffered", AssetDatabase.LoadAssetAtPath<VoidEventChannelSO>(RunAssetBuilder.CardRewardOfferedPath), report);
                 Wire(view, "_rewardChosen", AssetDatabase.LoadAssetAtPath<IntEventChannelSO>(RunAssetBuilder.CardRewardChosenPath), report);
+
+                var style = AssetDatabase.LoadAssetAtPath<CardRewardStyleSO>(CardRewardAssetBuilder.StylePath);
+                if (style != null)
+                {
+                    UICanvasWiring.SyncOverlayCanvas(view, style.SortingOrder, report);
+                }
             }
         }
 

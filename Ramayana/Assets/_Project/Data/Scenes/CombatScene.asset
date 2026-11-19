@@ -13,9 +13,5 @@ MonoBehaviour:
   m_Name: CombatScene
   m_EditorClassIdentifier: JourneyToLanka.Scenes::JourneyToLanka.Scenes.SceneDefinitionSO
   _id: combatscene
-  _scene:
-    m_AssetGUID: 99c9720ab356a0642a771bea13969a05
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
+  _sceneGuid: 99c9720ab356a0642a771bea13969a05
+  _scenePath: Assets/Scenes/CombatScene.unity

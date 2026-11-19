@@ -12,15 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ed70d8d0602cff46ae7a5efb421063e, type: 3}
   m_Name: CombatFeedbackStyle
   m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatFeedbackStyleSO
-  _numberFont: {fileID: 0}
+  _numberFont: {fileID: 11400000, guid: d70f485aa27dc43f79a8fd168f58435c, type: 2}
   _numberFontSize: 7
   _healthLossColor: {r: 1, g: 0.3, b: 0.25, a: 1}
   _blockedColor: {r: 0.45, g: 0.75, b: 1, a: 1}
+  _healColor: {r: 0.45, g: 0.95, b: 0.55, a: 1}
   _blockedSideOffset: {x: 0.6, y: -0.2, z: 0}
   _numberRise: 0.9
   _numberDuration: 0.8
   _numberPopScale: 1.35
-  _intentFont: {fileID: 0}
+  _statusPopupFontSize: 4.5
+  _statusPopupOffset: {x: 0, y: 0.45, z: 0}
+  _arrowPopupFontSize: 6
+  _arrowPopupOffset: {x: 0, y: 1.1, z: 0}
+  _intentFont: {fileID: 11400000, guid: d70f485aa27dc43f79a8fd168f58435c, type: 2}
   _intentFontSize: 5
   _intentOffset: {x: 0, y: 1.15, z: 0}
   _intentRowSpacing: 0.6

@@ -1,5 +1,5 @@
-// Creates the combo chain bar's assets: the Chain Bar style, with the soft disc sprite (made by the Status Visuals
-// builder) wired in as its pip shape and as the fallback icon for chain kinds without one, then assigns the style to
+// Creates the combo chain bead string's assets: the Chain Bar style, with the soft disc sprite (made by the Status
+// Visuals builder) wired in as its bead shape and as its tier-flash halo, then assigns the style to
 // the Combat HUD style if it has none, and seeds the chain bar's interface text (the multiplier pattern, Finisher and
 // the broken-chain message) into the UI string table. Existing assets, values, assigned references and edited text
 // are never changed. Runs after the Status Visuals, Combat UI and Quiver builders.
@@ -45,8 +45,8 @@ namespace JourneyToLanka.CombatUI.EditorTools
             var disc = AssetDatabase.LoadAssetAtPath<Sprite>(StatusVisualsAssetBuilder.DiscPath);
             if (disc != null)
             {
-                AssetBuilderUtility.WireAssetFieldIfNull(style, "_pipSprite", disc, report);
-                AssetBuilderUtility.WireAssetFieldIfNull(style, "_fallbackIconSprite", disc, report);
+                AssetBuilderUtility.WireAssetFieldIfNull(style, "_beadSprite", disc, report);
+                AssetBuilderUtility.WireAssetFieldIfNull(style, "_haloSprite", disc, report);
             }
             else
             {

@@ -1,64 +1,6 @@
 <linker>
-  <assembly fullname="JourneyToLanka.Combat, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="JourneyToLanka.Combat.Cards.CardDefinitionSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Cards.CardRewardPoolSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Cards.CardTypeSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Cards.StartingDeckSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.CombatEncounterSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.CombatResultEventChannelSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.CombatRulesSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Effects.BlockEffectSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Effects.ChosenTargetRuleSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Effects.DamageEffectSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Effects.DrawCardsEffectSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Enemies.EnemyDefinitionSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Enemies.EnemyMoveSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Flow.CombatPacingSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.PlayerDefinitionSO" preserve="all" />
-    <type fullname="JourneyToLanka.Combat.Cards.DeckEntry" preserve="nothing" serialized="true" />
-  </assembly>
-  <assembly fullname="JourneyToLanka.CombatScene, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="JourneyToLanka.CombatScene.CombatantView" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.CombatantViewStyleSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.CombatCameraAnchorProvider" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.CombatCameraAnchorSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.CombatCameraShake" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.CombatController" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.CombatControllerAnchorProvider" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.CombatControllerAnchorSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.CombatFeedbackStyleSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.CombatImpactDirector" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.CombatImpactStyleSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.DamageNumberSpawner" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.EnemyIntentView" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.EnemyTargetView" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.HitStop" preserve="all" />
-    <type fullname="JourneyToLanka.CombatScene.TargetMarkerStyleSO" preserve="all" />
-  </assembly>
-  <assembly fullname="JourneyToLanka.CombatUI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="JourneyToLanka.CombatUI.CardRewardStyleSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatUI.CardRewardView" preserve="all" />
-    <type fullname="JourneyToLanka.CombatUI.CardTypeVisualsSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatUI.CombatHudStyleSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatUI.CombatHudView" preserve="all" />
-    <type fullname="JourneyToLanka.CombatUI.CombatInspectStyleSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatUI.FanHandLayoutSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatUI.PranaOrbsStyleSO" preserve="all" />
-    <type fullname="JourneyToLanka.CombatUI.TargetingLineStyleSO" preserve="all" />
-  </assembly>
-  <assembly fullname="JourneyToLanka.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="JourneyToLanka.Core.Events.IntEventChannelSO" preserve="all" />
-    <type fullname="JourneyToLanka.Core.Events.VoidEventChannelSO" preserve="all" />
-  </assembly>
-  <assembly fullname="JourneyToLanka.Run, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="JourneyToLanka.Run.RunDefinitionSO" preserve="all" />
-  </assembly>
-  <assembly fullname="JourneyToLanka.Scenes, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="JourneyToLanka.Scenes.SceneDefinitionSO" preserve="all" />
-  </assembly>
   <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
     <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
-    <type fullname="UnityEngine.AddressableAssets.AssetReference" preserve="nothing" serialized="true" />
   </assembly>
   <assembly fullname="Unity.Localization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="UnityEngine.Localization.Locale" preserve="all" />
@@ -70,81 +12,13 @@
     <type fullname="UnityEngine.Localization.LocaleIdentifier" preserve="nothing" serialized="true" />
     <type fullname="UnityEngine.Localization.Tables.TableEntryData" preserve="nothing" serialized="true" />
   </assembly>
-  <assembly fullname="Unity.RenderPipelines.Core.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="UnityEngine.Rendering.Volume" preserve="all" />
-    <type fullname="UnityEngine.Rendering.VolumeProfile" preserve="all" />
-    <type fullname="UnityEngine.Rendering.BoolParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.ClampedFloatParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.ClampedIntParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.ColorParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.FloatParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.MinFloatParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.TextureParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.Vector2Parameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.Vector4Parameter" preserve="nothing" serialized="true" />
-  </assembly>
-  <assembly fullname="Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="UnityEngine.Rendering.Universal.Bloom" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.ChannelMixer" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.ColorAdjustments" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.LiftGammaGain" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.MotionBlur" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.ShadowsMidtonesHighlights" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.SplitToning" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.Tonemapping" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.UniversalAdditionalCameraData" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.UniversalAdditionalLightData" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.Vignette" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.WhiteBalance" preserve="all" />
-    <type fullname="UnityEngine.Rendering.Universal.BloomFilterModeParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.Universal.DownscaleParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.Universal.HDRACESPresetParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.Universal.MotionBlurModeParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.Universal.MotionBlurQualityParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.Universal.NeutralRangeReductionModeParameter" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.Universal.TemporalAA/Settings" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Rendering.Universal.TonemappingModeParameter" preserve="nothing" serialized="true" />
-  </assembly>
   <assembly fullname="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
     <type fullname="UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider" preserve="all" />
     <type fullname="UnityEngine.ResourceManagement.ResourceProviders.BundledAssetProvider" preserve="all" />
     <type fullname="UnityEngine.ResourceManagement.ResourceProviders.InstanceProvider" preserve="all" />
     <type fullname="UnityEngine.ResourceManagement.ResourceProviders.SceneProvider" preserve="all" />
   </assembly>
-  <assembly fullname="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="UnityEngine.AudioListener" preserve="all" />
-  </assembly>
   <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="UnityEngine.Camera" preserve="all" />
-    <type fullname="UnityEngine.Cubemap" preserve="all" />
-    <type fullname="UnityEngine.GameObject" preserve="all" />
-    <type fullname="UnityEngine.Light" preserve="all" />
-    <type fullname="UnityEngine.LightmapSettings" preserve="all" />
-    <type fullname="UnityEngine.Material" preserve="all" />
-    <type fullname="UnityEngine.MeshFilter" preserve="all" />
-    <type fullname="UnityEngine.MeshRenderer" preserve="all" />
     <type fullname="UnityEngine.Object" preserve="all" />
-    <type fullname="UnityEngine.RectTransform" preserve="all" />
-    <type fullname="UnityEngine.RenderSettings" preserve="all" />
-    <type fullname="UnityEngine.Shader" preserve="all" />
-    <type fullname="UnityEngine.Transform" preserve="all" />
-    <type fullname="UnityEngine.Color" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.LayerMask" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.RenderingLayerMask" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Vector2" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Vector3" preserve="nothing" serialized="true" />
-    <type fullname="UnityEngine.Vector4" preserve="nothing" serialized="true" />
-  </assembly>
-  <assembly fullname="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="UnityEngine.BoxCollider" preserve="all" />
-    <type fullname="UnityEngine.MeshCollider" preserve="all" />
-  </assembly>
-  <assembly fullname="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="UnityEngine.EventSystems.PhysicsRaycaster" preserve="all" />
-    <type fullname="UnityEngine.UI.CanvasScaler" preserve="all" />
-    <type fullname="UnityEngine.UI.GraphicRaycaster" preserve="all" />
-  </assembly>
-  <assembly fullname="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="UnityEngine.Canvas" preserve="all" />
   </assembly>
 </linker>

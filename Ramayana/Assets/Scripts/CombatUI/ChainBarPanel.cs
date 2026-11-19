@@ -1,14 +1,15 @@
-// The combo chain bar above the hand: a panel with the running chain's icon, its name in the chain's colour and the
-// count of its cards played in a row ("Bow Chain 3"), its hint line, and one pip per ladder step with the step's
-// multiplier under it (x1, x1, x1.5, x2, x3). Lit pips show the cards played, the next pip is half lit, and the last
-// (the finisher) is drawn larger. It fades in when a chain starts and out when the chain breaks or resets. Each card
-// that builds the chain punches the panel and lights its pip; a step with a multiplier also flashes the panel in the
-// chain's colour, harder for bigger multipliers. The finisher pops a Finisher tag, holds the full bar for a moment,
-// then fades it out. A chain of the style's minimum length or more that another card breaks raises a short "Broken
-// at N in a row" message that rises and fades. It listens only to the ComboChain's events and never changes combat
-// state. It lives on its own child canvas, so its fades and punches never rebuild the static HUD panels. Tweens are
-// DOTween core on unscaled time, killed on Detach and Dispose. Every visual value comes from ChainBarStyleSO and the
-// Combat HUD style; text comes from the chain kind's keys (Combat table) and ChainKeys (UI table).
+// The combo chain bead string at the top centre of the screen: the running chain's name in its colour, one bead per
+// ladder step threaded on a thin line (lit in the chain's colour for each card played in a row, the next bead half
+// lit, the finisher bead larger, a pale ring behind the bead just played), and the current multiplier under the
+// string (x1, x1.5, x2...). It fades in when a chain starts and out when the chain breaks or resets. Each card that
+// builds the chain punches its bead and the multiplier; a step with a multiplier also flashes a halo in the chain's
+// colour behind that bead, bigger and brighter for bigger multipliers. The finisher pops a Finisher tag under the
+// multiplier, holds the full string for a moment, then fades it out. A chain of the style's minimum length or more
+// that another card breaks raises a short "Broken at N in a row" message that drifts and fades. It listens only to
+// the ComboChain's events and never changes combat state. It lives on its own child canvas, so its fades and punches
+// never rebuild the static HUD panels. Tweens are DOTween core on unscaled time, killed on Detach and Dispose. Every
+// visual value comes from ChainBarStyleSO and the Combat HUD style; text comes from the chain kind's name key
+// (Combat table) and ChainKeys (UI table).
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,22 +35,22 @@ namespace JourneyToLanka.CombatUI
 
         private readonly RectTransform _root;
         private readonly CanvasGroup _group;
-        private readonly RectTransform _panel;
-        private readonly Image _background;
-        private readonly Image _flash;
-        private readonly Image _icon;
+        private readonly Image _backing;
         private readonly TextMeshProUGUI _name;
-        private readonly TextMeshProUGUI _count;
-        private readonly TextMeshProUGUI _hint;
-        private readonly RectTransform _pipRow;
+        private readonly RectTransform _row;
+        private readonly Image _thread;
+        private readonly Image _flash;
+        private readonly Image _ring;
+        private readonly TextMeshProUGUI _multiplier;
         private readonly TextMeshProUGUI _finisher;
         private readonly RectTransform _brokenRect;
         private readonly TextMeshProUGUI _broken;
         private readonly LocalizedText _nameText;
-        private readonly LocalizedText _hintText;
         private readonly LocalizedText _finisherText;
         private readonly LocalizedPatternText _brokenText;
-        private readonly List<Pip> _pips = new List<Pip>(5);
+        private readonly List<Bead> _beads = new List<Bead>(5);
+        private readonly List<float> _beadX = new List<float>(5);
+        private readonly List<float> _beadSizes = new List<float>(5);
         private readonly List<CardValue> _brokenValues = new List<CardValue>(1);
         private readonly StringBuilder _labelBuilder = new StringBuilder(LabelCapacity);
         private readonly LocalizedString _multiplierString = new LocalizedString(LocalizationTableNames.UI, ChainKeys.Multiplier);
@@ -72,7 +73,6 @@ namespace JourneyToLanka.CombatUI
         private ChainBarStyleSO _style;
         private ComboChain _chain;
         private ChainKindSO _shownKind;
-        private ChainKindSO _labelledKind;
         private string _multiplierPattern;
         private int _shownCount;
         private bool _allowed;
@@ -82,30 +82,28 @@ namespace JourneyToLanka.CombatUI
         private float _finisherAlpha;
         private float _brokenProgress;
         private Tween _fade;
-        private Tween _punch;
+        private Tween _multiplierPunch;
         private Tween _flashTween;
         private Sequence _finisherSequence;
         private Sequence _brokenSequence;
 
-        private ChainBarPanel(RectTransform root, CanvasGroup group, RectTransform panel, Image background, Image flash,
-            Image icon, TextMeshProUGUI name, TextMeshProUGUI count, TextMeshProUGUI hint, RectTransform pipRow,
-            TextMeshProUGUI finisher, RectTransform brokenRect, TextMeshProUGUI broken)
+        private ChainBarPanel(RectTransform root, CanvasGroup group, Image backing, TextMeshProUGUI name,
+            RectTransform row, Image thread, Image flash, Image ring, TextMeshProUGUI multiplier,
+            TextMeshProUGUI finisher, TextMeshProUGUI broken)
         {
             _root = root;
             _group = group;
-            _panel = panel;
-            _background = background;
-            _flash = flash;
-            _icon = icon;
+            _backing = backing;
             _name = name;
-            _count = count;
-            _hint = hint;
-            _pipRow = pipRow;
+            _row = row;
+            _thread = thread;
+            _flash = flash;
+            _ring = ring;
+            _multiplier = multiplier;
             _finisher = finisher;
-            _brokenRect = brokenRect;
             _broken = broken;
+            _brokenRect = broken.rectTransform;
             _nameText = new LocalizedText(name);
-            _hintText = new LocalizedText(hint);
             _finisherText = new LocalizedText(finisher);
             _finisherText.Set(LocalizationTableNames.UI, ChainKeys.Finisher);
             _brokenText = new LocalizedPatternText(broken);
@@ -130,6 +128,7 @@ namespace JourneyToLanka.CombatUI
 
             _group.alpha = 0f;
             _root.gameObject.SetActive(false);
+            _ring.gameObject.SetActive(false);
             SetFlashAlpha(0f);
             SetFinisherAlpha(0f);
             _brokenRect.gameObject.SetActive(false);
@@ -142,25 +141,18 @@ namespace JourneyToLanka.CombatUI
             group.interactable = false;
             group.blocksRaycasts = false;
 
-            Image background = UIBuildUtility.CreateImage("Panel", root, false);
-            RectTransform panel = background.rectTransform;
-            UIBuildUtility.Stretch(panel);
-            Image flash = UIBuildUtility.CreateImage("Flash", panel, false);
-            UIBuildUtility.Stretch(flash.rectTransform);
-            Image icon = UIBuildUtility.CreateImage("Icon", panel, false);
-            icon.preserveAspect = true;
-            TextMeshProUGUI name = UIBuildUtility.CreateText("Name", panel, TextAlignmentOptions.MidlineLeft);
-            TextMeshProUGUI count = UIBuildUtility.CreateText("Count", panel, TextAlignmentOptions.MidlineRight);
-            TextMeshProUGUI hint = UIBuildUtility.CreateText("Hint", panel, TextAlignmentOptions.MidlineLeft);
-            hint.overflowMode = TextOverflowModes.Ellipsis;
-            RectTransform pipRow = UIBuildUtility.CreateRect("Pips", panel);
-
-            TextMeshProUGUI finisher = UIBuildUtility.CreateText("Finisher", root, TextAlignmentOptions.Bottom);
-
+            Image backing = UIBuildUtility.CreateImage("Backing", root, false);
+            UIBuildUtility.Stretch(backing.rectTransform);
+            TextMeshProUGUI name = UIBuildUtility.CreateText("Name", root, TextAlignmentOptions.Center);
+            RectTransform row = UIBuildUtility.CreateRect("Beads", root);
+            Image thread = UIBuildUtility.CreateImage("Thread", row, false);
+            Image flash = UIBuildUtility.CreateImage("Flash", row, false);
+            Image ring = UIBuildUtility.CreateImage("Ring", row, false);
+            TextMeshProUGUI multiplier = UIBuildUtility.CreateText("Multiplier", root, TextAlignmentOptions.Center);
+            TextMeshProUGUI finisher = UIBuildUtility.CreateText("Finisher", root, TextAlignmentOptions.Top);
             TextMeshProUGUI broken = UIBuildUtility.CreateText("Broken", parent, TextAlignmentOptions.Center);
 
-            return new ChainBarPanel(root, group, panel, background, flash, icon, name, count, hint, pipRow, finisher,
-                broken.rectTransform, broken);
+            return new ChainBarPanel(root, group, backing, name, row, thread, flash, ring, multiplier, finisher, broken);
         }
 
         public void ApplyStyle(CombatHudStyleSO hudStyle, ChainBarStyleSO style)
@@ -173,24 +165,25 @@ namespace JourneyToLanka.CombatUI
                 return;
             }
 
-            UIBuildUtility.StyleImage(_background, hudStyle.PanelSprite, hudStyle.PanelColor);
-            UIBuildUtility.StyleImage(_flash, hudStyle.PanelSprite, Color.clear);
+            UIBuildUtility.StyleImage(_backing, style.BackingSprite, style.BackingColor);
+            _backing.enabled = style.BackingColor.a > 0f;
+            UIBuildUtility.StyleImage(_thread, null, style.ThreadColor);
+            StyleDisc(_ring, style.BeadSprite, style.CurrentRingColor);
+            StyleDisc(_flash, style.HaloSprite, Color.clear);
             SetFlashAlpha(_flashAlpha);
-            UIBuildUtility.StyleText(_name, hudStyle.Font, style.TitleFontSize, hudStyle.HudTextColor);
-            UIBuildUtility.StyleText(_count, hudStyle.Font, style.CountFontSize, hudStyle.HudTextColor);
-            UIBuildUtility.StyleText(_hint, hudStyle.Font, style.HintFontSize, style.HintColor);
+            UIBuildUtility.StyleText(_name, hudStyle.Font, style.NameFontSize, hudStyle.HudTextColor);
+            UIBuildUtility.StyleText(_multiplier, hudStyle.Font, style.MultiplierFontSize, hudStyle.HudTextColor);
             UIBuildUtility.StyleText(_finisher, hudStyle.Font, style.FinisherFontSize, hudStyle.HudTextColor);
             UIBuildUtility.StyleText(_broken, hudStyle.Font, style.BrokenFontSize, style.BrokenColor);
-            UIBuildUtility.Place(_brokenRect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0.5f), style.BrokenOffset,
+            UIBuildUtility.Place(_brokenRect, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), style.BrokenTopOffset,
                 style.BrokenSize);
             SetBrokenProgress(_brokenProgress);
 
-            for (int i = 0; i < _pips.Count; i++)
+            for (int i = 0; i < _beads.Count; i++)
             {
-                _pips[i].ApplyStyle(hudStyle, style);
+                _beads[i].ApplyStyle(style);
             }
 
-            _labelledKind = null;
             Render();
         }
 
@@ -243,13 +236,12 @@ namespace JourneyToLanka.CombatUI
         {
             Detach();
             _multiplierString.StringChanged -= _multiplierChanged;
-            for (int i = 0; i < _pips.Count; i++)
+            for (int i = 0; i < _beads.Count; i++)
             {
-                _pips[i].Dispose();
+                _beads[i].Dispose();
             }
 
             _nameText.Clear();
-            _hintText.Clear();
             _finisherText.Clear();
             _brokenText.Clear();
         }
@@ -314,7 +306,6 @@ namespace JourneyToLanka.CombatUI
         private void HandleMultiplierChanged(string value)
         {
             _multiplierPattern = value;
-            _labelledKind = null;
             Render();
         }
 
@@ -331,30 +322,18 @@ namespace JourneyToLanka.CombatUI
             }
 
             ChainKindSO kind = _shownKind;
-            bool hasIcon = kind.Icon != null;
-            UIBuildUtility.StyleImage(_icon, hasIcon ? kind.Icon : _style.FallbackIconSprite, hasIcon ? Color.white : kind.Color);
-            _icon.enabled = _icon.sprite != null;
             _name.color = kind.Color;
             _nameText.Set(LocalizationTableNames.Combat, kind.NameKey);
-            _count.SetText("{0}", (float)_shownCount);
-            _hintText.Set(LocalizationTableNames.Combat, kind.HintKey);
+            ChainMultiplierFormat.Format(_multiplierPattern, kind.GetPercent(_shownCount), _labelBuilder);
+            _multiplier.SetText(_labelBuilder);
 
-            EnsurePips(kind.Length);
+            EnsureBeads(kind.Length);
             Layout(kind.Length);
-            if (_labelledKind != kind)
-            {
-                _labelledKind = kind;
-                for (int i = 0; i < kind.Length; i++)
-                {
-                    ChainMultiplierFormat.Format(_multiplierPattern, kind.GetPercent(i + 1), _labelBuilder);
-                    _pips[i].SetLabel(_labelBuilder);
-                }
-            }
 
-            for (int i = 0; i < _pips.Count; i++)
+            for (int i = 0; i < _beads.Count; i++)
             {
                 bool visible = i < kind.Length;
-                _pips[i].SetVisible(visible);
+                _beads[i].SetVisible(visible);
                 if (!visible)
                 {
                     continue;
@@ -362,78 +341,96 @@ namespace JourneyToLanka.CombatUI
 
                 if (i < _shownCount)
                 {
-                    _pips[i].SetState(kind.Color, _style.PipLabelLitColor);
+                    _beads[i].SetColor(kind.Color);
                 }
                 else if (i == _shownCount)
                 {
                     Color next = kind.Color;
-                    next.a *= _style.NextPipAlpha;
-                    _pips[i].SetState(next, _style.PipLabelColor);
+                    next.a *= _style.NextBeadAlpha;
+                    _beads[i].SetColor(next);
                 }
                 else
                 {
-                    _pips[i].SetState(_style.PipEmptyColor, _style.PipLabelColor);
+                    _beads[i].SetColor(_style.BeadEmptyColor);
                 }
             }
-        }
 
-        private void EnsurePips(int count)
-        {
-            while (_pips.Count < count)
+            int current = Mathf.Min(_shownCount, kind.Length) - 1;
+            bool hasCurrent = current >= 0 && current < _beadX.Count;
+            _ring.gameObject.SetActive(hasCurrent);
+            if (hasCurrent)
             {
-                var pip = new Pip(_pipRow, _pips.Count);
-                if (_hudStyle != null && _style != null)
-                {
-                    pip.ApplyStyle(_hudStyle, _style);
-                }
-
-                _pips.Add(pip);
+                PlaceAtBead(_ring.rectTransform, current, _beadSizes[current] * _style.CurrentRingScale);
             }
         }
 
-        private void Layout(int pipCount)
+        private void EnsureBeads(int count)
+        {
+            while (_beads.Count < count)
+            {
+                var bead = new Bead(_row, _beads.Count);
+                if (_style != null)
+                {
+                    bead.ApplyStyle(_style);
+                }
+
+                _beads.Add(bead);
+            }
+        }
+
+        private void Layout(int beadCount)
         {
             ChainBarStyleSO style = _style;
-            float padding = style.Padding;
+            float padding = style.BackingPadding;
             float width = style.Width;
-            float inner = Mathf.Max(0f, width - padding * 2f);
-            float titleRow = Mathf.Max(style.IconSize, Mathf.Max(style.TitleFontSize, style.CountFontSize) * LineHeight);
-            float hintRow = style.HintFontSize * LineHeight;
-            float maxPip = style.PipSize * style.FinisherPipScale;
-            float labelRow = style.PipLabelFontSize * LineHeight;
-            float pipRow = maxPip + style.PipLabelGap + labelRow;
-            float height = padding * 2f + titleRow + style.RowSpacing + hintRow + style.RowSpacing + pipRow;
+            float nameHeight = style.NameFontSize * LineHeight;
+            float maxBead = style.BeadSize * style.FinisherBeadScale;
+            float multiplierHeight = style.MultiplierFontSize * LineHeight;
+            float height = padding * 2f + nameHeight + style.NameGap + maxBead + style.MultiplierGap + multiplierHeight;
 
-            UIBuildUtility.Place(_root, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), style.Offset, new Vector2(width, height));
+            UIBuildUtility.Place(_root, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), style.TopOffset,
+                new Vector2(width + padding * 2f, height));
 
             float y = -padding;
-            UIBuildUtility.Place(_icon.rectTransform, new Vector2(0f, 1f), new Vector2(0f, 0.5f),
-                new Vector2(padding, y - titleRow * 0.5f), new Vector2(style.IconSize, style.IconSize));
-            float nameX = padding + style.IconSize + style.IconGap;
-            float nameWidth = Mathf.Max(0f, width - nameX - padding - style.CountWidth);
-            UIBuildUtility.Place(_name.rectTransform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(nameX, y),
-                new Vector2(nameWidth, titleRow));
-            UIBuildUtility.Place(_count.rectTransform, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-padding, y),
-                new Vector2(style.CountWidth, titleRow));
+            UIBuildUtility.Place(_name.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, y),
+                new Vector2(width, nameHeight));
+            y -= nameHeight + style.NameGap;
+            UIBuildUtility.Place(_row, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, y),
+                new Vector2(width, maxBead));
+            y -= maxBead + style.MultiplierGap;
+            UIBuildUtility.Place(_multiplier.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+                new Vector2(0f, y), new Vector2(width, multiplierHeight));
+            UIBuildUtility.Place(_finisher.rectTransform, new Vector2(0.5f, 0f), new Vector2(0.5f, 1f),
+                new Vector2(0f, -style.FinisherGap), new Vector2(width, style.FinisherFontSize * LineHeight));
 
-            y -= titleRow + style.RowSpacing;
-            UIBuildUtility.Place(_hint.rectTransform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(padding, y),
-                new Vector2(inner, hintRow));
-
-            y -= hintRow + style.RowSpacing;
-            UIBuildUtility.Place(_pipRow, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(padding, y),
-                new Vector2(inner, pipRow));
-
-            float slot = pipCount > 0 ? inner / pipCount : inner;
-            for (int i = 0; i < pipCount && i < _pips.Count; i++)
+            _beadX.Clear();
+            _beadSizes.Clear();
+            float usable = Mathf.Max(0f, width - maxBead);
+            for (int i = 0; i < beadCount; i++)
             {
-                bool finisher = i == pipCount - 1;
-                float size = finisher ? maxPip : style.PipSize;
-                _pips[i].Place(slot * (i + 0.5f), maxPip, size, slot, labelRow, style.PipLabelGap);
+                float x = maxBead * 0.5f + (beadCount > 1 ? usable * i / (beadCount - 1) : usable * 0.5f);
+                float size = i == beadCount - 1 ? maxBead : style.BeadSize;
+                _beadX.Add(x);
+                _beadSizes.Add(size);
+                if (i < _beads.Count)
+                {
+                    PlaceAtBead(_beads[i].Rect, i, size);
+                }
             }
 
-            UIBuildUtility.Place(_finisher.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 0f), style.FinisherOffset,
-                new Vector2(width, style.FinisherFontSize * LineHeight));
+            if (beadCount > 0)
+            {
+                float start = _beadX[0];
+                float length = _beadX[beadCount - 1] - start;
+                UIBuildUtility.Place(_thread.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f),
+                    new Vector2(start, 0f), new Vector2(length, style.ThreadThickness));
+            }
+        }
+
+        private void PlaceAtBead(RectTransform rect, int index, float size)
+        {
+            UIBuildUtility.Place(rect, new Vector2(0f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(_beadX[index], 0f),
+                new Vector2(size, size));
         }
 
         private void Show()
@@ -464,20 +461,20 @@ namespace JourneyToLanka.CombatUI
         private void HideNow()
         {
             KillTween(ref _fade);
-            KillTween(ref _punch);
+            KillTween(ref _multiplierPunch);
             KillTween(ref _flashTween);
             KillFinisher();
             KillBroken();
-            for (int i = 0; i < _pips.Count; i++)
+            for (int i = 0; i < _beads.Count; i++)
             {
-                _pips[i].StopPunch();
+                _beads[i].StopPunch();
             }
 
             _shown = false;
             _shownKind = null;
             _shownCount = 0;
             _group.alpha = 0f;
-            _panel.localScale = Vector3.one;
+            _multiplier.rectTransform.localScale = Vector3.one;
             SetFlashAlpha(0f);
             _root.gameObject.SetActive(false);
         }
@@ -498,30 +495,32 @@ namespace JourneyToLanka.CombatUI
         private void PlayTier(ChainKindSO kind, int step, int percent)
         {
             float strength = Mathf.Max(0, percent - ChainScale.NeutralPercent) / (float)ChainScale.NeutralPercent;
-
-            KillTween(ref _punch);
-            _panel.localScale = Vector3.one;
-            float punch = _style.PunchBase + _style.PunchPerMultiplier * strength;
-            if (punch > 0f)
+            int bead = step - 1;
+            if (bead >= 0 && bead < _beads.Count)
             {
-                _punch = _panel.DOPunchScale(Vector3.one * punch, _style.PunchDuration, PunchVibrato, PunchElasticity)
-                    .SetUpdate(true);
+                _beads[bead].Punch(_style.BeadPunchBase + _style.BeadPunchPerMultiplier * strength, _style.PunchDuration);
             }
 
-            int pip = step - 1;
-            if (pip >= 0 && pip < _pips.Count)
+            KillTween(ref _multiplierPunch);
+            Transform multiplier = _multiplier.rectTransform;
+            multiplier.localScale = Vector3.one;
+            float punch = _style.MultiplierPunchBase + _style.MultiplierPunchPerMultiplier * strength;
+            if (punch > 0f)
             {
-                _pips[pip].Punch(_style.PipPunchScale, _style.PipPunchDuration);
+                _multiplierPunch = multiplier.DOPunchScale(Vector3.one * punch, _style.PunchDuration, PunchVibrato,
+                    PunchElasticity).SetUpdate(true);
             }
 
             KillTween(ref _flashTween);
             float flash = Mathf.Min(_style.FlashMaxAlpha, _style.FlashAlphaPerMultiplier * strength);
-            if (flash <= 0f)
+            if (flash <= 0f || bead < 0 || bead >= _beadX.Count)
             {
                 SetFlashAlpha(0f);
                 return;
             }
 
+            float size = _beadSizes[bead] * (_style.HaloScale + _style.HaloScalePerMultiplier * strength);
+            PlaceAtBead(_flash.rectTransform, bead, size);
             _flash.color = new Color(kind.Color.r, kind.Color.g, kind.Color.b, 0f);
             SetFlashAlpha(flash);
             _flashTween = DOTween.To(_getFlash, _setFlash, 0f, _style.FlashDuration).SetEase(Ease.OutQuad).SetUpdate(true);
@@ -530,9 +529,10 @@ namespace JourneyToLanka.CombatUI
         private void PlayFinisher(ChainKindSO kind)
         {
             KillFinisher();
+            _holdingFinisher = true;
             _finisher.color = new Color(kind.Color.r, kind.Color.g, kind.Color.b, 0f);
             SetFinisherAlpha(0f);
-            Transform label = _finisher.transform;
+            Transform label = _finisher.rectTransform;
             label.localScale = Vector3.one * _style.FinisherStartScale;
 
             Sequence sequence = DOTween.Sequence();
@@ -572,7 +572,7 @@ namespace JourneyToLanka.CombatUI
             _brokenSequence = sequence;
         }
 
-        // Progress 0 to 1 over the whole message: it fades in, holds, fades out, and rises the whole time.
+        // Progress 0 to 1 over the whole message: it fades in, holds, fades out, and drifts by BrokenRise the whole time.
         private void SetBrokenProgress(float progress)
         {
             _brokenProgress = progress;
@@ -581,8 +581,7 @@ namespace JourneyToLanka.CombatUI
                 return;
             }
 
-            float total = Mathf.Max(0.0001f, _style.BrokenFadeIn + _style.BrokenHold + _style.BrokenFadeOut);
-            float time = progress * total;
+            float time = progress * (_style.BrokenFadeIn + _style.BrokenHold + _style.BrokenFadeOut);
             float alpha;
             if (time < _style.BrokenFadeIn)
             {
@@ -598,7 +597,7 @@ namespace JourneyToLanka.CombatUI
             }
 
             _broken.alpha = Mathf.Clamp01(alpha);
-            _brokenRect.anchoredPosition = _style.BrokenOffset + new Vector2(0f, _style.BrokenRise * progress);
+            _brokenRect.anchoredPosition = _style.BrokenTopOffset + new Vector2(0f, _style.BrokenRise * progress);
         }
 
         private void SetFlashAlpha(float alpha)
@@ -607,6 +606,7 @@ namespace JourneyToLanka.CombatUI
             Color color = _flash.color;
             color.a = alpha;
             _flash.color = color;
+            _flash.enabled = alpha > 0f;
         }
 
         private void SetFinisherAlpha(float alpha)
@@ -640,6 +640,13 @@ namespace JourneyToLanka.CombatUI
             _brokenRect.gameObject.SetActive(false);
         }
 
+        private static void StyleDisc(Image image, Sprite sprite, Color color)
+        {
+            UIBuildUtility.StyleImage(image, sprite, color);
+            image.type = Image.Type.Simple;
+            image.preserveAspect = true;
+        }
+
         private static void KillTween(ref Tween tween)
         {
             if (tween == null)
@@ -652,32 +659,21 @@ namespace JourneyToLanka.CombatUI
             active.Kill();
         }
 
-        private sealed class Pip : IDisposable
+        private sealed class Bead : IDisposable
         {
             private readonly Image _image;
-            private readonly TextMeshProUGUI _label;
             private Tween _punch;
 
-            public Pip(Transform parent, int index)
+            public Bead(Transform parent, int index)
             {
-                _image = UIBuildUtility.CreateImage("Pip" + (index + 1), parent, false);
-                _label = UIBuildUtility.CreateText("Label", parent, TextAlignmentOptions.Top);
+                _image = UIBuildUtility.CreateImage("Bead" + (index + 1), parent, false);
             }
 
-            public void ApplyStyle(CombatHudStyleSO hudStyle, ChainBarStyleSO style)
-            {
-                _image.sprite = style.PipSprite;
-                _image.type = Image.Type.Simple;
-                _image.preserveAspect = true;
-                UIBuildUtility.StyleText(_label, hudStyle.Font, style.PipLabelFontSize, style.PipLabelColor);
-            }
+            public RectTransform Rect => _image.rectTransform;
 
-            public void Place(float centerX, float rowPipHeight, float size, float slotWidth, float labelHeight, float gap)
+            public void ApplyStyle(ChainBarStyleSO style)
             {
-                UIBuildUtility.Place(_image.rectTransform, new Vector2(0f, 1f), new Vector2(0.5f, 0.5f),
-                    new Vector2(centerX, -rowPipHeight * 0.5f), new Vector2(size, size));
-                UIBuildUtility.Place(_label.rectTransform, new Vector2(0f, 1f), new Vector2(0.5f, 1f),
-                    new Vector2(centerX, -(rowPipHeight + gap)), new Vector2(slotWidth, labelHeight));
+                StyleDisc(_image, style.BeadSprite, _image.color);
             }
 
             public void SetVisible(bool visible)
@@ -685,19 +681,12 @@ namespace JourneyToLanka.CombatUI
                 if (_image.gameObject.activeSelf != visible)
                 {
                     _image.gameObject.SetActive(visible);
-                    _label.gameObject.SetActive(visible);
                 }
             }
 
-            public void SetLabel(StringBuilder text)
+            public void SetColor(Color color)
             {
-                _label.SetText(text);
-            }
-
-            public void SetState(Color pipColor, Color labelColor)
-            {
-                _image.color = pipColor;
-                _label.color = labelColor;
+                _image.color = color;
             }
 
             public void Punch(float scale, float duration)

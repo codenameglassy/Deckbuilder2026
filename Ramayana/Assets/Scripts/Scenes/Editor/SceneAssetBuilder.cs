@@ -1,6 +1,9 @@
 // Scene loading assets. The default builder creates the Load Scene channel. "Register Active Scene" (under
-// Tools > Journey to Lanka > Scenes) makes the open, saved scene an Addressable and creates its SceneDefinitionSO
-// at Data/Scenes/<SceneName>.asset, filling the scene reference only while it is empty. Both are idempotent.
+// Tools > Journey to Lanka > Scenes) adds the open, saved scene to the build's scene list, removes any Addressable
+// entry it has (gameplay scenes must not be Addressable, or ScriptableObjects shared with Boot are duplicated in
+// player builds), and creates its SceneDefinitionSO at Data/Scenes/<SceneName>.asset, filling the scene GUID only
+// while it is empty and keeping the stored path in sync with that GUID. Both are idempotent.
+using System.Collections.Generic;
 using JourneyToLanka.Core.EditorTools;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
@@ -53,22 +56,8 @@ namespace JourneyToLanka.Scenes.EditorTools
                 return;
             }
 
-            AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.GetSettings(true);
-            if (settings == null)
-            {
-                report.AddSkipped("Addressables settings could not be created");
-                return;
-            }
-
-            if (settings.FindAssetEntry(guid) != null)
-            {
-                report.AddExisted($"Addressable entry for {scene.path}");
-            }
-            else
-            {
-                settings.CreateOrMoveEntry(guid, settings.DefaultGroup);
-                report.AddCreated($"Addressable entry for {scene.path}");
-            }
+            AddToBuildScenes(scene.path, report);
+            RemoveAddressableEntry(guid, scene.path, report);
 
             string definitionPath = Root + "/" + scene.name + ".asset";
             SceneDefinitionSO definition = AssetBuilderSerialization.LoadOrCreateConfigured<SceneDefinitionSO>(definitionPath, report,
@@ -79,18 +68,73 @@ namespace JourneyToLanka.Scenes.EditorTools
             }
 
             using var serializedObject = new SerializedObject(definition);
-            SerializedProperty guidProperty = AssetBuilderSerialization.Require(serializedObject, "_scene.m_AssetGUID");
+            SerializedProperty guidProperty = AssetBuilderSerialization.Require(serializedObject, "_sceneGuid");
+            SerializedProperty pathProperty = AssetBuilderSerialization.Require(serializedObject, "_scenePath");
+
             if (string.IsNullOrEmpty(guidProperty.stringValue))
             {
                 guidProperty.stringValue = guid;
-                serializedObject.ApplyModifiedPropertiesWithoutUndo();
-                EditorUtility.SetDirty(definition);
                 report.AddWired($"{definitionPath} scene reference");
+            }
+            else if (guidProperty.stringValue != guid)
+            {
+                report.AddSkipped($"{definitionPath} already points at another scene");
+                return;
             }
             else
             {
                 report.AddExisted($"{definitionPath} scene reference");
             }
+
+            if (pathProperty.stringValue != scene.path)
+            {
+                pathProperty.stringValue = scene.path;
+                report.AddWired($"{definitionPath} scene path");
+            }
+
+            if (serializedObject.ApplyModifiedPropertiesWithoutUndo())
+            {
+                EditorUtility.SetDirty(definition);
+            }
+        }
+
+        private static void AddToBuildScenes(string scenePath, AssetBuilderReport report)
+        {
+            EditorBuildSettingsScene[] scenes = EditorBuildSettings.scenes;
+            for (int i = 0; i < scenes.Length; i++)
+            {
+                if (scenes[i].path != scenePath)
+                {
+                    continue;
+                }
+
+                if (scenes[i].enabled)
+                {
+                    report.AddExisted($"Build scene list entry for {scenePath}");
+                    return;
+                }
+
+                scenes[i].enabled = true;
+                EditorBuildSettings.scenes = scenes;
+                report.AddWired($"Enabled build scene list entry for {scenePath}");
+                return;
+            }
+
+            var list = new List<EditorBuildSettingsScene>(scenes) { new EditorBuildSettingsScene(scenePath, true) };
+            EditorBuildSettings.scenes = list.ToArray();
+            report.AddCreated($"Build scene list entry for {scenePath}");
+        }
+
+        private static void RemoveAddressableEntry(string guid, string scenePath, AssetBuilderReport report)
+        {
+            AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
+            if (settings == null || settings.FindAssetEntry(guid) == null)
+            {
+                return;
+            }
+
+            settings.RemoveAssetEntry(guid);
+            report.AddWired($"Removed Addressable entry for {scenePath}");
         }
     }
 }

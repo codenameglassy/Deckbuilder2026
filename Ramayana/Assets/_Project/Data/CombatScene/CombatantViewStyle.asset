@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b41ffd35a0f778449a81604ccdf418c, type: 3}
   m_Name: CombatantViewStyle
   m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatantViewStyleSO
-  _font: {fileID: 0}
+  _font: {fileID: 11400000, guid: d70f485aa27dc43f79a8fd168f58435c, type: 2}
   _barOffset: {x: 0, y: 0.9, z: 0}
   _barWorldScale: 0.01
   _barSize: {x: 120, y: 20}
@@ -41,8 +41,6 @@ MonoBehaviour:
   _shakeDuration: 0.25
   _shakeStrength: 0.12
   _shakeFrequency: 40
-  _blockPulseScale: 0.12
-  _blockPulseDuration: 0.2
   _lungeDistance: 0.9
   _lungeWindBack: 0.25
   _lungeWindBackShare: 0.45
@@ -69,3 +67,4 @@ MonoBehaviour:
   _statusCountBadgeColor: {r: 0.08, g: 0.06, b: 0.05, a: 0.92}
   _statusCountColor: {r: 0.98, g: 0.95, b: 0.88, a: 1}
   _statusCountFontSize: 12
+  _statusGhostAlpha: 0.5

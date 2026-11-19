@@ -1,6 +1,8 @@
 // Scene wiring for the combat UI. Fills only empty serialized fields on the selected objects, with Undo:
 // a CombatHudView gets its style, the CombatController anchor and the CombatStarted channel; a
-// CombatControllerAnchorProvider gets the anchor. Assigned values are never replaced. It also checks the EventSystem:
+// CombatControllerAnchorProvider gets the anchor. Assigned values are never replaced. The HUD's canvas is also saved
+// as Screen Space Overlay (its sort order is left as set), so player builds draw it in the right order (see
+// UICanvasWiring). It also checks the EventSystem:
 // the Boot scene owns the game's only EventSystem (it stays loaded under every gameplay scene), so this tool never adds
 // one. It reports when the open scenes have none (open Boot alongside), more than one, or one without the Input
 // System UI module.
@@ -43,6 +45,7 @@ namespace JourneyToLanka.CombatUI.EditorTools
                     Wire(hud, "_style", Load<CombatHudStyleSO>(CombatUIAssetBuilder.StylePath, report), report);
                     Wire(hud, "_controllerAnchor", Load<CombatControllerAnchorSO>(CombatUIAssetBuilder.ControllerAnchorPath, report), report);
                     Wire(hud, "_combatStarted", Load<VoidEventChannelSO>(CombatSceneAssetBuilder.CombatStartedPath, report), report);
+                    UICanvasWiring.SyncOverlayCanvas(hud, null, report);
                 }
 
                 if (target.TryGetComponent(out CombatControllerAnchorProvider provider))

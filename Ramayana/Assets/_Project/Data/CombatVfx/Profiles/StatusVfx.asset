@@ -99,24 +99,24 @@ MonoBehaviour:
       _maxDuration: 1.5
   - _status: {fileID: 11400000, guid: 5fcc23637ad236840b2ae5b82b94ddc9, type: 2}
     _aura:
-      _prefab: {fileID: 1336599754335101577, guid: 6f832c5adbd045a4a8b2e7bc29d3d8a7, type: 3}
+      _prefab: {fileID: 484303760593850642, guid: e82df0cde06892643ab5fe7cd9a2eee7, type: 3}
       _height: 0
       _onCameraSurface: 0
       _offset: {x: 0, y: 0, z: 0}
       _scale: 0.85
       _scaleWithHit: 0
       _alignToBlow: 0
-      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _tint: {r: 0.09420614, g: 0.5794238, b: 0.6886792, a: 1}
       _maxDuration: 3
     _applyAccent:
-      _prefab: {fileID: 0}
+      _prefab: {fileID: 484303760593850642, guid: e82df0cde06892643ab5fe7cd9a2eee7, type: 3}
       _height: 0
       _onCameraSurface: 0
       _offset: {x: 0, y: 0, z: 0}
       _scale: 1
       _scaleWithHit: 0
       _alignToBlow: 0
-      _tint: {r: 1, g: 1, b: 1, a: 1}
+      _tint: {r: 0.48949805, g: 0.8301887, b: 0.8111664, a: 1}
       _maxDuration: 1.5
   - _status: {fileID: 11400000, guid: 2d3b849b7cd2e8a4a8fde4eab944abc9, type: 2}
     _aura:

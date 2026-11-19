@@ -18,7 +18,7 @@ namespace JourneyToLanka.CombatUI.EditorTools
 
         private static readonly KeyValuePair<string, string>[] EnglishEntries =
         {
-            new KeyValuePair<string, string>(QuiverKeys.Caption, "Quiver"),
+            new KeyValuePair<string, string>(QuiverKeys.Caption, "Special arrow"),
         };
 
         [MenuItem(AssetBuilderConstants.MenuRoot + "Quiver", priority = AssetBuilderConstants.FeatureMenuPriority + 26)]

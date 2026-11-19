@@ -12,44 +12,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10007ead5ec6bc40a27003c191be97e, type: 3}
   m_Name: ChainBarStyle
   m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.ChainBarStyleSO
-  _offset: {x: 0, y: 330}
+  _topOffset: {x: 0, y: -28}
   _width: 440
-  _padding: 12
-  _rowSpacing: 4
-  _iconSize: 34
-  _fallbackIconSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
-  _iconGap: 8
-  _titleFontSize: 26
-  _countFontSize: 34
-  _countWidth: 64
-  _hintFontSize: 18
-  _hintColor: {r: 0.96, g: 0.91, b: 0.8, a: 0.75}
-  _pipSize: 28
-  _pipSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
-  _pipEmptyColor: {r: 1, g: 1, b: 1, a: 0.15}
-  _nextPipAlpha: 0.45
-  _finisherPipScale: 1.3
-  _pipLabelFontSize: 16
-  _pipLabelGap: 2
-  _pipLabelColor: {r: 0.96, g: 0.91, b: 0.8, a: 0.45}
-  _pipLabelLitColor: {r: 1, g: 0.97, b: 0.9, a: 1}
-  _pipPunchScale: 0.4
-  _pipPunchDuration: 0.25
+  _backingSprite: {fileID: 0}
+  _backingColor: {r: 0, g: 0, b: 0, a: 0}
+  _backingPadding: 10
+  _nameFontSize: 22
+  _nameGap: 2
+  _beadSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
+  _beadSize: 22
+  _finisherBeadScale: 1.4
+  _beadEmptyColor: {r: 0.37, g: 0.37, b: 0.35, a: 0.9}
+  _nextBeadAlpha: 0.45
+  _threadThickness: 2
+  _threadColor: {r: 0.53, g: 0.53, b: 0.5, a: 0.8}
+  _currentRingScale: 1.45
+  _currentRingColor: {r: 0.98, g: 0.93, b: 0.85, a: 0.9}
+  _multiplierFontSize: 34
+  _multiplierGap: 0
   _fadeIn: 0.15
   _fadeOut: 0.25
-  _punchBase: 0.04
-  _punchPerMultiplier: 0.06
-  _punchDuration: 0.28
+  _haloSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
+  _haloScale: 2.2
+  _haloScalePerMultiplier: 0.8
   _flashAlphaPerMultiplier: 0.35
   _flashMaxAlpha: 0.8
   _flashDuration: 0.35
+  _beadPunchBase: 0.25
+  _beadPunchPerMultiplier: 0.2
+  _multiplierPunchBase: 0.08
+  _multiplierPunchPerMultiplier: 0.12
+  _punchDuration: 0.28
   _finisherFontSize: 40
-  _finisherOffset: {x: 0, y: 6}
+  _finisherGap: 0
   _finisherStartScale: 0.6
   _finisherPopDuration: 0.22
   _finisherHold: 0.7
   _brokenMinLength: 2
-  _brokenOffset: {x: 0, y: 470}
+  _brokenTopOffset: {x: 0, y: -150}
   _brokenSize: {x: 520, y: 48}
   _brokenFontSize: 28
   _brokenColor: {r: 1, g: 0.55, b: 0.45, a: 1}

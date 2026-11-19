@@ -1,21 +1,18 @@
-// Loads gameplay scenes additively through Addressables and unloads the previous one first, so Boot is never
-// replaced and only one gameplay scene is loaded at a time. It can also adopt a scene that was already loaded
-// (scenes opened together in the Editor) and, in the Editor only, load any scene by path for Play from Boot.
+// Loads gameplay scenes additively from the build's scene list and unloads the previous one first, so Boot is never
+// replaced and only one gameplay scene is loaded at a time. Scenes are not loaded through Addressables, because a
+// ScriptableObject referenced by both Boot and an Addressable scene is duplicated in a player build, which splits
+// event channels into two unconnected copies. It can also adopt a scene that was already loaded (scenes opened
+// together in the Editor) and, in the Editor only, load any scene by path for Play from Boot.
 // Failures are logged and leave the loader ready for the next request.
 using System;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
 namespace JourneyToLanka.Scenes
 {
     public sealed class SceneLoader : ISceneLoader
     {
-        private AsyncOperationHandle<SceneInstance> _currentHandle;
-        private bool _hasCurrentHandle;
-        private Scene _currentPlainScene;
+        private Scene _currentScene;
 
         public event Action<SceneDefinitionSO> LoadStarted;
 
@@ -29,7 +26,15 @@ namespace JourneyToLanka.Scenes
         {
             if (scene == null || !scene.IsValid)
             {
-                Debug.LogError($"SceneLoader: cannot load '{(scene != null ? scene.name : "null")}', it has no valid scene reference.");
+                Debug.LogError($"SceneLoader: cannot load '{(scene != null ? scene.name : "null")}', it has no scene path. " +
+                               "Open the scene and run Tools > Journey to Lanka > Scenes > Register Active Scene.");
+                return;
+            }
+
+            if (SceneUtility.GetBuildIndexByScenePath(scene.ScenePath) < 0)
+            {
+                Debug.LogError($"SceneLoader: '{scene.ScenePath}' is not in the build's scene list. " +
+                               "Open the scene and run Tools > Journey to Lanka > Scenes > Register Active Scene.");
                 return;
             }
 
@@ -38,7 +43,7 @@ namespace JourneyToLanka.Scenes
                 return;
             }
 
-            UnloadCurrent(() => LoadAddressable(scene));
+            UnloadCurrent(() => LoadFromBuildList(scene));
         }
 
         public void AdoptLoadedScene(Scene scene)
@@ -48,7 +53,7 @@ namespace JourneyToLanka.Scenes
                 return;
             }
 
-            _currentPlainScene = scene;
+            _currentScene = scene;
             SceneManager.SetActiveScene(scene);
         }
 
@@ -102,19 +107,12 @@ namespace JourneyToLanka.Scenes
 
         private void UnloadCurrent(Action next)
         {
-            if (_hasCurrentHandle)
-            {
-                AsyncOperationHandle<SceneInstance> handle = _currentHandle;
-                _hasCurrentHandle = false;
-                _currentHandle = default;
-                Addressables.UnloadSceneAsync(handle).Completed += _ => next();
-                return;
-            }
+            Scene current = _currentScene;
+            _currentScene = default;
 
-            if (_currentPlainScene.IsValid() && _currentPlainScene.isLoaded)
+            if (current.IsValid() && current.isLoaded)
             {
-                AsyncOperation operation = SceneManager.UnloadSceneAsync(_currentPlainScene);
-                _currentPlainScene = default;
+                AsyncOperation operation = SceneManager.UnloadSceneAsync(current);
                 if (operation != null)
                 {
                     operation.completed += _ => next();
@@ -122,26 +120,32 @@ namespace JourneyToLanka.Scenes
                 }
             }
 
-            _currentPlainScene = default;
             next();
         }
 
-        private void LoadAddressable(SceneDefinitionSO scene)
+        private void LoadFromBuildList(SceneDefinitionSO scene)
         {
-            AsyncOperationHandle<SceneInstance> handle = Addressables.LoadSceneAsync(scene.RuntimeKey, LoadSceneMode.Additive);
-            handle.Completed += completed =>
+            string path = scene.ScenePath;
+            AsyncOperation operation = SceneManager.LoadSceneAsync(path, LoadSceneMode.Additive);
+            if (operation == null)
             {
-                if (completed.Status == AsyncOperationStatus.Succeeded)
+                Debug.LogError($"SceneLoader: loading '{path}' could not start.");
+                FinishLoad(null);
+                return;
+            }
+
+            operation.completed += _ =>
+            {
+                Scene loaded = SceneManager.GetSceneByPath(path);
+                if (!loaded.IsValid() || !loaded.isLoaded)
                 {
-                    _currentHandle = completed;
-                    _hasCurrentHandle = true;
-                    SceneManager.SetActiveScene(completed.Result.Scene);
-                    FinishLoad(scene);
+                    Debug.LogError($"SceneLoader: loading '{path}' finished but the scene is not loaded.");
+                    FinishLoad(null);
                     return;
                 }
 
-                Debug.LogError($"SceneLoader: loading '{scene.name}' failed. {completed.OperationException}");
-                FinishLoad(null);
+                AdoptLoadedScene(loaded);
+                FinishLoad(scene);
             };
         }
     }

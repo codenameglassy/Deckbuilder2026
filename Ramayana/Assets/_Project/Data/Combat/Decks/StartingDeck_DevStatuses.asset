@@ -33,9 +33,7 @@ MonoBehaviour:
     _count: 1
   - _card: {fileID: 11400000, guid: 6fab5441bd98bd347be4de716062f133, type: 2}
     _count: 1
-  - _card: {fileID: 11400000, guid: 44b271ef0293e2243948c341b2dbdf43, type: 2}
-    _count: 1
-  - _card: {fileID: 11400000, guid: 139caa8d712a2f343b6c29dc572f26b2, type: 2}
-    _count: 1
-  - _card: {fileID: 11400000, guid: e42618d3a70698b45ba5539845c938b8, type: 2}
-    _count: 1
+  - _card: {fileID: 11400000, guid: c9f448f92d32b1942ac7012464952900, type: 2}
+    _count: 4
+  - _card: {fileID: 11400000, guid: e8847a3c180e9d245bfca9eae769f709, type: 2}
+    _count: 4

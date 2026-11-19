@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardRewardStyle
   m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.CardRewardStyleSO
   _sortingOrder: 50
-  _font: {fileID: 0}
+  _font: {fileID: 11400000, guid: d70f485aa27dc43f79a8fd168f58435c, type: 2}
   _backdropColor: {r: 0.02, g: 0.02, b: 0.03, a: 0.8}
   _titleFontSize: 48
   _titleColor: {r: 0.98, g: 0.86, b: 0.55, a: 1}
@@ -28,3 +28,7 @@ MonoBehaviour:
   _skipColor: {r: 0.2, g: 0.17, b: 0.14, a: 1}
   _skipTextColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
   _skipFontSize: 28
+  _arrowLineOffset: {x: 0, y: -350}
+  _arrowLineSize: {x: 1100, y: 48}
+  _arrowLineFontSize: 28
+  _arrowLineColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}

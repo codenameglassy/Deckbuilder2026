@@ -15,6 +15,7 @@
         "JourneyToLanka.Localization.Editor",
         "Unity.Localization",
         "Unity.Localization.Editor",
+        "Unity.TextMeshPro",
         "Unity.InputSystem",
         "UnityEngine.UI"
     ],

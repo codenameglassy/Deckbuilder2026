@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CombatHudStyle
   m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.CombatHudStyleSO
   _referenceResolution: {x: 1920, y: 1080}
-  _font: {fileID: 0}
+  _font: {fileID: 11400000, guid: d70f485aa27dc43f79a8fd168f58435c, type: 2}
   _handBottomMargin: 24
   _handMaxWidth: 1300
   _handInactiveAlpha: 0.6

@@ -59,7 +59,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4068096615825408
-    m_Localized: Incoming
+    m_Localized: Incoming Dmg
     m_Metadata:
       m_Items: []
   - m_Id: 4068096615825409
@@ -67,7 +67,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4068096615825410
-    m_Localized: You take
+    m_Localized: Dmg You take
     m_Metadata:
       m_Items: []
   - m_Id: 4100530170413056
@@ -115,7 +115,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7569418434560000
-    m_Localized: Quiver
+    m_Localized: Special arrow
     m_Metadata:
       m_Items: []
   - m_Id: 7569418518446080
