@@ -16,7 +16,9 @@
 // The frame is drawn by the Card Frame shader in its card type's accent (CardTypeVisualsSO via the style), with the
 // type label in the type's colour, an optional type icon, and a panel behind the description for readability. A Card
 // Sprite on the style replaces the shader frame. SetGlow fades a soft halo in or out behind the card (the hand turns
-// it on for cards that can be played now); every card shares the glow material and fades only its own vertex alpha.
+// it on only for the playable card the player is considering); every card shares the glow material and fades only its
+// own vertex alpha. IsPlayable remembers the last SetPlayable call so the hand can decide the glow without asking the
+// combat model again.
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -107,6 +109,8 @@ namespace JourneyToLanka.CombatUI
         public CardTextContext TextContext => _textContext;
 
         public bool IsGlowing => _glowOn;
+
+        public bool IsPlayable { get; private set; }
 
         internal CanvasGroup Group => _group;
 
@@ -204,6 +208,7 @@ namespace JourneyToLanka.CombatUI
 
         public void SetPlayable(bool playable, float unplayableAlpha)
         {
+            IsPlayable = playable;
             _playableAlpha = playable ? 1f : unplayableAlpha;
             ApplyAlpha();
         }
@@ -354,6 +359,7 @@ namespace JourneyToLanka.CombatUI
             _textContext = default;
             _values.Clear();
             _playableAlpha = 1f;
+            IsPlayable = false;
             _revealed = true;
             _zoomHidden = false;
             _externalHover = false;
@@ -383,6 +389,7 @@ namespace JourneyToLanka.CombatUI
             CardId = -1;
             _textContext = default;
             _values.Clear();
+            IsPlayable = false;
             _zoomHidden = false;
             _externalHover = false;
             IsPointerInside = false;

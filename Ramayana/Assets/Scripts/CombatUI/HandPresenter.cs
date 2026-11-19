@@ -1,7 +1,8 @@
 // Keeps the hand of card views in step with the deck: a card entering the hand takes a pooled view, a card
 // leaving returns it. It orders views to match the hand, lets the HandLayoutAnimator place them with the style's
-// HandLayoutSO strategy (spreading around the focused card), dims cards that cannot be played right now and glows
-// the ones that can, turns a card's cost badge red when the player lacks the Prana for it, starts the other cards
+// HandLayoutSO strategy (spreading around the focused card), dims cards that cannot be played right now, glows only
+// the considered card (hovered, selected with keyboard or gamepad, lifted for targeting or dragged) when it can be
+// played, so idle cards never glow, turns a card's cost badge red when the player lacks the Prana for it, starts the other cards
 // moving outward from the slot when a card joins or leaves, and wires explicit left/right navigation with End Turn
 // at the end and up to the neighbour the HUD gives (SetUpNeighbour, the quiver); NavigationChanged fires after the
 // cards are rewired, and FirstCardButton is where that neighbour leads back down to. HasPlayableCard (and
@@ -58,6 +59,7 @@ namespace JourneyToLanka.CombatUI
         private CardTextContext _textContext;
         private int _targetIndex = -1;
         private CardInstance _consideredCard;
+        private CardView _consideredView;
         private Selectable _upNeighbour;
 
         public HandPresenter(CardView template, RectTransform handArea, HandInputSurface surface, CanvasGroup group,
@@ -236,14 +238,12 @@ namespace JourneyToLanka.CombatUI
                 CardView view = _views[i];
                 bool playable = playerTurn && model.CheckPlay(view.CardId, target) == CardPlayCheck.Playable;
                 view.SetPlayable(playable, _style.UnplayableAlpha);
-                view.SetGlow(playable);
                 view.SetCostAffordable(!playerTurn || view.Card == null || view.Card.Cost <= prana);
                 anyPlayable |= playable;
             }
 
-            _zoom.SyncShown();
             SetHasPlayableCard(anyPlayable);
-            RefreshConsideredCard();
+            RefreshConsideredCard(true);
         }
 
         public void SelectFirst()
@@ -557,26 +557,33 @@ namespace JourneyToLanka.CombatUI
 
         private void RefreshConsideredCard()
         {
-            CardInstance considered = null;
+            RefreshConsideredCard(false);
+        }
+
+        private void RefreshConsideredCard(bool forceGlow)
+        {
+            CardView view = null;
             if (_flow != null && _flow.IsPlayerTurn && !_blocked)
             {
-                CardView card = _drag.DraggedCard;
-                if (card == null)
+                view = _drag.DraggedCard;
+                if (view == null)
                 {
-                    card = _targeting.LiftedCard;
+                    view = _targeting.LiftedCard;
                 }
 
-                if (card == null)
+                if (view == null)
                 {
-                    card = _zoom.FocusedCard;
-                }
-
-                if (card != null)
-                {
-                    considered = card.Card;
+                    view = _zoom.FocusedCard;
                 }
             }
 
+            if (forceGlow || view != _consideredView)
+            {
+                _consideredView = view;
+                RefreshGlow();
+            }
+
+            CardInstance considered = view != null ? view.Card : null;
             if (considered == _consideredCard)
             {
                 return;
@@ -584,6 +591,17 @@ namespace JourneyToLanka.CombatUI
 
             _consideredCard = considered;
             ConsideredCardChanged?.Invoke(considered);
+        }
+
+        private void RefreshGlow()
+        {
+            for (int i = 0; i < _views.Count; i++)
+            {
+                CardView view = _views[i];
+                view.SetGlow(view == _consideredView && view.IsPlayable);
+            }
+
+            _zoom.SyncShown();
         }
 
         private void SetHasPlayableCard(bool hasPlayableCard)
