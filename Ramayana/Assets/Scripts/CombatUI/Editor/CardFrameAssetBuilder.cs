@@ -1,10 +1,13 @@
 // Creates the card frame's assets: the material for the Card Frame shader, the material for the Card Glow shader (the
-// playable-card halo), a Card Type Visuals asset for Attack (warm red-orange), Skill (teal), Dharma (marigold),
-// Invocation (violet), Astra (radiant sky blue), Power (forest green) and a neutral default, each linked to its card type, and wires them
-// into the Combat HUD style (frame and glow materials, the type list and the default) where those are still empty.
-// Types added after the list was first filled are appended to it if missing; nothing in it is removed or reordered.
-// Existing assets, colours and assigned references are never changed. Runs after the Combat, Status Cards, Power
-// Cards and Combat UI builders, which create the card types and the style.
+// playable-card halo), the material for the Card Art shader (art window, type ribbon and cost orb), the material for
+// the Card Back shader (the pile stacks and face-down flights), a Card Type Visuals asset for Attack (warm red-orange),
+// Skill (teal), Dharma (marigold), Invocation (violet), Astra (radiant sky blue), Power (forest green) and a neutral
+// default, each linked to its card type, a Card Rarity Visuals asset for Common (bronze), Rare (silver), Epic (gold, a
+// faint shimmer) and Divine (saffron, a clear shimmer), and wires them into the Combat HUD style (frame, glow, art and
+// back materials, the type and rarity lists and the default) where those are still empty. Types or rarities added after
+// a list was first filled are appended to it if missing; nothing in it is removed or reordered. Existing assets,
+// colours and assigned references are never changed. Runs after the Combat, Status Cards, Power Cards and Combat UI
+// builders, which create the card types and the style.
 using JourneyToLanka.Combat.Cards;
 using JourneyToLanka.Combat.EditorTools;
 using JourneyToLanka.Core.EditorTools;
@@ -19,6 +22,10 @@ namespace JourneyToLanka.CombatUI.EditorTools
         public const string MaterialPath = CombatUIAssetBuilder.Root + "/CardFrame.mat";
         public const string GlowShaderName = "Journey to Lanka/UI/Card Glow";
         public const string GlowMaterialPath = CombatUIAssetBuilder.Root + "/CardGlow.mat";
+        public const string ArtShaderName = "Journey to Lanka/UI/Card Art";
+        public const string ArtMaterialPath = CombatUIAssetBuilder.Root + "/CardArt.mat";
+        public const string BackShaderName = "Journey to Lanka/UI/Card Back";
+        public const string BackMaterialPath = CombatUIAssetBuilder.Root + "/CardBack.mat";
         public const string VisualsFolder = CombatUIAssetBuilder.Root + "/CardTypes";
         public const string AttackVisualsPath = VisualsFolder + "/CardTypeVisuals_Attack.asset";
         public const string SkillVisualsPath = VisualsFolder + "/CardTypeVisuals_Skill.asset";
@@ -27,6 +34,18 @@ namespace JourneyToLanka.CombatUI.EditorTools
         public const string AstraVisualsPath = VisualsFolder + "/CardTypeVisuals_Astra.asset";
         public const string PowerVisualsPath = VisualsFolder + "/CardTypeVisuals_Power.asset";
         public const string DefaultVisualsPath = VisualsFolder + "/CardTypeVisuals_Default.asset";
+        public const string RarityFolder = CombatUIAssetBuilder.Root + "/CardRarities";
+        public const string CommonRarityPath = RarityFolder + "/CardRarityVisuals_Common.asset";
+        public const string RareRarityPath = RarityFolder + "/CardRarityVisuals_Rare.asset";
+        public const string EpicRarityPath = RarityFolder + "/CardRarityVisuals_Epic.asset";
+        public const string DivineRarityPath = RarityFolder + "/CardRarityVisuals_Divine.asset";
+
+        private static readonly Color CommonTrim = new Color(0.74f, 0.5f, 0.3f, 0.9f);
+        private static readonly Color RareTrim = new Color(0.8f, 0.86f, 0.92f, 0.95f);
+        private static readonly Color EpicTrim = new Color(0.98f, 0.8f, 0.35f, 1f);
+        private static readonly Color DivineTrim = new Color(1f, 0.62f, 0.16f, 1f);
+        private const float EpicShimmer = 0.25f;
+        private const float DivineShimmer = 0.7f;
 
         private static readonly Color AttackAccent = new Color(0.86f, 0.33f, 0.18f);
         private static readonly Color AttackLabel = new Color(1f, 0.84f, 0.74f);
@@ -54,9 +73,12 @@ namespace JourneyToLanka.CombatUI.EditorTools
         {
             AssetBuilderUtility.EnsureFolder(CombatUIAssetBuilder.Root, report);
             AssetBuilderUtility.EnsureFolder(VisualsFolder, report);
+            AssetBuilderUtility.EnsureFolder(RarityFolder, report);
 
             Material material = LoadOrCreateMaterial(MaterialPath, ShaderName, "CardFrame", report);
             Material glowMaterial = LoadOrCreateMaterial(GlowMaterialPath, GlowShaderName, "CardGlow", report);
+            Material artMaterial = LoadOrCreateMaterial(ArtMaterialPath, ArtShaderName, "CardArt", report);
+            Material backMaterial = LoadOrCreateMaterial(BackMaterialPath, BackShaderName, "CardBack", report);
             CardTypeVisualsSO attack = Visuals(AttackVisualsPath, "Attack", AttackAccent, AttackLabel, report);
             CardTypeVisualsSO skill = Visuals(SkillVisualsPath, "Skill", SkillAccent, SkillLabel, report);
             CardTypeVisualsSO dharma = Visuals(DharmaVisualsPath, "Dharma", DharmaAccent, DharmaLabel, report);
@@ -64,6 +86,10 @@ namespace JourneyToLanka.CombatUI.EditorTools
             CardTypeVisualsSO astra = Visuals(AstraVisualsPath, "Astra", AstraAccent, AstraLabel, report);
             CardTypeVisualsSO power = Visuals(PowerVisualsPath, "Power", PowerAccent, PowerLabel, report);
             CardTypeVisualsSO fallback = Visuals(DefaultVisualsPath, null, DefaultAccent, DefaultLabel, report);
+            CardRarityVisualsSO common = Rarity(CommonRarityPath, CardRarity.Common, CommonTrim, 0f, report);
+            CardRarityVisualsSO rare = Rarity(RareRarityPath, CardRarity.Rare, RareTrim, 0f, report);
+            CardRarityVisualsSO epic = Rarity(EpicRarityPath, CardRarity.Epic, EpicTrim, EpicShimmer, report);
+            CardRarityVisualsSO divine = Rarity(DivineRarityPath, CardRarity.Divine, DivineTrim, DivineShimmer, report);
 
             var style = AssetDatabase.LoadAssetAtPath<CombatHudStyleSO>(CombatUIAssetBuilder.StylePath);
             if (style == null)
@@ -82,6 +108,16 @@ namespace JourneyToLanka.CombatUI.EditorTools
                 AssetBuilderUtility.WireAssetFieldIfNull(style, "_cardGlowMaterial", glowMaterial, report);
             }
 
+            if (artMaterial != null)
+            {
+                AssetBuilderUtility.WireAssetFieldIfNull(style, "_cardArtMaterial", artMaterial, report);
+            }
+
+            if (backMaterial != null)
+            {
+                AssetBuilderUtility.WireAssetFieldIfNull(style, "_cardBackMaterial", backMaterial, report);
+            }
+
             if (fallback != null)
             {
                 AssetBuilderUtility.WireAssetFieldIfNull(style, "_defaultCardTypeVisuals", fallback, report);
@@ -97,6 +133,23 @@ namespace JourneyToLanka.CombatUI.EditorTools
                 AssetBuilderSerialization.AppendObjectsIfMissing(style, "_cardTypeVisuals",
                     new Object[] { dharma, invocation, astra, power }, report);
             }
+
+            if (common != null && rare != null && epic != null && divine != null)
+            {
+                AssetBuilderSerialization.AppendObjectsIfMissing(style, "_cardRarityVisuals",
+                    new Object[] { common, rare, epic, divine }, report);
+            }
+        }
+
+        private static CardRarityVisualsSO Rarity(string path, CardRarity rarity, Color trim, float shimmer,
+            AssetBuilderReport report)
+        {
+            return AssetBuilderSerialization.LoadOrCreateConfigured<CardRarityVisualsSO>(path, report, so =>
+            {
+                AssetBuilderSerialization.Require(so, "_rarity").intValue = (int)rarity;
+                AssetBuilderSerialization.Require(so, "_trimColor").colorValue = trim;
+                AssetBuilderSerialization.Require(so, "_shimmer").floatValue = shimmer;
+            });
         }
 
         private static CardTypeVisualsSO Visuals(string path, string cardTypeFileName, Color accent, Color label,

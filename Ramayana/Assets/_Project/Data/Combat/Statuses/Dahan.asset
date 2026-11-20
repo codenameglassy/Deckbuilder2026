@@ -16,10 +16,11 @@ MonoBehaviour:
   _nameKey: status.dahan.name
   _descriptionKey: status.dahan.description
   _shortNameKey: status.dahan.short
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 6601eecdbe7d46a47bc6d2c6d66dfc2b, type: 3}
   _color: {r: 1, g: 0.5, b: 0.15, a: 1}
   _isDebuff: 1
   _maxAmount: 0
   _defaultDuration: 0
   _decay: {fileID: 11400000, guid: d413988d3c91fbb409ec051eb9ace29e, type: 2}
   _damageRule: {fileID: 0}
+  _trigger: {fileID: 0}

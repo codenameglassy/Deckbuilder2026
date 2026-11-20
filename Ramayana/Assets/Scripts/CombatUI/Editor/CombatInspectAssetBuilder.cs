@@ -1,4 +1,4 @@
-// Creates the combat inspect style (card zoom, pile viewer, enemy info panel) next to the Combat HUD style.
+// Creates the combat inspect style (pile viewer, enemy info panel) next to the Combat HUD style.
 // Existing assets are never changed. Runs after the Combat UI builder.
 using JourneyToLanka.Core.EditorTools;
 using UnityEditor;

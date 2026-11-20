@@ -1,8 +1,11 @@
 // Binds one TextMeshPro text to a localization key whose text is a pattern with numbered placeholders, such as a
 // card description ("Deal {0} damage."), and keeps it filled with the current values through CardTextFormatter.
-// It re-renders when the string table loads, when the player changes language, when the values change and when the
+// Before the numbers go in, keywords from an optional CardKeywordSet are coloured (CardKeywordDecorator); the
+// decorated pattern is kept and rebuilt only when the pattern or the keywords change. It re-renders when the string
+// table loads, when the player changes language, when the keywords change, when the values change and when the
 // highlight colours change. The entries must be plain (not Smart) strings, so the placeholders arrive untouched.
-// Clear unsubscribes, so pooled views call it when they are returned. Formatting reuses one StringBuilder.
+// Clear unsubscribes from the string and the keywords, so pooled views call it when they are returned. Formatting
+// reuses one StringBuilder for the numbers and one for the keywords.
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,6 +23,12 @@ namespace JourneyToLanka.CombatUI
         private readonly TMP_Text _target;
         private readonly LocalizedString _string = new LocalizedString();
         private readonly StringBuilder _builder = new StringBuilder(BuilderCapacity);
+        private readonly StringBuilder _keywordBuilder = new StringBuilder(BuilderCapacity);
+        private readonly Action _keywordsChanged;
+        private CardKeywordSet _keywords;
+        private bool _keywordsSubscribed;
+        private string _decorated;
+        private int _decoratedVersion = -1;
         private IReadOnlyList<CardValue> _values = Array.Empty<CardValue>();
         private string _pattern;
         private string _buffedColorTag;
@@ -29,6 +38,21 @@ namespace JourneyToLanka.CombatUI
         public LocalizedPatternText(TMP_Text target)
         {
             _target = target;
+            _keywordsChanged = HandleKeywordsChanged;
+        }
+
+        public void SetKeywords(CardKeywordSet keywords)
+        {
+            if (_keywords == keywords)
+            {
+                return;
+            }
+
+            SubscribeKeywords(false);
+            _keywords = keywords;
+            _decorated = null;
+            SubscribeKeywords(_subscribed);
+            Render();
         }
 
         public void Set(string table, string key)
@@ -50,6 +74,7 @@ namespace JourneyToLanka.CombatUI
 
             _string.StringChanged += HandleStringChanged;
             _subscribed = true;
+            SubscribeKeywords(true);
         }
 
         public void SetValues(IReadOnlyList<CardValue> values)
@@ -73,7 +98,9 @@ namespace JourneyToLanka.CombatUI
                 _subscribed = false;
             }
 
+            SubscribeKeywords(false);
             _pattern = null;
+            _decorated = null;
             _values = Array.Empty<CardValue>();
             _target.text = string.Empty;
         }
@@ -81,7 +108,49 @@ namespace JourneyToLanka.CombatUI
         private void HandleStringChanged(string value)
         {
             _pattern = value;
+            _decorated = null;
             Render();
+        }
+
+        private void HandleKeywordsChanged()
+        {
+            Render();
+        }
+
+        private void SubscribeKeywords(bool subscribe)
+        {
+            if (_keywords == null || _keywordsSubscribed == subscribe)
+            {
+                return;
+            }
+
+            if (subscribe)
+            {
+                _keywords.Changed += _keywordsChanged;
+            }
+            else
+            {
+                _keywords.Changed -= _keywordsChanged;
+            }
+
+            _keywordsSubscribed = subscribe;
+        }
+
+        private string DecoratedPattern()
+        {
+            if (_keywords == null)
+            {
+                return _pattern;
+            }
+
+            if (_decorated == null || _decoratedVersion != _keywords.Version)
+            {
+                CardKeywordDecorator.Decorate(_pattern, _keywords.Keywords, _keywordBuilder);
+                _decorated = _keywordBuilder.ToString();
+                _decoratedVersion = _keywords.Version;
+            }
+
+            return _decorated;
         }
 
         private void Render()
@@ -91,7 +160,7 @@ namespace JourneyToLanka.CombatUI
                 return;
             }
 
-            CardTextFormatter.Format(_pattern, _values, _buffedColorTag, _weakenedColorTag, _builder);
+            CardTextFormatter.Format(DecoratedPattern(), _values, _buffedColorTag, _weakenedColorTag, _builder);
             _target.SetText(_builder);
         }
     }

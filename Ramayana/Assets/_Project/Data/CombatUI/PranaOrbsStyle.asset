@@ -14,10 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.PranaOrbsStyleSO
   _orbMaterial: {fileID: 2100000, guid: c9370148bbfc07d45900b62d58c984f4, type: 2}
   _orbDiameter: 34
-  _orbGap: 8
   _maxOrbs: 10
-  _panelPadding: 12
+  _arcRadius: 70
+  _arcStepDegrees: 38
+  _arcCentreDegrees: 0
+  _medallionDiameter: 84
+  _medallionRingWidth: 4
+  _medallionRingColor: {r: 0.95, g: 0.78, b: 0.42, a: 1}
+  _medallionFaceColor: {r: 0.08, g: 0.06, b: 0.045, a: 0.95}
   _valueFontSize: 26
+  _valueColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
   _coreColor: {r: 1, g: 0.96, b: 0.8, a: 1}
   _glowColor: {r: 1, g: 0.62, b: 0.18, a: 1}
   _socketColor: {r: 0.06, g: 0.045, b: 0.03, a: 0.9}

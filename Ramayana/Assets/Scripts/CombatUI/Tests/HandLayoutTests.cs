@@ -1,8 +1,9 @@
 // EditMode tests for the hand layout strategies with their default values: both layouts are symmetric and centred,
 // fit the hand width when crowded, and push neighbours outward around a hovered card; the flat row never rotates; the
-// fan stands its middle card upright and highest and tilts outer cards away from the centre; and hover detection
-// works from the resting layout, picking the nearest card in an overlap, ignoring points outside the hand, and
-// letting the hovered card's zone reach above it.
+// fan stands its middle card upright and highest and tilts outer cards away from the centre; a hovered card stays in
+// its slot, straightens, grows and sits fully above the hand's bottom edge in both layouts; and hover detection works
+// from the resting layout, picking the nearest card in an overlap, ignoring points outside the hand, and letting the
+// hovered card's zone reach the top of its raised pose.
 using NUnit.Framework;
 using UnityEngine;
 
@@ -102,6 +103,13 @@ namespace JourneyToLanka.CombatUI.Tests
         }
 
         [Test]
+        public void HoveredCard_StaysInItsSlot_GrowsAndSitsAboveTheHandBottom()
+        {
+            AssertHoverPose(_flat);
+            AssertHoverPose(_fan);
+        }
+
+        [Test]
         public void FindCardAt_ReturnsTheCardUnderTheCentreOfEachCard()
         {
             HandLayoutInput input = Input(5);
@@ -146,7 +154,10 @@ namespace JourneyToLanka.CombatUI.Tests
         {
             HandLayoutInput input = Input(5);
             HandCardPose middle = _flat.GetPose(input, 2);
-            Vector2 aboveMiddle = middle.Position + new Vector2(0f, CardSize.y * 0.5f + _flat.HoverZoneExtraTop * 0.5f);
+            HandCardPose raised = _flat.GetPose(input.WithHovered(2), 2);
+            float raisedTop = raised.Position.y + CardSize.y * 0.5f * raised.Scale;
+            float restingTop = middle.Position.y + CardSize.y * 0.5f;
+            Vector2 aboveMiddle = new Vector2(middle.Position.x, (restingTop + raisedTop) * 0.5f);
 
             Assert.AreEqual(-1, _flat.FindCardAt(input, aboveMiddle, -1));
             Assert.AreEqual(2, _flat.FindCardAt(input, aboveMiddle, 2));
@@ -176,6 +187,20 @@ namespace JourneyToLanka.CombatUI.Tests
             float right = layout.GetPose(input, input.Count - 1).Position.x + halfCard;
             Assert.GreaterOrEqual(left, -input.Width * 0.5f - Tolerance);
             Assert.LessOrEqual(right, input.Width * 0.5f + Tolerance);
+        }
+
+        private static void AssertHoverPose(HandLayoutSO layout)
+        {
+            HandLayoutInput resting = Input(5);
+            HandLayoutInput hovered = resting.WithHovered(1);
+            HandCardPose before = layout.GetPose(resting, 1);
+            HandCardPose after = layout.GetPose(hovered, 1);
+
+            Assert.AreEqual(before.Position.x, after.Position.x, Tolerance, $"{layout.name} slot x");
+            Assert.AreEqual(0f, after.Rotation, Tolerance, $"{layout.name} rotation");
+            Assert.AreEqual(layout.HoverScale, after.Scale, Tolerance, $"{layout.name} scale");
+            float bottom = after.Position.y - CardSize.y * 0.5f * after.Scale;
+            Assert.AreEqual(layout.HoverBottom, bottom, Tolerance, $"{layout.name} bottom edge");
         }
 
         private static void AssertHoverSpreads(HandLayoutSO layout)

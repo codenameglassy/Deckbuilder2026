@@ -1,9 +1,13 @@
 // Visual values for combat feedback that is not tied to one fighter: floating damage numbers (font, colours for lost
 // health, absorbed Kavach and healing, rise, duration, pop), the floating status popups ("Bhaya 2", drawn in the
 // status's colour, their size and where they sit relative to the numbers), the special-arrow name popup over Rama when
-// he fires one (drawn in the arrow's colour, its size and offset) and enemy intents (offset, colours, optional icons, and the fallback disc a status the move
-// applies is drawn with, in the status's colour, until the status has an icon). Numbers and icons only, so nothing
-// here needs localization; status and arrow popups take their names from their localization keys. Read-only at runtime; in the Editor, Changed lets intent views re-apply it live.
+// he fires one (drawn in the arrow's colour, its size and offset) and enemy intents (the layout strategy, the outlined
+// number material, the gap above the health bar or a fixed offset, size on screen through the
+// combat camera anchor, colours, optional icons, the ladder of attack icons by total damage, the plate behind each row,
+// the pop when an intent changes, and the fallback disc a status the move applies is drawn with, in the status's
+// colour, until the status has an icon). Numbers and icons only, so nothing here needs localization; status and arrow
+// popups take their names from their localization keys. Read-only at runtime; in the Editor, Changed lets intent views
+// re-apply it live.
 using System;
 using TMPro;
 using UnityEngine;
@@ -36,6 +40,16 @@ namespace JourneyToLanka.CombatScene
         [SerializeField] private TMP_FontAsset _intentFont;
         [SerializeField, Min(0.1f)] private float _intentFontSize = 5f;
         [SerializeField] private Vector3 _intentOffset = new Vector3(0f, 2f, 0f);
+        [Tooltip("How each intent row arranges its icon, number and plate.")]
+        [SerializeField] private IntentLayoutSO _intentLayout;
+        [Tooltip("Outlined material for the intent numbers, made from the intent font. Empty uses the font's own.")]
+        [SerializeField] private Material _intentNumberMaterial;
+        [Tooltip("Reference pixels from the health bar's top to the lowest intent row. Negative: use Intent Offset.")]
+        [SerializeField] private float _intentBarGap = 14f;
+        [Tooltip("Reference pixels (at 1080p) per intent unit, kept the same at any distance. Zero keeps world size.")]
+        [SerializeField, Min(0f)] private float _intentScreenScale = 90f;
+        [Tooltip("The combat camera, used to keep intents the same size on screen.")]
+        [SerializeField] private CombatCameraAnchorSO _cameraAnchor;
         [SerializeField, Min(0f)] private float _intentRowSpacing = 0.6f;
         [SerializeField] private Vector2 _intentLabelSize = new Vector2(3f, 0.8f);
         [SerializeField] private Color _attackColor = new Color(1f, 0.45f, 0.35f);
@@ -44,6 +58,16 @@ namespace JourneyToLanka.CombatScene
         [SerializeField] private Sprite _defendIcon;
         [SerializeField, Min(0.05f)] private float _intentIconSize = 0.5f;
         [SerializeField] private Sprite _statusIntentSprite;
+        [Tooltip("Attack icons by total damage, lowest first. Attacks below the first tier use Attack Icon.")]
+        [SerializeField] private IntentAttackTier[] _attackTiers = Array.Empty<IntentAttackTier>();
+        [SerializeField, Min(0f)] private float _intentIconGap = 0.08f;
+        [Tooltip("Nine-sliced plate behind each intent row. Leave empty for no plate.")]
+        [SerializeField] private Sprite _intentPlateSprite;
+        [SerializeField] private Color _intentPlateColor = Color.white;
+        [SerializeField] private Vector2 _intentPlatePadding = new Vector2(0.14f, 0.08f);
+        [Tooltip("How much the intent swells when the enemy picks a new move.")]
+        [SerializeField, Min(0f)] private float _intentPopScale = 0.3f;
+        [SerializeField, Min(0.01f)] private float _intentPopDuration = 0.35f;
 
         public event Action Changed;
 
@@ -66,6 +90,11 @@ namespace JourneyToLanka.CombatScene
         public TMP_FontAsset IntentFont => _intentFont;
         public float IntentFontSize => _intentFontSize;
         public Vector3 IntentOffset => _intentOffset;
+        public float IntentScreenScale => _intentScreenScale;
+        public IntentLayoutSO IntentLayout => _intentLayout;
+        public Material IntentNumberMaterial => _intentNumberMaterial;
+        public float IntentBarGap => _intentBarGap;
+        public CombatCameraAnchorSO CameraAnchor => _cameraAnchor;
         public float IntentRowSpacing => _intentRowSpacing;
         public Vector2 IntentLabelSize => _intentLabelSize;
         public Color AttackColor => _attackColor;
@@ -74,6 +103,34 @@ namespace JourneyToLanka.CombatScene
         public Sprite DefendIcon => _defendIcon;
         public float IntentIconSize => _intentIconSize;
         public Sprite StatusIntentSprite => _statusIntentSprite;
+        public float IntentIconGap => _intentIconGap;
+        public Sprite IntentPlateSprite => _intentPlateSprite;
+        public Color IntentPlateColor => _intentPlateColor;
+        public Vector2 IntentPlatePadding => _intentPlatePadding;
+        public float IntentPopScale => _intentPopScale;
+        public float IntentPopDuration => _intentPopDuration;
+
+        public Sprite AttackIconFor(int totalDamage, out float scale)
+        {
+            Sprite icon = _attackIcon;
+            scale = 1f;
+            if (_attackTiers == null)
+            {
+                return icon;
+            }
+
+            for (int i = 0; i < _attackTiers.Length; i++)
+            {
+                IntentAttackTier tier = _attackTiers[i];
+                if (tier.Icon != null && totalDamage >= tier.MinDamage)
+                {
+                    icon = tier.Icon;
+                    scale = tier.Scale;
+                }
+            }
+
+            return icon;
+        }
 
         private void OnDisable()
         {

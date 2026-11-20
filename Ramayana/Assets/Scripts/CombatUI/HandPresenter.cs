@@ -1,30 +1,29 @@
-// Keeps the hand of card views in step with the deck: a card entering the hand takes a pooled view, a card
-// leaving returns it. It orders views to match the hand, lets the HandLayoutAnimator place them with the style's
-// HandLayoutSO strategy (spreading around the focused card), dims cards that cannot be played right now, glows only
-// the considered card (hovered, selected with keyboard or gamepad, lifted for targeting or dragged) when it can be
-// played, so idle cards never glow, turns a card's cost badge red when the player lacks the Prana for it, starts the other cards
-// moving outward from the slot when a card joins or leaves, and wires explicit left/right navigation with End Turn
-// at the end and up to the neighbour the HUD gives (SetUpNeighbour, the quiver); NavigationChanged fires after the
-// cards are rewired, and FirstCardButton is where that neighbour leads back down to. HasPlayableCard (and
-// PlayableChanged) tell the HUD when nothing in the hand can be played.
-// Each card's description shows live numbers: the hand gives every card a preview context (the combat resolver and
-// Rama, plus the highlighted enemy for the card being targeted) and refreshes it when damage modifiers change or the
-// highlighted enemy changes. ConsideredCardChanged reports the card the player is considering (the dragged card,
-// else the card being targeted, else the focused card; null for none), so the Prana orbs can preview its cost and
-// the outcome preview can show what it would do.
-// The mouse reaches the hand only through the HandInputSurface: hover comes from HandPointerHover and presses from the
-// same resting-layout hit test, so overlapping fanned cards never fight over the pointer and the zoomed copy is
-// clickable. A click plays the card under the press; dragging a card hands it to the HandDragController (drag to
-// play). Keyboard and gamepad use the cards' own buttons. Clicking a card that needs a target hands it to the
-// TargetingPresenter when there is more than one living enemy; otherwise the card plays at once (at the only living
-// enemy, or untargeted). Clicking the lifted card again cancels. Clicking or dragging a card that cannot be played
-// wiggles it and raises PlayRejected with the reason, so the HUD can say why. Cards entering the hand during a fight
-// fly in through the CardMotionPresenter, and cards leaving fly out from their slot (or from wherever they were
-// dragged); a card that is already in the hand when the HUD attaches simply appears. Card focus goes to the
-// CardZoomPresenter, which zooms only during the player's turn, outside targeting and dragging, and while the hand is
-// not blocked (the HUD blocks it while the pile viewer is open). While a special arrow is in flight
-// (CombatFlow.CanPlayerAct is false) clicks and drags on cards are ignored; the hand keeps its look, since the flight
-// is too short for dimming it to read as anything but a flicker.
+// Keeps the hand of card views in step with the deck: a card entering the hand takes a pooled view, a card leaving
+// returns it. It orders views to match the hand, lets the HandLayoutAnimator place them with the style's HandLayoutSO
+// strategy (the focused card rises, grows and straightens in its own slot while its neighbours spread), dims cards that
+// cannot be played right now, glows only the considered card (hovered, selected with keyboard or gamepad, lifted for
+// targeting or dragged) when it can be played, so idle cards never glow, turns a card's cost badge red when the player
+// lacks the Prana for it, starts the other cards moving outward from the slot when a card joins or leaves, and wires
+// explicit left/right navigation with End Turn at the end and up to the neighbour the HUD gives (SetUpNeighbour, the
+// quiver); NavigationChanged fires after the cards are rewired, and FirstCardButton is where that neighbour leads back
+// down to. HasPlayableCard (and PlayableChanged) tell the HUD when nothing in the hand can be played. Each card's
+// description shows live numbers: the hand gives every card a preview context (the combat resolver and Rama, plus the
+// highlighted enemy for the card being targeted) and refreshes it when damage modifiers change or the highlighted enemy
+// changes. ConsideredCardChanged reports the card the player is considering (the dragged card, else the card being
+// targeted, else the focused card; null for none), so the Prana orbs can preview its cost and the outcome preview can
+// show what it would do. The mouse reaches the hand only through the HandInputSurface: hover comes from
+// HandPointerHover and presses from the same resting-layout hit test, so overlapping fanned cards never fight over the
+// pointer and the raised card is clickable across its whole face. A click plays the card under the press; dragging a
+// card hands it to the HandDragController (drag to play). Keyboard and gamepad use the cards' own buttons. Clicking a
+// card that needs a target hands it to the TargetingPresenter when there is more than one living enemy; otherwise the
+// card plays at once (at the only living enemy, or untargeted). Clicking the lifted card again cancels. Clicking or
+// dragging a card that cannot be played wiggles it and raises PlayRejected with the reason, so the HUD can say why.
+// Cards entering the hand during a fight fly in through the CardMotionPresenter, and cards leaving fly out from their
+// slot (or from wherever they were dragged); a card that is already in the hand when the HUD attaches simply appears.
+// Card focus goes to the HandFocusTracker, which allows focus only during the player's turn, outside targeting and
+// dragging, and while the hand is not blocked (the HUD blocks it while the pile viewer is open). While a special arrow
+// is in flight (CombatFlow.CanPlayerAct is false) clicks and drags on cards are ignored; the hand keeps its look, since
+// the flight is too short for dimming it to read as anything but a flicker.
 using System;
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Effects;
@@ -47,7 +46,7 @@ namespace JourneyToLanka.CombatUI
         private readonly Button _endTurn;
         private readonly TargetingPresenter _targeting;
         private readonly CardMotionPresenter _motion;
-        private readonly CardZoomPresenter _zoom;
+        private readonly HandFocusTracker _focus;
         private readonly RectTransform _handArea;
         private readonly HandInputSurface _surface;
         private readonly HandDragController _drag;
@@ -64,7 +63,7 @@ namespace JourneyToLanka.CombatUI
 
         public HandPresenter(CardView template, RectTransform handArea, HandInputSurface surface, CanvasGroup group,
             Button endTurn, TargetingPresenter targeting, TargetingLinePresenter targetingLine,
-            CardMotionPresenter motion, CardZoomPresenter zoom)
+            CardMotionPresenter motion, HandFocusTracker focus)
         {
             _pool = new ComponentPool<CardView>(template, handArea, 12, 32);
             _animator = new HandLayoutAnimator(_views);
@@ -76,12 +75,12 @@ namespace JourneyToLanka.CombatUI
             _endTurn = endTurn;
             _targeting = targeting;
             _motion = motion;
-            _zoom = zoom;
+            _focus = focus;
             _targeting.Cancelled += HandleTargetingCancelled;
             _targeting.ActiveChanged += HandleTargetingActiveChanged;
             _targeting.TargetChanged += HandleTargetChanged;
             _hover.HoveredChanged += HandlePointerHoverChanged;
-            _zoom.FocusedCardChanged += HandleFocusedCardChanged;
+            _focus.FocusedCardChanged += HandleFocusedCardChanged;
             _drag.DraggingChanged += HandleDraggingChanged;
             _drag.PlayRejected += Reject;
             _surface.SetHitTest(HitTest);
@@ -165,7 +164,7 @@ namespace JourneyToLanka.CombatUI
             _flow = null;
             _textContext = default;
             _targetIndex = -1;
-            _zoom.SetAllowed(false);
+            _focus.SetAllowed(false);
             _hover.SetEnabled(false);
             SetSurfaceActive(false);
             SetHasPlayableCard(false);
@@ -179,7 +178,7 @@ namespace JourneyToLanka.CombatUI
             _targeting.ActiveChanged -= HandleTargetingActiveChanged;
             _targeting.TargetChanged -= HandleTargetChanged;
             _hover.HoveredChanged -= HandlePointerHoverChanged;
-            _zoom.FocusedCardChanged -= HandleFocusedCardChanged;
+            _focus.FocusedCardChanged -= HandleFocusedCardChanged;
             _drag.DraggingChanged -= HandleDraggingChanged;
             _drag.PlayRejected -= Reject;
             if (_surface != null)
@@ -227,7 +226,7 @@ namespace JourneyToLanka.CombatUI
             _group.blocksRaycasts = false;
             _group.alpha = playerTurn ? 1f : _style.HandInactiveAlpha;
             SetSurfaceActive(usable);
-            RefreshZoomAllowed();
+            RefreshFocusAllowed();
 
             CombatModel model = _flow.Model;
             int target = model.FirstLivingEnemyIndex();
@@ -276,7 +275,7 @@ namespace JourneyToLanka.CombatUI
             }
 
             RefreshPlayable();
-            RefreshZoomAllowed();
+            RefreshFocusAllowed();
         }
 
         private void HandleCardMoved(CardInstance card, CardPile from, CardPile to)
@@ -367,7 +366,7 @@ namespace JourneyToLanka.CombatUI
                 _pointerHovered = null;
             }
 
-            _zoom.Release(view);
+            _focus.Release(view);
             _pool.Release(view);
             RefreshConsideredCard();
         }
@@ -499,7 +498,7 @@ namespace JourneyToLanka.CombatUI
 
         private void Reject(CardView view, CardPlayCheck check)
         {
-            if (_style != null && !_zoom.TryPlayRejected(view, _style.RejectAngle, _style.RejectDuration))
+            if (_style != null)
             {
                 view.PlayRejected(_style.RejectAngle, _style.RejectDuration);
             }
@@ -509,12 +508,12 @@ namespace JourneyToLanka.CombatUI
 
         private void HandleCardFocusChanged(CardView view)
         {
-            _zoom.HandleFocusChanged(view);
+            _focus.HandleFocusChanged(view);
         }
 
         private void HandleTargetingActiveChanged(bool active)
         {
-            RefreshZoomAllowed();
+            RefreshFocusAllowed();
             RefreshConsideredCard();
         }
 
@@ -544,13 +543,11 @@ namespace JourneyToLanka.CombatUI
                 CardView view = _views[i];
                 view.SetTextContext(view == lifted && target != null ? _textContext.WithTarget(target) : _textContext);
             }
-
-            _zoom.SyncShown();
         }
 
         private void HandleDraggingChanged()
         {
-            RefreshZoomAllowed();
+            RefreshFocusAllowed();
             ApplySiblingOrder();
             RefreshConsideredCard();
         }
@@ -573,7 +570,7 @@ namespace JourneyToLanka.CombatUI
 
                 if (view == null)
                 {
-                    view = _zoom.FocusedCard;
+                    view = _focus.FocusedCard;
                 }
             }
 
@@ -600,8 +597,6 @@ namespace JourneyToLanka.CombatUI
                 CardView view = _views[i];
                 view.SetGlow(view == _consideredView && view.IsPlayable);
             }
-
-            _zoom.SyncShown();
         }
 
         private void SetHasPlayableCard(bool hasPlayableCard)
@@ -648,17 +643,17 @@ namespace JourneyToLanka.CombatUI
             _animator.MarkDirty();
         }
 
-        private void RefreshZoomAllowed()
+        private void RefreshFocusAllowed()
         {
             bool interactive = _flow != null && _flow.IsPlayerTurn && !_blocked && !_targeting.IsActive
                 && !_drag.IsDragging;
-            _zoom.SetAllowed(interactive);
+            _focus.SetAllowed(interactive);
             _hover.SetEnabled(interactive);
         }
 
         private int IndexOfFocused()
         {
-            CardView focused = _zoom.FocusedCard;
+            CardView focused = _focus.FocusedCard;
             return focused != null ? _views.IndexOf(focused) : -1;
         }
 
@@ -686,7 +681,7 @@ namespace JourneyToLanka.CombatUI
                 _views[i].transform.SetSiblingIndex(i);
             }
 
-            CardView top = _drag.DraggedCard != null ? _drag.DraggedCard : _zoom.FocusedCard;
+            CardView top = _drag.DraggedCard != null ? _drag.DraggedCard : _focus.FocusedCard;
             if (top != null && _views.Contains(top))
             {
                 top.transform.SetAsLastSibling();

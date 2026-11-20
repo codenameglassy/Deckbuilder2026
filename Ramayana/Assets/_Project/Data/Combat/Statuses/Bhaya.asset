@@ -16,10 +16,11 @@ MonoBehaviour:
   _nameKey: status.bhaya.name
   _descriptionKey: status.bhaya.description
   _shortNameKey: status.bhaya.short
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: d959cce415f26d94a97b67db7870dbbc, type: 3}
   _color: {r: 0.88, g: 0.28, b: 0.32, a: 1}
   _isDebuff: 1
   _maxAmount: 3
   _defaultDuration: 0
   _decay: {fileID: 11400000, guid: 994e38441f600f04aacfe82e3f6b5438, type: 2}
   _damageRule: {fileID: 11400000, guid: 3be0d3700ee67e54e9487fb30373c7bd, type: 2}
+  _trigger: {fileID: 0}

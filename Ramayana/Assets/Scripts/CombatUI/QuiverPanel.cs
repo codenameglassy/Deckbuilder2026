@@ -1,16 +1,19 @@
-// Rama's quiver on the combat HUD: a captioned panel with one slot per quiver place, each showing its special arrow
-// (the arrow's icon, or the fallback disc in its colour) or an empty frame, with a small 1 to 3 key hint. A slot is
-// pressed with the mouse, with the submit button once selected (gamepad and keyboard reach the slots by moving up
-// from the hand), or by the HUD's number keys; every way raises SlotActivated with the slot, and the HUD decides how
-// to fire it. The arrow being considered (the targeted arrow while one waits for its target, else the slot under the
-// pointer, else the selected slot; none while a card is being targeted or the quiver is not usable) gets a highlight
-// ring, a punch and a tooltip above the panel with its localized name in the arrow's colour and its description with
-// live numbers (the same CardTextContext cards use, with the highlighted enemy while the arrow is being targeted),
-// refreshed when damage modifiers change. ConsideredSlotChanged reports it (-1 for none) so the HUD can preview its
-// outcome. Slots chain left and right among the filled ones and lead down to the neighbour the HUD gives
-// (SetDownNeighbour, the hand); FirstSelectable is where the hand leads up to, and NavigationChanged fires when that
-// may have changed. SelectionLost fires when the selected slot empties, so the HUD can move the selection. It
-// refreshes only when the quiver changes, never per frame, and only presents.
+// Rama's quiver on the combat HUD: a slim carved rail (a gold-trimmed pill drawn by the Card Art shader's round
+// material) holding one round socket per quiver place, each showing its special arrow (the arrow's icon, or the
+// fallback disc in its colour) or an empty frame, with a thin rim and a small 1 to 3 key hint. The sockets are taller
+// than the rail, so they read as set into it. The rail is pinned to a screen corner from the style (top-left by
+// default), a small localized caption ("Special arrow") sits above it, and each key hint sits centred under its socket.
+// A slot is pressed with the mouse, with the submit button once selected (gamepad and keyboard reach the slots by
+// moving up from the hand), or by the HUD's number keys; every way raises SlotActivated with the slot, and the HUD
+// decides how to fire it. The arrow being considered (the targeted arrow while one waits for its target, else the slot
+// under the pointer, else the selected slot; none while a card is being targeted or the quiver is not usable) gets a
+// highlight ring, a punch and a tooltip beside the rail (below it at the top of the screen) with its localized name in
+// the arrow's colour and its description with live numbers (the same CardTextContext cards use, with the highlighted
+// enemy while the arrow is being targeted), refreshed when damage modifiers change. ConsideredSlotChanged reports it
+// (-1 for none) so the HUD can preview its outcome. Slots chain left and right among the filled ones and lead down to
+// the neighbour the HUD gives (SetDownNeighbour, the hand); FirstSelectable is where the hand leads up to, and
+// NavigationChanged fires when that may have changed. SelectionLost fires when the selected slot empties, so the HUD
+// can move the selection. It refreshes only when the quiver changes, never per frame, and only presents.
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -27,12 +30,13 @@ namespace JourneyToLanka.CombatUI
 {
     internal sealed class QuiverPanel : IDisposable
     {
-        private const float CaptionLineHeight = 1.3f;
         private const int PunchVibrato = 6;
+        private const float KeyLineHeight = 1.3f;
         private const float PunchElasticity = 0.5f;
 
         private readonly RectTransform _rect;
-        private readonly Image _background;
+        private readonly Image _railTrim;
+        private readonly Image _rail;
         private readonly CanvasGroup _group;
         private readonly TextMeshProUGUI _caption;
         private readonly LocalizedText _captionText;
@@ -62,12 +66,14 @@ namespace JourneyToLanka.CombatUI
         private int _considered = -1;
         private int _targetIndex = -1;
 
-        private QuiverPanel(RectTransform rect, Image background, CanvasGroup group, TextMeshProUGUI caption,
-            RectTransform row, RectTransform tooltip, Image tooltipBackground, VerticalLayoutGroup tooltipLayout,
-            TextMeshProUGUI tooltipName, TextMeshProUGUI tooltipDescription)
+        private QuiverPanel(RectTransform rect, Image railTrim, Image rail, CanvasGroup group, TextMeshProUGUI caption,
+            RectTransform row,
+            RectTransform tooltip, Image tooltipBackground, VerticalLayoutGroup tooltipLayout, TextMeshProUGUI tooltipName,
+            TextMeshProUGUI tooltipDescription)
         {
             _rect = rect;
-            _background = background;
+            _railTrim = railTrim;
+            _rail = rail;
             _group = group;
             _caption = caption;
             _row = row;
@@ -112,12 +118,17 @@ namespace JourneyToLanka.CombatUI
 
         public static QuiverPanel Create(Transform parent)
         {
-            Image background = UIBuildUtility.CreateImage("Quiver", parent, false);
-            CanvasGroup group = background.gameObject.AddComponent<CanvasGroup>();
-            TextMeshProUGUI caption = UIBuildUtility.CreateText("Caption", background.transform, TextAlignmentOptions.MidlineLeft);
-            RectTransform row = UIBuildUtility.CreateRect("Slots", background.transform);
+            RectTransform root = UIBuildUtility.CreateRect("Quiver", parent);
+            CanvasGroup group = root.gameObject.AddComponent<CanvasGroup>();
+            Image railTrim = UIBuildUtility.CreateImage("RailTrim", root, false);
+            railTrim.gameObject.AddComponent<CardArtMeshEffect>();
+            Image rail = UIBuildUtility.CreateImage("Rail", root, false);
+            rail.gameObject.AddComponent<CardArtMeshEffect>();
+            TextMeshProUGUI caption = UIBuildUtility.CreateText("Caption", root, TextAlignmentOptions.BottomLeft);
+            caption.textWrappingMode = TextWrappingModes.NoWrap;
+            RectTransform row = UIBuildUtility.CreateRect("Slots", root);
 
-            Image tooltipBackground = UIBuildUtility.CreateImage("Tooltip", background.transform, false);
+            Image tooltipBackground = UIBuildUtility.CreateImage("Tooltip", root, false);
             RectTransform tooltip = tooltipBackground.rectTransform;
             VerticalLayoutGroup layout = tooltip.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.childAlignment = TextAnchor.UpperLeft;
@@ -131,8 +142,7 @@ namespace JourneyToLanka.CombatUI
             TextMeshProUGUI name = UIBuildUtility.CreateText("Name", tooltip, TextAlignmentOptions.TopLeft);
             TextMeshProUGUI description = UIBuildUtility.CreateText("Description", tooltip, TextAlignmentOptions.TopLeft);
 
-            return new QuiverPanel(background.rectTransform, background, group, caption, row, tooltip, tooltipBackground,
-                layout, name, description);
+            return new QuiverPanel(root, railTrim, rail, group, caption, row, tooltip, tooltipBackground, layout, name, description);
         }
 
         public RectTransform GetSlotRect(int slot)
@@ -149,8 +159,13 @@ namespace JourneyToLanka.CombatUI
                 return;
             }
 
-            UIBuildUtility.StyleImage(_background, hudStyle.PanelSprite, hudStyle.PanelColor);
-            UIBuildUtility.StyleText(_caption, hudStyle.Font, hudStyle.CaptionFontSize, hudStyle.HudTextColor);
+            Material round = CardFrameMaterials.GetRound(hudStyle);
+            UIBuildUtility.StyleImage(_railTrim, null, style.RailTrimColor);
+            _railTrim.material = round;
+            UIBuildUtility.StyleImage(_rail, null, style.RailColor);
+            _rail.material = round;
+            UIBuildUtility.StyleText(_caption, hudStyle.Font, style.CaptionFontSize, style.CaptionColor);
+            _caption.gameObject.SetActive(style.ShowCaption);
 
             UIBuildUtility.StyleImage(_tooltipBackground, hudStyle.PanelSprite, hudStyle.PanelColor);
             int padding = Mathf.RoundToInt(style.TooltipPadding);
@@ -159,8 +174,17 @@ namespace JourneyToLanka.CombatUI
             UIBuildUtility.StyleText(_tooltipName, hudStyle.Font, style.TooltipNameFontSize, hudStyle.HudTextColor);
             UIBuildUtility.StyleText(_tooltipDescription, hudStyle.Font, style.TooltipDescriptionFontSize, hudStyle.HudTextColor);
             _tooltipDescriptionText.SetColors(hudStyle.CardValueBuffedColor, hudStyle.CardValueWeakenedColor);
-            UIBuildUtility.Place(_tooltip, new Vector2(0f, 1f), Vector2.zero, style.TooltipOffset,
-                new Vector2(style.TooltipWidth, 0f));
+            Vector2 tooltipSize = new Vector2(style.TooltipWidth, 0f);
+            if (style.Anchor.y >= 0.5f)
+            {
+                float hints = style.ShowKeyHints ? style.KeyHintGap + style.KeyHintFontSize * KeyLineHeight : 0f;
+                UIBuildUtility.Place(_tooltip, Vector2.zero, new Vector2(0f, 1f),
+                    new Vector2(style.TooltipOffset.x, -(style.TooltipOffset.y + hints)), tooltipSize);
+            }
+            else
+            {
+                UIBuildUtility.Place(_tooltip, new Vector2(0f, 1f), Vector2.zero, style.TooltipOffset, tooltipSize);
+            }
 
             for (int i = 0; i < _slots.Count; i++)
             {
@@ -316,15 +340,22 @@ namespace JourneyToLanka.CombatUI
             int count = _model != null ? _model.Quiver.Capacity : _slots.Count;
             float size = _style.SlotSize;
             float padding = _style.Padding;
-            float captionHeight = _hudStyle.CaptionFontSize * CaptionLineHeight;
             float rowWidth = count * size + Mathf.Max(0, count - 1) * _style.SlotSpacing;
             float width = rowWidth + padding * 2f;
-            float height = padding * 2f + captionHeight + _style.CaptionGap + size;
+            float halfRail = Mathf.Min(_style.RailHeight, size) * 0.5f;
+            float trim = Mathf.Min(_style.RailTrimWidth, halfRail);
+            float middle = size * 0.5f;
+            float captionHeight = _style.ShowCaption ? _style.CaptionFontSize * KeyLineHeight : 0f;
+            float captionBand = _style.ShowCaption ? captionHeight + _style.CaptionGap : 0f;
 
-            UIBuildUtility.Place(_rect, Vector2.zero, Vector2.zero, _style.Offset, new Vector2(width, height));
-            UIBuildUtility.Place(_caption.rectTransform, new Vector2(0f, 1f), new Vector2(0f, 1f),
-                new Vector2(padding, -padding), new Vector2(rowWidth, captionHeight));
-            UIBuildUtility.Place(_row, Vector2.zero, Vector2.zero, new Vector2(padding, padding), new Vector2(rowWidth, size));
+            UIBuildUtility.Place(_rect, _style.Anchor, _style.Anchor, _style.Offset, new Vector2(width, size + captionBand));
+            UIBuildUtility.Place(_caption.rectTransform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(padding, 0f),
+                new Vector2(Mathf.Max(0f, width - padding * 2f), captionHeight));
+            UIBuildUtility.SetOffsets(_railTrim.rectTransform, Vector2.zero, new Vector2(1f, 0f),
+                new Vector2(0f, middle - halfRail), new Vector2(0f, middle + halfRail));
+            UIBuildUtility.SetOffsets(_rail.rectTransform, Vector2.zero, new Vector2(1f, 0f),
+                new Vector2(trim, middle - halfRail + trim), new Vector2(-trim, middle + halfRail - trim));
+            UIBuildUtility.Place(_row, Vector2.zero, Vector2.zero, new Vector2(padding, 0f), new Vector2(rowWidth, size));
 
             for (int i = 0; i < _slots.Count; i++)
             {
@@ -545,7 +576,7 @@ namespace JourneyToLanka.CombatUI
                 _arrow.preserveAspect = true;
                 UIBuildUtility.Place(_arrow.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
                     Vector2.zero, Vector2.zero);
-                _key = UIBuildUtility.CreateText("Key", Rect, TextAlignmentOptions.TopLeft);
+                _key = UIBuildUtility.CreateText("Key", Rect, TextAlignmentOptions.Top);
                 _key.SetText("{0}", index + 1);
             }
 
@@ -566,8 +597,8 @@ namespace JourneyToLanka.CombatUI
                 _frame.sprite = style.SlotSprite;
 
                 UIBuildUtility.StyleText(_key, hudStyle.Font, style.KeyHintFontSize, style.KeyHintColor);
-                UIBuildUtility.SetOffsets(_key.rectTransform, Vector2.zero, Vector2.one,
-                    new Vector2(style.KeyHintOffset.x, 0f), new Vector2(0f, style.KeyHintOffset.y));
+                UIBuildUtility.Place(_key.rectTransform, new Vector2(0.5f, 0f), new Vector2(0.5f, 1f),
+                    new Vector2(0f, -style.KeyHintGap), new Vector2(style.SlotSize, style.KeyHintFontSize * KeyLineHeight));
                 _key.gameObject.SetActive(style.ShowKeyHints);
             }
 
@@ -597,8 +628,14 @@ namespace JourneyToLanka.CombatUI
 
             public void SetConsidered(bool considered, QuiverStyleSO style, bool punch)
             {
-                _ring.color = considered && style != null ? style.HighlightColor : Color.clear;
-                if (!considered || !punch || style == null || style.PunchScale <= 0f)
+                if (style == null)
+                {
+                    _ring.color = Color.clear;
+                    return;
+                }
+
+                _ring.color = considered ? style.HighlightColor : style.SocketRimColor;
+                if (!considered || !punch || style.PunchScale <= 0f)
                 {
                     return;
                 }

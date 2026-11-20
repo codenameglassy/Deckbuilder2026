@@ -10,6 +10,7 @@
 // reset on release. A face copy shows the same live description numbers as the hand card it stands in for.
 // Drawn cards fly in along an upward arc, face down at first, flip face up partway and swell slightly as they land;
 // the end-of-turn sweep arcs into the discard pile with a spin away from the hand.
+// Face-down copies and flip covers are drawn as card backs (CardFrameMaterials.ApplyBack), matching the pile stacks.
 // All timings, scales and the play zone come from CombatHudStyleSO. It only presents.
 using System;
 using System.Collections.Generic;
@@ -32,8 +33,8 @@ namespace JourneyToLanka.CombatUI
 
         private readonly RectTransform _root;
         private readonly CardView _template;
-        private readonly StatPanel _drawPile;
-        private readonly StatPanel _discardPile;
+        private readonly PileStackView _drawPile;
+        private readonly PileStackView _discardPile;
         private readonly ObjectPool<CardFlight> _faces;
         private readonly ObjectPool<CardFlight> _backs;
         private readonly List<CardFlight> _created = new List<CardFlight>(FaceCapacity + BackCapacity);
@@ -49,7 +50,8 @@ namespace JourneyToLanka.CombatUI
         private float _nextDrawTime;
         private float _nextSweepTime;
 
-        public CardMotionPresenter(CardView template, RectTransform root, StatPanel drawPile, StatPanel discardPile)
+        public CardMotionPresenter(CardView template, RectTransform root, PileStackView drawPile,
+            PileStackView discardPile)
         {
             _template = template;
             _root = root;
@@ -120,7 +122,7 @@ namespace JourneyToLanka.CombatUI
 
             CardFlight flight = GetFace(card, handView);
             flight.HandView = handView;
-            StatPanel source = from == _deck.DiscardPile ? _discardPile : _drawPile;
+            PileStackView source = from == _deck.DiscardPile ? _discardPile : _drawPile;
             flight.Place(CardFlight.WorldCenter(source.Rect), _style.DrawStartScale, 0f);
             flight.SetPath(_style.DrawArcHeight, 0f);
             flight.SetFlip(_style.DrawFlipPoint, _style.DrawFlipWidth);
@@ -325,14 +327,14 @@ namespace JourneyToLanka.CombatUI
             }
 
             flight.Rect.sizeDelta = _style.CardSize;
-            UIBuildUtility.StyleImage(flight.Back, _style.CardBackSprite, _style.CardBackColor);
+            CardFrameMaterials.ApplyBack(flight.Back, _style, Color.white);
         }
 
         private void StyleCover(CardFlight flight)
         {
             if (flight.Cover != null && _style != null)
             {
-                UIBuildUtility.StyleImage(flight.Cover, _style.CardBackSprite, _style.CardBackColor);
+                CardFrameMaterials.ApplyBack(flight.Cover, _style, Color.white);
             }
         }
 

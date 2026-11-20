@@ -15,6 +15,8 @@ MonoBehaviour:
   _font: {fileID: 11400000, guid: d70f485aa27dc43f79a8fd168f58435c, type: 2}
   _barOffset: {x: 0, y: 0.9, z: 0}
   _barWorldScale: 0.01
+  _barScreenScale: 1.4
+  _cameraAnchor: {fileID: 11400000, guid: d70b816e01fcec8428526dbe13c00e9a, type: 2}
   _barSize: {x: 120, y: 20}
   _barBorder: 2
   _barBorderColor: {r: 0.05, g: 0.04, b: 0.03, a: 0.95}
@@ -29,7 +31,7 @@ MonoBehaviour:
   _kavachBorderColor: {r: 0.6, g: 0.85, b: 1, a: 1}
   _kavachBadgeSize: {x: 30, y: 30}
   _kavachBadgeGap: 4
-  _kavachBadgeSprite: {fileID: 0}
+  _kavachBadgeSprite: {fileID: 21300000, guid: 76c4189dec3be5140807317ed7887c40, type: 3}
   _kavachBadgeColor: {r: 0.3, g: 0.55, b: 0.9, a: 1}
   _kavachTextColor: {r: 0.98, g: 0.95, b: 0.88, a: 1}
   _kavachFontSize: 17
@@ -57,6 +59,24 @@ MonoBehaviour:
   _lethalTagFontSize: 16
   _lethalTagOffset: {x: 0, y: 20}
   _previewPulseDuration: 0.45
+  _threatStripeSprite: {fileID: 21300000, guid: 0f86af10c12ddc343ba5ed20fe05209a, type: 3}
+  _threatStripeColor: {r: 1, g: 1, b: 1, a: 1}
+  _threatLethalStripeColor: {r: 1, g: 0.55, b: 0.5, a: 1}
+  _threatStripeDimAlpha: 0.55
+  _threatPulseDuration: 0.7
+  _threatTagSprite: {fileID: 21300000, guid: 7d99f2e947d854e45946fa84037648f5, type: 3}
+  _threatPointerSprite: {fileID: 21300000, guid: 314d173e96c46fa4ca8d86ee16ce61f7, type: 3}
+  _threatTagColor: {r: 0.85, g: 0.25, b: 0.22, a: 1}
+  _threatLethalTagColor: {r: 1, g: 0.15, b: 0.1, a: 1}
+  _threatTextColor: {r: 1, g: 0.72, b: 0.64, a: 1}
+  _threatLethalTextColor: {r: 1, g: 0.92, b: 0.88, a: 1}
+  _threatTagFontSize: 16
+  _threatTagHeight: 24
+  _threatTagPadding: 8
+  _threatTagOffset: {x: 0, y: -7}
+  _threatPointerSize: {x: 12, y: 7}
+  _threatPunchScale: 0.25
+  _threatPunchDuration: 0.25
   _statusChipSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
   _statusChipSize: {x: 26, y: 26}
   _statusChipSpacing: 4

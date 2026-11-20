@@ -48,11 +48,15 @@ MonoBehaviour:
   _cardPadding: 12
   _cardTextColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
   _cardNameFontSize: 24
+  _cardNameMinFontSize: 15
   _cardTypeFontSize: 18
+  _cardTypeMinFontSize: 10
   _cardDescriptionFontSize: 22
+  _cardDescriptionMinFontSize: 14
   _cardValueBuffedColor: {r: 0.5, g: 0.95, b: 0.45, a: 1}
   _cardValueWeakenedColor: {r: 1, g: 0.45, b: 0.38, a: 1}
   _costBadgeSize: 48
+  _costBadgeOverhang: 14
   _costBadgeSprite: {fileID: 0}
   _costBadgeColor: {r: 0.95, g: 0.7, b: 0.25, a: 1}
   _costTextColor: {r: 0.15, g: 0.1, b: 0.05, a: 1}
@@ -61,6 +65,18 @@ MonoBehaviour:
   _costUnaffordableTextColor: {r: 1, g: 0.92, b: 0.86, a: 1}
   _unplayableAlpha: 0.45
   _targetingCardScale: 1.12
+  _cardBannerHeight: 34
+  _cardArtHeight: 112
+  _cardSectionGap: 6
+  _cardRibbonSize: {x: 84, y: 24}
+  _cardArtMaterial: {fileID: 2100000, guid: 455654344d2012b499df131627501042, type: 2}
+  _cardArtCornerRadius: 0.1
+  _cardArtVignette: 0.5
+  _cardArtVignetteWidth: 0.35
+  _cardArtTopLight: 0.12
+  _cardArtPlaceholderTint: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+  _cardKeywords: {fileID: 11400000, guid: 59a7856ceb118cc48b0997c2f8114711, type: 2}
+  _cardRoundShade: 0.25
   _cardFrameMaterial: {fileID: 2100000, guid: 8475f330874bd5c40bd0e4cd2898ff28, type: 2}
   _cardTypeVisuals:
   - {fileID: 11400000, guid: b5ef3404bf2ebd14ba81d22f7ec2f232, type: 2}
@@ -79,15 +95,33 @@ MonoBehaviour:
   _frameTrimWidth: 0.006
   _frameTrimInset: 0.016
   _frameBandStrength: 0.9
+  _frameBannerRadius: 0.04
+  _frameArtRimWidth: 0.012
   _frameGlowWidth: 0.06
   _frameGlowStrength: 0.4
   _frameSheen: 0.08
+  _cardRarityVisuals:
+  - {fileID: 11400000, guid: 3acd9be30577b4a4fab34fd931464b86, type: 2}
+  - {fileID: 11400000, guid: 026f3ad014431204e82f6048c16270ba, type: 2}
+  - {fileID: 11400000, guid: e383ce814f797ed49bebaee15a28dbc7, type: 2}
+  - {fileID: 11400000, guid: d8781cf028133224e97ef9dfecd1cda5, type: 2}
+  _frameBevel: 0.35
+  _frameBevelWidth: 0.05
+  _frameInnerLine: 0.6
+  _frameInnerLineGap: 0.018
+  _frameOrnament: 1
+  _frameOrnamentSize: 0.075
+  _frameBannerPattern: 0.5
+  _frameShimmerSpeed: 0.35
   _descriptionPanelSprite: {fileID: 0}
   _descriptionPanelColor: {r: 0, g: 0, b: 0, a: 0.28}
   _descriptionPanelPadding: 2
   _typeIconSize: 22
   _cardBackSprite: {fileID: 0}
   _cardBackColor: {r: 0.45, g: 0.16, b: 0.1, a: 1}
+  _cardBackMaterial: {fileID: 2100000, guid: bdc83f2daa4afe54687582d3c420e529, type: 2}
+  _cardBackEmblemSize: 0.5
+  _cardBackPattern: 0.35
   _drawDuration: 0.35
   _drawStagger: 0.09
   _drawStartScale: 0.35
@@ -123,17 +157,34 @@ MonoBehaviour:
   _panelSprite: {fileID: 0}
   _panelColor: {r: 0.08, g: 0.07, b: 0.06, a: 0.85}
   _hudTextColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
-  _captionFontSize: 22
-  _valueFontSize: 40
-  _statPanelSize: {x: 160, y: 100}
-  _pranaOffset: {x: 40, y: 150}
-  _drawPileOffset: {x: 40, y: 30}
   _discardPileOffset: {x: -40, y: 30}
+  _pileCardSize: {x: 66, y: 92}
+  _pileMaxLayers: 4
+  _pileCardsPerLayer: 5
+  _pileLayerOffset: {x: 3, y: -3}
+  _pileLayerRotation: 2.5
+  _pileLayerShade: 0.08
+  _pileEmptyColor: {r: 1, g: 1, b: 1, a: 0.18}
+  _discardPileTint: {r: 0.78, g: 0.72, b: 0.68, a: 1}
+  _pileBadgeDiameter: 40
+  _pileBadgeRingWidth: 3
+  _pileBadgeRingColor: {r: 0.95, g: 0.78, b: 0.42, a: 1}
+  _pileBadgeFaceColor: {r: 0.08, g: 0.06, b: 0.045, a: 0.95}
+  _pileBadgeFontSize: 22
+  _pileBadgeTextColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
+  _pileBadgeAnchor: {x: 1, y: 0}
+  _pileBadgeOffset: {x: -4, y: 8}
+  _pileCaptionFontSize: 18
+  _pileCaptionColor: {r: 0.95, g: 0.82, b: 0.55, a: 0.9}
+  _pileCaptionGap: 6
+  _leftColumnCentreX: 120
+  _leftColumnBottom: 30
+  _leftColumnGap: 20
   _pranaOrbs: {fileID: 11400000, guid: 8dc167f388a78674ca4ff34e78da85f0, type: 2}
   _quiver: {fileID: 11400000, guid: a9aaa9d102a809b49bb87e5b4664064a, type: 2}
   _chainBar: {fileID: 11400000, guid: c0a47086586d72343a8e8f9b27daf70a, type: 2}
   _endTurnSize: {x: 240, y: 80}
-  _endTurnOffset: {x: -40, y: 150}
+  _endTurnOffset: {x: -40, y: 175}
   _endTurnSprite: {fileID: 0}
   _endTurnColor: {r: 0.55, g: 0.2, b: 0.12, a: 1}
   _endTurnTextColor: {r: 0.98, g: 0.94, b: 0.85, a: 1}
@@ -141,18 +192,6 @@ MonoBehaviour:
   _endTurnGlowColor: {r: 0.95, g: 0.55, b: 0.2, a: 1}
   _endTurnPulseScale: 1.06
   _endTurnPulseDuration: 0.7
-  _threatPanelSize: {x: 260, y: 132}
-  _threatPanelOffset: {x: 40, y: 270}
-  _threatPadding: 12
-  _threatCaptionFontSize: 22
-  _threatValueFontSize: 28
-  _threatIncomingColor: {r: 1, g: 0.45, b: 0.35, a: 1}
-  _threatKavachColor: {r: 0.45, g: 0.75, b: 1, a: 1}
-  _threatTakenColor: {r: 0.96, g: 0.91, b: 0.8, a: 1}
-  _threatLethalColor: {r: 1, g: 0.2, b: 0.15, a: 1}
-  _threatPreviewColor: {r: 1, g: 0.88, b: 0.5, a: 1}
-  _threatPunchScale: 0.3
-  _threatPunchDuration: 0.25
   _turnBannerSize: {x: 900, y: 120}
   _turnBannerOffset: {x: 0, y: 160}
   _turnBannerSprite: {fileID: 0}

@@ -4,7 +4,8 @@
 // CollectCardValues gathers the numbers its description pattern shows, from every effect in order.
 // Exhausts sends the card to the exhaust pile once played, out of the deck for the rest of the fight. Rarity decides
 // how often a reward roll offers it. Chain is the combo chain the card builds (Kodanda Strike builds the Bow Chain,
-// Vajra Guard the Ring Chain); left empty, playing the card breaks any running chain.
+// Vajra Guard the Ring Chain); left empty, playing the card breaks any running chain. Art is the painting shown in
+// the card's art window; presentation reads it, combat never does, and an empty one shows a placeholder.
 using System;
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Effects;
@@ -18,6 +19,8 @@ namespace JourneyToLanka.Combat.Cards
         [SerializeField] private string _id;
         [SerializeField] private string _nameKey;
         [SerializeField] private string _descriptionKey;
+        [Tooltip("Painting shown in the card's art window, cropped to fill it. Leave empty for the type-coloured placeholder.")]
+        [SerializeField] private Sprite _art;
         [SerializeField] private CardTypeSO _type;
         [SerializeField, Min(0)] private int _cost = 1;
         [Tooltip("How often reward rolls offer this card. None means not set yet; Divine cards are never rolled.")]
@@ -34,6 +37,8 @@ namespace JourneyToLanka.Combat.Cards
         public string NameKey => _nameKey;
 
         public string DescriptionKey => _descriptionKey;
+
+        public Sprite Art => _art;
 
         public CardTypeSO Type => _type;
 

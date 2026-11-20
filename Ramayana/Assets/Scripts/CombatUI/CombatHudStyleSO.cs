@@ -1,17 +1,22 @@
 // Every visual value of the combat HUD and its cards: canvas reference resolution, the hand area and its layout
-// strategy (a swappable HandLayoutSO asset), how quickly cards ease into place and how far a targeted card rises,
-// drag to play (the play line, the dragged card's scale, follow speed and tilt), hand life (the playable glow, the
-// spring and stagger of the hand settling, the arc, flip and swell of a drawn card, the arc and spin of the
-// end-of-turn sweep), card size, colours (including the cost badge when the card is unaffordable, and description
-// numbers that are buffed or weakened), the card frame (the Card Frame shader's material and values, the visuals for
-// each card type, the description panel and the type icon), fonts and text sizes, the lifted card's scale while
-// targeting, card motion (draw, play, discard, reshuffle), the rejected-card wiggle and message, panel and button
-// placement, the Prana orbs (their own PranaOrbsStyleSO), Rama's quiver (its own QuiverStyleSO), the combo chain bar
-// above the hand (its own ChainBarStyleSO), the End Turn glow
-// when nothing is playable, the threat panel, the turn banner and its timing, and the result banner.
-// Sprites are optional; without one an element draws as a flat colour. A Card Sprite, when set, replaces the shader
-// frame with that sprite tinted by Card Color. Read-only at runtime. In the Editor,
-// changing a value raises Changed so the HUD re-applies it in Play mode without rebuilding.
+// strategy (a swappable HandLayoutSO asset), how quickly cards ease into place and how far a targeted card rises, drag
+// to play (the play line, the dragged card's scale, follow speed and tilt), hand life (the playable glow, the spring
+// and stagger of the hand settling, the arc, flip and swell of a drawn card, the arc and spin of the end-of-turn
+// sweep), card size, colours (including the cost badge when the card is unaffordable, and description numbers that are
+// buffed or weakened), the card face layout (name banner, art window, type ribbon and description box, the cost orb's
+// overhang, and the smallest sizes the name and description may shrink to), the card art (the Card Art shader's
+// material, corner radius, vignette and the placeholder tint used until a card has a painting), the keywords coloured
+// in card descriptions (a CardKeywordsSO), the card frame (the Card Frame shader's material and values, the visuals for
+// each card type and each card rarity, which colour the trim and can shimmer, and the Mithila finishing: bevel, inner
+// rule, corner motifs and banner border, the description panel and the type icon), fonts and text sizes, the lifted
+// card's scale while targeting, card motion (draw, play, discard, reshuffle), the rejected-card wiggle and message, the
+// draw and discard stacks (card size, how many cards show, their tilt and shade, the count badge and caption), the card
+// back (its shader material, emblem and lattice), panel and button placement (the left column that stacks Prana above
+// the draw pile on one centre line), the Prana orbs (their own PranaOrbsStyleSO), Rama's quiver (its own
+// QuiverStyleSO), the combo chain bar above the hand (its own ChainBarStyleSO), the End Turn glow when nothing is
+// playable, the turn banner and its timing, and the result banner. Sprites are optional; without one an element draws
+// as a flat colour. A Card Sprite, when set, replaces the shader frame with that sprite tinted by Card Color. Read-only
+// at runtime. In the Editor, changing a value raises Changed so the HUD re-applies it in Play mode without rebuilding.
 using System;
 using JourneyToLanka.Combat.Cards;
 using TMPro;
@@ -75,12 +80,20 @@ namespace JourneyToLanka.CombatUI
         [SerializeField] private Color _cardColor = new Color(0.22f, 0.17f, 0.12f);
         [SerializeField, Min(0f)] private float _cardPadding = 12f;
         [SerializeField] private Color _cardTextColor = new Color(0.96f, 0.91f, 0.8f);
+        [Tooltip("The name's largest size; long names shrink toward Card Name Min Font Size to stay on one line.")]
         [SerializeField, Min(1f)] private float _cardNameFontSize = 24f;
-        [SerializeField, Min(1f)] private float _cardTypeFontSize = 18f;
+        [SerializeField, Min(1f)] private float _cardNameMinFontSize = 15f;
+        [Tooltip("The type label's largest size; long type names shrink toward Card Type Min Font Size.")]
+        [SerializeField, Min(1f)] private float _cardTypeFontSize = 16f;
+        [SerializeField, Min(1f)] private float _cardTypeMinFontSize = 10f;
+        [Tooltip("The description's largest size; long descriptions shrink toward Card Description Min Font Size.")]
         [SerializeField, Min(1f)] private float _cardDescriptionFontSize = 22f;
+        [SerializeField, Min(1f)] private float _cardDescriptionMinFontSize = 14f;
         [SerializeField] private Color _cardValueBuffedColor = new Color(0.5f, 0.95f, 0.45f);
         [SerializeField] private Color _cardValueWeakenedColor = new Color(1f, 0.45f, 0.38f);
         [SerializeField, Min(1f)] private float _costBadgeSize = 48f;
+        [Tooltip("How far the cost orb sticks out past the card's top-left corner. Zero keeps it inside the corner.")]
+        [SerializeField] private float _costBadgeOverhang = 14f;
         [SerializeField] private Sprite _costBadgeSprite;
         [SerializeField] private Color _costBadgeColor = new Color(0.95f, 0.7f, 0.25f);
         [SerializeField] private Color _costTextColor = new Color(0.15f, 0.1f, 0.05f);
@@ -89,6 +102,27 @@ namespace JourneyToLanka.CombatUI
         [SerializeField] private Color _costUnaffordableTextColor = new Color(1f, 0.92f, 0.86f);
         [SerializeField, Range(0f, 1f)] private float _unplayableAlpha = 0.45f;
         [SerializeField, Min(1f)] private float _targetingCardScale = 1.12f;
+
+        [Header("Card Face (pixels at card size)")]
+        [SerializeField, Min(0f)] private float _cardBannerHeight = 34f;
+        [SerializeField, Min(0f)] private float _cardArtHeight = 112f;
+        [SerializeField, Min(0f)] private float _cardSectionGap = 6f;
+        [SerializeField] private Vector2 _cardRibbonSize = new Vector2(84f, 24f);
+
+        [Header("Card Art")]
+        [SerializeField] private Material _cardArtMaterial;
+        [Tooltip("Fraction of the art window's shorter side.")]
+        [SerializeField, Range(0f, 0.5f)] private float _cardArtCornerRadius = 0.1f;
+        [SerializeField, Range(0f, 1f)] private float _cardArtVignette = 0.5f;
+        [Tooltip("How far the vignette reaches in, as a fraction of the art window's shorter side.")]
+        [SerializeField, Range(0.01f, 1f)] private float _cardArtVignetteWidth = 0.35f;
+        [SerializeField, Range(0f, 0.5f)] private float _cardArtTopLight = 0.12f;
+        [Tooltip("Multiplies the card type's accent to colour the art window while a card has no painting.")]
+        [SerializeField] private Color _cardArtPlaceholderTint = new Color(0.55f, 0.55f, 0.55f, 1f);
+        [Tooltip("Keywords coloured in card descriptions (Kavach, Prana, Exhaust and the status names).")]
+        [SerializeField] private CardKeywordsSO _cardKeywords;
+        [Tooltip("Edge shading on the type ribbon and the cost orb.")]
+        [SerializeField, Range(0f, 1f)] private float _cardRoundShade = 0.25f;
 
         [Header("Card Frame (sizes are fractions of the card width)")]
         [SerializeField] private Material _cardFrameMaterial;
@@ -103,9 +137,26 @@ namespace JourneyToLanka.CombatUI
         [SerializeField, Range(0f, 0.03f)] private float _frameTrimWidth = 0.006f;
         [SerializeField, Range(0f, 0.1f)] private float _frameTrimInset = 0.016f;
         [SerializeField, Range(0f, 1f)] private float _frameBandStrength = 0.9f;
+        [SerializeField, Range(0f, 0.25f)] private float _frameBannerRadius = 0.04f;
+        [SerializeField, Range(0f, 0.05f)] private float _frameArtRimWidth = 0.012f;
         [SerializeField, Range(0.001f, 0.25f)] private float _frameGlowWidth = 0.06f;
         [SerializeField, Range(0f, 2f)] private float _frameGlowStrength = 0.4f;
         [SerializeField, Range(0f, 1f)] private float _frameSheen = 0.08f;
+        [Tooltip("One asset per card rarity; colours the trim, banner edge and art rim. Missing rarities use Frame Trim Color.")]
+        [SerializeField] private CardRarityVisualsSO[] _cardRarityVisuals = Array.Empty<CardRarityVisualsSO>();
+        [Tooltip("Light on the top and left edges, shade on the bottom and right. Zero for a flat card.")]
+        [SerializeField, Range(0f, 1f)] private float _frameBevel = 0.35f;
+        [SerializeField, Range(0.005f, 0.2f)] private float _frameBevelWidth = 0.05f;
+        [Tooltip("Strength of the second rule inside the trim. Zero for a single rule.")]
+        [SerializeField, Range(0f, 1f)] private float _frameInnerLine = 0.6f;
+        [SerializeField, Range(0f, 0.06f)] private float _frameInnerLineGap = 0.018f;
+        [Tooltip("Strength of the Mithila petal motif in each corner. Zero hides it.")]
+        [SerializeField, Range(0f, 1f)] private float _frameOrnament = 1f;
+        [SerializeField, Range(0.02f, 0.2f)] private float _frameOrnamentSize = 0.075f;
+        [Tooltip("Strength of the rule-and-dots border inside the name banner. Zero for a plain banner.")]
+        [SerializeField, Range(0f, 1f)] private float _frameBannerPattern = 0.5f;
+        [Tooltip("How many times a second the rarity shimmer sweeps across the card.")]
+        [SerializeField, Range(0f, 2f)] private float _frameShimmerSpeed = 0.35f;
         [SerializeField] private Sprite _descriptionPanelSprite;
         [SerializeField] private Color _descriptionPanelColor = new Color(0f, 0f, 0f, 0.28f);
         [SerializeField] private float _descriptionPanelPadding = 2f;
@@ -114,6 +165,10 @@ namespace JourneyToLanka.CombatUI
         [Header("Card Motion")]
         [SerializeField] private Sprite _cardBackSprite;
         [SerializeField] private Color _cardBackColor = new Color(0.45f, 0.16f, 0.1f);
+        [Tooltip("Card Back shader material for the pile stacks and face-down flights. A Card Back Sprite replaces it.")]
+        [SerializeField] private Material _cardBackMaterial;
+        [SerializeField, Range(0.1f, 0.9f)] private float _cardBackEmblemSize = 0.5f;
+        [SerializeField, Range(0f, 1f)] private float _cardBackPattern = 0.35f;
         [SerializeField, Min(0.01f)] private float _drawDuration = 0.35f;
         [SerializeField, Min(0f)] private float _drawStagger = 0.09f;
         [SerializeField, Range(0.05f, 1f)] private float _drawStartScale = 0.35f;
@@ -155,12 +210,46 @@ namespace JourneyToLanka.CombatUI
         [SerializeField] private Sprite _panelSprite;
         [SerializeField] private Color _panelColor = new Color(0.08f, 0.07f, 0.06f, 0.85f);
         [SerializeField] private Color _hudTextColor = new Color(0.96f, 0.91f, 0.8f);
-        [SerializeField, Min(1f)] private float _captionFontSize = 22f;
-        [SerializeField, Min(1f)] private float _valueFontSize = 40f;
-        [SerializeField] private Vector2 _statPanelSize = new Vector2(160f, 100f);
-        [SerializeField] private Vector2 _pranaOffset = new Vector2(40f, 150f);
-        [SerializeField] private Vector2 _drawPileOffset = new Vector2(40f, 30f);
+
+        [Header("Draw and Discard Piles")]
+        [Tooltip("Bottom-right corner of the discard pile, from the screen's bottom-right corner.")]
         [SerializeField] private Vector2 _discardPileOffset = new Vector2(-40f, 30f);
+        [SerializeField] private Vector2 _pileCardSize = new Vector2(66f, 92f);
+        [Tooltip("Most cards drawn in a stack; a full pile shows this many.")]
+        [SerializeField, Range(1, 6)] private int _pileMaxLayers = 4;
+        [Tooltip("Cards per visible layer: 1 to this many shows one card, the next as many show two, and so on.")]
+        [SerializeField, Min(1)] private int _pileCardsPerLayer = 5;
+        [Tooltip("How far each lower card sits from the one above it.")]
+        [SerializeField] private Vector2 _pileLayerOffset = new Vector2(3f, -3f);
+        [Tooltip("Tilt of the lower cards, alternating left and right, growing with depth.")]
+        [SerializeField, Range(0f, 10f)] private float _pileLayerRotation = 2.5f;
+        [Tooltip("How much darker each lower card is.")]
+        [SerializeField, Range(0f, 0.3f)] private float _pileLayerShade = 0.08f;
+        [Tooltip("Tint of the outline left when a pile is empty.")]
+        [SerializeField] private Color _pileEmptyColor = new Color(1f, 1f, 1f, 0.18f);
+        [Tooltip("Tint of the discard stack, so it reads apart from the draw stack.")]
+        [SerializeField] private Color _discardPileTint = new Color(0.78f, 0.72f, 0.68f, 1f);
+        [SerializeField, Min(8f)] private float _pileBadgeDiameter = 40f;
+        [SerializeField, Min(0f)] private float _pileBadgeRingWidth = 3f;
+        [SerializeField] private Color _pileBadgeRingColor = new Color(0.95f, 0.78f, 0.42f, 1f);
+        [SerializeField] private Color _pileBadgeFaceColor = new Color(0.08f, 0.06f, 0.045f, 0.95f);
+        [SerializeField, Min(1f)] private float _pileBadgeFontSize = 22f;
+        [SerializeField] private Color _pileBadgeTextColor = new Color(0.96f, 0.91f, 0.8f);
+        [Tooltip("Point on the top card the count badge is centred on (0, 0 is bottom-left, 1, 0 bottom-right).")]
+        [SerializeField] private Vector2 _pileBadgeAnchor = new Vector2(1f, 0f);
+        [SerializeField] private Vector2 _pileBadgeOffset = new Vector2(-4f, 8f);
+        [SerializeField, Min(1f)] private float _pileCaptionFontSize = 18f;
+        [SerializeField] private Color _pileCaptionColor = new Color(0.95f, 0.82f, 0.55f, 0.9f);
+        [Tooltip("Space between the stack and its caption below it.")]
+        [SerializeField, Min(0f)] private float _pileCaptionGap = 6f;
+
+        [Header("Left Column (draw pile, Prana above it)")]
+        [Tooltip("Distance from the screen's left edge to the column's centre line.")]
+        [SerializeField, Min(0f)] private float _leftColumnCentreX = 120f;
+        [Tooltip("Distance from the screen's bottom edge to the draw pile's bottom.")]
+        [SerializeField, Min(0f)] private float _leftColumnBottom = 30f;
+        [Tooltip("Space between the draw pile and Prana.")]
+        [SerializeField, Min(0f)] private float _leftColumnGap = 20f;
 
         [Header("Prana")]
         [SerializeField] private PranaOrbsStyleSO _pranaOrbs;
@@ -181,20 +270,6 @@ namespace JourneyToLanka.CombatUI
         [SerializeField] private Color _endTurnGlowColor = new Color(0.95f, 0.55f, 0.2f);
         [SerializeField, Min(1f)] private float _endTurnPulseScale = 1.06f;
         [SerializeField, Min(0f)] private float _endTurnPulseDuration = 0.7f;
-
-        [Header("Threat Panel")]
-        [SerializeField] private Vector2 _threatPanelSize = new Vector2(260f, 132f);
-        [SerializeField] private Vector2 _threatPanelOffset = new Vector2(40f, 270f);
-        [SerializeField, Min(0f)] private float _threatPadding = 12f;
-        [SerializeField, Min(1f)] private float _threatCaptionFontSize = 22f;
-        [SerializeField, Min(1f)] private float _threatValueFontSize = 28f;
-        [SerializeField] private Color _threatIncomingColor = new Color(1f, 0.45f, 0.35f);
-        [SerializeField] private Color _threatKavachColor = new Color(0.45f, 0.75f, 1f);
-        [SerializeField] private Color _threatTakenColor = new Color(0.96f, 0.91f, 0.8f);
-        [SerializeField] private Color _threatLethalColor = new Color(1f, 0.2f, 0.15f);
-        [SerializeField] private Color _threatPreviewColor = new Color(1f, 0.88f, 0.5f);
-        [SerializeField, Min(0f)] private float _threatPunchScale = 0.3f;
-        [SerializeField, Min(0.01f)] private float _threatPunchDuration = 0.25f;
 
         [Header("Turn Banner")]
         [SerializeField] private Vector2 _turnBannerSize = new Vector2(900f, 120f);
@@ -258,11 +333,15 @@ namespace JourneyToLanka.CombatUI
         public float CardPadding => _cardPadding;
         public Color CardTextColor => _cardTextColor;
         public float CardNameFontSize => _cardNameFontSize;
+        public float CardNameMinFontSize => Mathf.Min(_cardNameMinFontSize, _cardNameFontSize);
         public float CardTypeFontSize => _cardTypeFontSize;
+        public float CardTypeMinFontSize => Mathf.Min(_cardTypeMinFontSize, _cardTypeFontSize);
         public float CardDescriptionFontSize => _cardDescriptionFontSize;
+        public float CardDescriptionMinFontSize => Mathf.Min(_cardDescriptionMinFontSize, _cardDescriptionFontSize);
         public Color CardValueBuffedColor => _cardValueBuffedColor;
         public Color CardValueWeakenedColor => _cardValueWeakenedColor;
         public float CostBadgeSize => _costBadgeSize;
+        public float CostBadgeOverhang => _costBadgeOverhang;
         public Sprite CostBadgeSprite => _costBadgeSprite;
         public Color CostBadgeColor => _costBadgeColor;
         public Color CostTextColor => _costTextColor;
@@ -271,6 +350,19 @@ namespace JourneyToLanka.CombatUI
         public Color CostUnaffordableTextColor => _costUnaffordableTextColor;
         public float UnplayableAlpha => _unplayableAlpha;
         public float TargetingCardScale => _targetingCardScale;
+
+        public float CardBannerHeight => _cardBannerHeight;
+        public float CardArtHeight => _cardArtHeight;
+        public float CardSectionGap => _cardSectionGap;
+        public Vector2 CardRibbonSize => _cardRibbonSize;
+        public Material CardArtMaterial => _cardArtMaterial;
+        public float CardArtCornerRadius => _cardArtCornerRadius;
+        public float CardArtVignette => _cardArtVignette;
+        public float CardArtVignetteWidth => _cardArtVignetteWidth;
+        public float CardArtTopLight => _cardArtTopLight;
+        public Color CardArtPlaceholderTint => _cardArtPlaceholderTint;
+        public float CardRoundShade => _cardRoundShade;
+        public CardKeywordsSO CardKeywords => _cardKeywords;
 
         public Material CardFrameMaterial => _cardFrameMaterial;
         public CardTypeVisualsSO DefaultCardTypeVisuals => _defaultCardTypeVisuals;
@@ -284,9 +376,42 @@ namespace JourneyToLanka.CombatUI
         public float FrameTrimWidth => _frameTrimWidth;
         public float FrameTrimInset => _frameTrimInset;
         public float FrameBandStrength => _frameBandStrength;
+        public float FrameBannerRadius => _frameBannerRadius;
+        public float FrameArtRimWidth => _frameArtRimWidth;
         public float FrameGlowWidth => _frameGlowWidth;
         public float FrameGlowStrength => _frameGlowStrength;
         public float FrameSheen => _frameSheen;
+        public float FrameShimmerSpeed => _frameShimmerSpeed;
+        public float FrameBevel => _frameBevel;
+        public float FrameBevelWidth => _frameBevelWidth;
+        public float FrameInnerLine => _frameInnerLine;
+        public float FrameInnerLineGap => _frameInnerLineGap;
+        public float FrameOrnament => _frameOrnament;
+        public float FrameOrnamentSize => _frameOrnamentSize;
+        public float FrameBannerPattern => _frameBannerPattern;
+        public int CardRarityVisualsCount => _cardRarityVisuals != null ? _cardRarityVisuals.Length : 0;
+
+        public CardRarityVisualsSO GetCardRarityVisuals(int index)
+        {
+            return _cardRarityVisuals[index];
+        }
+
+        public CardRarityVisualsSO FindCardRarityVisuals(CardRarity rarity)
+        {
+            if (_cardRarityVisuals != null)
+            {
+                for (int i = 0; i < _cardRarityVisuals.Length; i++)
+                {
+                    CardRarityVisualsSO visuals = _cardRarityVisuals[i];
+                    if (visuals != null && visuals.Rarity == rarity)
+                    {
+                        return visuals;
+                    }
+                }
+            }
+
+            return null;
+        }
         public Sprite DescriptionPanelSprite => _descriptionPanelSprite;
         public Color DescriptionPanelColor => _descriptionPanelColor;
         public float DescriptionPanelPadding => _descriptionPanelPadding;
@@ -316,6 +441,9 @@ namespace JourneyToLanka.CombatUI
 
         public Sprite CardBackSprite => _cardBackSprite;
         public Color CardBackColor => _cardBackColor;
+        public Material CardBackMaterial => _cardBackMaterial;
+        public float CardBackEmblemSize => _cardBackEmblemSize;
+        public float CardBackPattern => _cardBackPattern;
         public float DrawDuration => _drawDuration;
         public float DrawStagger => _drawStagger;
         public float DrawStartScale => _drawStartScale;
@@ -354,12 +482,29 @@ namespace JourneyToLanka.CombatUI
         public Sprite PanelSprite => _panelSprite;
         public Color PanelColor => _panelColor;
         public Color HudTextColor => _hudTextColor;
-        public float CaptionFontSize => _captionFontSize;
-        public float ValueFontSize => _valueFontSize;
-        public Vector2 StatPanelSize => _statPanelSize;
-        public Vector2 PranaOffset => _pranaOffset;
-        public Vector2 DrawPileOffset => _drawPileOffset;
+        public float LeftColumnCentreX => _leftColumnCentreX;
+        public float LeftColumnBottom => _leftColumnBottom;
+        public float LeftColumnGap => _leftColumnGap;
         public Vector2 DiscardPileOffset => _discardPileOffset;
+        public Vector2 PileCardSize => _pileCardSize;
+        public int PileMaxLayers => _pileMaxLayers;
+        public int PileCardsPerLayer => _pileCardsPerLayer;
+        public Vector2 PileLayerOffset => _pileLayerOffset;
+        public float PileLayerRotation => _pileLayerRotation;
+        public float PileLayerShade => _pileLayerShade;
+        public Color PileEmptyColor => _pileEmptyColor;
+        public Color DiscardPileTint => _discardPileTint;
+        public float PileBadgeDiameter => _pileBadgeDiameter;
+        public float PileBadgeRingWidth => _pileBadgeRingWidth;
+        public Color PileBadgeRingColor => _pileBadgeRingColor;
+        public Color PileBadgeFaceColor => _pileBadgeFaceColor;
+        public float PileBadgeFontSize => _pileBadgeFontSize;
+        public Color PileBadgeTextColor => _pileBadgeTextColor;
+        public Vector2 PileBadgeAnchor => _pileBadgeAnchor;
+        public Vector2 PileBadgeOffset => _pileBadgeOffset;
+        public float PileCaptionFontSize => _pileCaptionFontSize;
+        public Color PileCaptionColor => _pileCaptionColor;
+        public float PileCaptionGap => _pileCaptionGap;
         public PranaOrbsStyleSO PranaOrbs => _pranaOrbs;
         public QuiverStyleSO Quiver => _quiver;
         public ChainBarStyleSO ChainBar => _chainBar;
@@ -374,18 +519,6 @@ namespace JourneyToLanka.CombatUI
         public float EndTurnPulseScale => _endTurnPulseScale;
         public float EndTurnPulseDuration => _endTurnPulseDuration;
 
-        public Vector2 ThreatPanelSize => _threatPanelSize;
-        public Vector2 ThreatPanelOffset => _threatPanelOffset;
-        public float ThreatPadding => _threatPadding;
-        public float ThreatCaptionFontSize => _threatCaptionFontSize;
-        public float ThreatValueFontSize => _threatValueFontSize;
-        public Color ThreatIncomingColor => _threatIncomingColor;
-        public Color ThreatKavachColor => _threatKavachColor;
-        public Color ThreatTakenColor => _threatTakenColor;
-        public Color ThreatLethalColor => _threatLethalColor;
-        public Color ThreatPreviewColor => _threatPreviewColor;
-        public float ThreatPunchScale => _threatPunchScale;
-        public float ThreatPunchDuration => _threatPunchDuration;
 
         public Vector2 TurnBannerSize => _turnBannerSize;
         public Vector2 TurnBannerOffset => _turnBannerOffset;

@@ -1,12 +1,14 @@
-// Every visual value for a combatant view: the world-space health bar (placement, size, colours, the trail that
-// drains after a hit, the number on it), the Kavach badge and the Kavach colours the bar switches to while the
-// fighter is protected, the tint for a fallen fighter, the hit reaction (flash and shake), the attack motions (an
-// enemy's lunge and Rama's thrust), where damage numbers appear, and the outcome preview (the
-// ghost over health a card would take, the previewed numbers, the lethal colour and tag, and the pulse), and the row of
-// status chips under the bar (the fallback disc drawn in a status's colour until it has an icon, chip size and spacing,
-// the short label, the stack count on its small badge, and how faint a ghost chip is while a card is previewed).
-// Read-only at runtime. In the Editor, changing a value raises Changed so views in Play mode re-apply it at once
-// without rebuilding. Sprites are optional; without one an element draws as a flat colour.
+// Every visual value for a combatant view: the world-space health bar (placement, size, colours, its size on screen,
+// which by default stays the same at any distance through the combat camera anchor, the trail that drains after a hit,
+// the number on it), the Kavach badge and the Kavach colours the bar switches to while the fighter is protected, the
+// tint for a fallen fighter, the hit reaction (flash and shake), the attack motions (an enemy's lunge and Rama's
+// thrust), where damage numbers appear, and the outcome preview (the ghost over health a card would take, the previewed
+// numbers, the lethal colour and tag, and the pulse), the incoming-threat mark on the bar (stripes over the health the
+// coming attacks will remove, their breathing, and the hanging loss tag with its pointer, colours and size), and the
+// row of status chips under the bar (the fallback disc drawn in a status's colour until it has an icon, chip size and
+// spacing, the short label, the stack count on its small badge, and how faint a ghost chip is while a card is
+// previewed). Read-only at runtime. In the Editor, changing a value raises Changed so views in Play mode re-apply it at
+// once without rebuilding. Sprites are optional; without one an element draws as a flat colour.
 using System;
 using TMPro;
 using UnityEngine;
@@ -19,7 +21,12 @@ namespace JourneyToLanka.CombatScene
         [Header("Health Bar")]
         [SerializeField] private TMP_FontAsset _font;
         [SerializeField] private Vector3 _barOffset = new Vector3(0f, 0.9f, 0f);
+        [Tooltip("World size of one bar unit. Used only when Bar Screen Scale is zero.")]
         [SerializeField, Min(0.0001f)] private float _barWorldScale = 0.01f;
+        [Tooltip("Reference pixels (at 1080p) per bar unit, kept the same at any distance. Zero uses Bar World Scale.")]
+        [SerializeField, Min(0f)] private float _barScreenScale = 1.4f;
+        [Tooltip("The combat camera, used to keep the bar's size on screen.")]
+        [SerializeField] private CombatCameraAnchorSO _cameraAnchor;
         [SerializeField] private Vector2 _barSize = new Vector2(120f, 20f);
         [SerializeField, Min(0f)] private float _barBorder = 2f;
         [SerializeField] private Color _barBorderColor = new Color(0.05f, 0.04f, 0.03f, 0.95f);
@@ -75,6 +82,30 @@ namespace JourneyToLanka.CombatScene
         [SerializeField] private Vector2 _lethalTagOffset = new Vector2(0f, 20f);
         [SerializeField, Min(0.05f)] private float _previewPulseDuration = 0.45f;
 
+        [Header("Incoming Threat")]
+        [Tooltip("Tiled over the health the coming attacks will remove.")]
+        [SerializeField] private Sprite _threatStripeSprite;
+        [SerializeField] private Color _threatStripeColor = Color.white;
+        [SerializeField] private Color _threatLethalStripeColor = new Color(1f, 0.55f, 0.5f, 1f);
+        [Tooltip("How faint the stripes get at the low point of their breathing, as a share of their alpha.")]
+        [SerializeField, Range(0f, 1f)] private float _threatStripeDimAlpha = 0.55f;
+        [SerializeField, Min(0f)] private float _threatPulseDuration = 0.7f;
+        [Tooltip("Nine-sliced tag under the stripes; light edge on a dark face, tinted by Threat Tag Color.")]
+        [SerializeField] private Sprite _threatTagSprite;
+        [SerializeField] private Sprite _threatPointerSprite;
+        [SerializeField] private Color _threatTagColor = new Color(0.85f, 0.25f, 0.22f, 1f);
+        [SerializeField] private Color _threatLethalTagColor = new Color(1f, 0.15f, 0.1f, 1f);
+        [SerializeField] private Color _threatTextColor = new Color(1f, 0.72f, 0.64f);
+        [SerializeField] private Color _threatLethalTextColor = new Color(1f, 0.92f, 0.88f);
+        [SerializeField, Min(1f)] private float _threatTagFontSize = 16f;
+        [SerializeField, Min(1f)] private float _threatTagHeight = 24f;
+        [SerializeField, Min(0f)] private float _threatTagPadding = 8f;
+        [Tooltip("Offset of the tag's top centre from the bottom of the striped segment, in bar units.")]
+        [SerializeField] private Vector2 _threatTagOffset = new Vector2(0f, -7f);
+        [SerializeField] private Vector2 _threatPointerSize = new Vector2(12f, 7f);
+        [SerializeField, Min(0f)] private float _threatPunchScale = 0.25f;
+        [SerializeField, Min(0.01f)] private float _threatPunchDuration = 0.25f;
+
         [Header("Status Chips")]
         [SerializeField] private Sprite _statusChipSprite;
         [SerializeField] private Vector2 _statusChipSize = new Vector2(26f, 26f);
@@ -93,6 +124,8 @@ namespace JourneyToLanka.CombatScene
         public TMP_FontAsset Font => _font;
         public Vector3 BarOffset => _barOffset;
         public float BarWorldScale => _barWorldScale;
+        public float BarScreenScale => _barScreenScale;
+        public CombatCameraAnchorSO CameraAnchor => _cameraAnchor;
         public Vector2 BarSize => _barSize;
         public float BarBorder => _barBorder;
         public Color BarBorderColor => _barBorderColor;
@@ -136,6 +169,24 @@ namespace JourneyToLanka.CombatScene
         public Color PreviewLossColor => _previewLossColor;
         public float PreviewLossDimAlpha => _previewLossDimAlpha;
         public Color PreviewTextColor => _previewTextColor;
+        public Sprite ThreatStripeSprite => _threatStripeSprite;
+        public Color ThreatStripeColor => _threatStripeColor;
+        public Color ThreatLethalStripeColor => _threatLethalStripeColor;
+        public float ThreatStripeDimAlpha => _threatStripeDimAlpha;
+        public float ThreatPulseDuration => _threatPulseDuration;
+        public Sprite ThreatTagSprite => _threatTagSprite;
+        public Sprite ThreatPointerSprite => _threatPointerSprite;
+        public Color ThreatTagColor => _threatTagColor;
+        public Color ThreatLethalTagColor => _threatLethalTagColor;
+        public Color ThreatTextColor => _threatTextColor;
+        public Color ThreatLethalTextColor => _threatLethalTextColor;
+        public float ThreatTagFontSize => _threatTagFontSize;
+        public float ThreatTagHeight => _threatTagHeight;
+        public float ThreatTagPadding => _threatTagPadding;
+        public Vector2 ThreatTagOffset => _threatTagOffset;
+        public Vector2 ThreatPointerSize => _threatPointerSize;
+        public float ThreatPunchScale => _threatPunchScale;
+        public float ThreatPunchDuration => _threatPunchDuration;
         public Color PreviewKavachTextColor => _previewKavachTextColor;
         public Color LethalColor => _lethalColor;
         public float LethalTagFontSize => _lethalTagFontSize;

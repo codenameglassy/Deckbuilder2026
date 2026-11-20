@@ -1,15 +1,26 @@
 // Shows an enemy's next move above it: an attack row ("7", or "4x2" for multi-hit), a buff row and a debuff row for
 // statuses the move applies (the first of each, with its amount), and a Kavach row, stacked bottom to top as Kavach,
-// debuff, buff, attack with only the rows the move uses. Attack and Kavach rows use the optional icons from the
-// feedback style; a status row uses the status's icon, or until it has one the feedback style's status disc in the
-// status's colour. Damage is previewed through the combat resolver, so statuses and other modifiers show. Numbers
-// and icons only, so it needs no localization. It refreshes when the enemy's intent changes, when the damage
-// modifiers change (any status gained, spent or worn off), and hides when the enemy falls. CombatController binds it
-// to the enemy on the same object. The intent keeps a uniform world scale under an unevenly scaled stand-in (a tall
-// cube), so its numbers and icons are never stretched.
+// debuff, buff, attack with only the rows the move uses. How a row arranges its icon, number and plate is the style's
+// IntentLayoutSO strategy (a large icon with the number on its corner, or icon and number on a fitted plate), and the
+// number can use the style's outlined material so it reads against any background. The lowest row sits a fixed number
+// of reference pixels above the fighter's health bar (CombatantView on the same object), falling back to the style's
+// intent offset when there is no bar or the gap is negative. The attack icon follows the style's ladder by
+// total damage (a dagger, a sword, a gada); the Kavach row uses the style's shield; a status row uses the status's
+// icon, or until it has one the style's status disc in the status's colour. Icons are sized by their own bounds, so a
+// sprite of any resolution or pixels-per-unit shows at the style's icon size. Damage is previewed through the combat
+// resolver, so statuses and other modifiers show. Numbers and icons only, so it needs no localization. It refreshes
+// when the enemy's intent changes (and then swells briefly, a DOTween core punch on its own pop transform), when the
+// damage modifiers change (any status gained, spent or worn off), and hides when the enemy falls. Rows are measured
+// and laid out only on refresh, never per frame. CombatController binds it to the enemy on the same object. The intent
+// keeps a uniform world scale under an unevenly scaled stand-in (a tall cube), so its numbers and icons are never
+// stretched, and while enabled it late-ticks to stay the same size on screen through the style's camera anchor
+// (ScreenScaleKeeper); with Intent Screen Scale at zero it keeps its world size instead.
+using DG.Tweening;
 using JourneyToLanka.Combat.Effects;
 using JourneyToLanka.Combat.Model;
 using JourneyToLanka.Combat.Statuses;
+using JourneyToLanka.Core.Services;
+using JourneyToLanka.Core.Ticking;
 using TMPro;
 using UnityEngine;
 
@@ -17,25 +28,28 @@ namespace JourneyToLanka.CombatScene
 {
     [DisallowMultipleComponent]
     [AddComponentMenu("Journey to Lanka/Combat/Enemy Intent View")]
-    public sealed class EnemyIntentView : MonoBehaviour
+    public sealed class EnemyIntentView : MonoBehaviour, ILateTickable
     {
+        private const int PlateSortingOrder = -1;
+        private const int PopVibrato = 6;
+        private const float PopElasticity = 0.5f;
+
         [SerializeField] private CombatFeedbackStyleSO _style;
 
         private Transform _root;
-        private Transform _attackRow;
-        private Transform _buffRow;
-        private Transform _debuffRow;
-        private Transform _defendRow;
-        private TextMeshPro _attackLabel;
-        private TextMeshPro _buffLabel;
-        private TextMeshPro _debuffLabel;
-        private TextMeshPro _defendLabel;
-        private SpriteRenderer _attackIcon;
-        private SpriteRenderer _buffIcon;
-        private SpriteRenderer _debuffIcon;
-        private SpriteRenderer _defendIcon;
+        private Transform _pop;
+        private IntentRow _attackRow;
+        private IntentRow _buffRow;
+        private IntentRow _debuffRow;
+        private IntentRow _defendRow;
         private EnemyCombatant _enemy;
         private CombatModel _model;
+        private Tween _popTween;
+        private ScreenScaleKeeper _screenScale;
+        private ITickService _ticks;
+        private bool _lateRegistered;
+        private CombatantView _bar;
+        private IntentLayoutSO _layout;
 
         private void Awake()
         {
@@ -43,13 +57,25 @@ namespace JourneyToLanka.CombatScene
             _root = rootObject.transform;
             _root.SetParent(transform, false);
 
-            _attackRow = CreateRow("Attack", out _attackIcon, out _attackLabel);
-            _buffRow = CreateRow("Buff", out _buffIcon, out _buffLabel);
-            _debuffRow = CreateRow("Debuff", out _debuffIcon, out _debuffLabel);
-            _defendRow = CreateRow("Defend", out _defendIcon, out _defendLabel);
+            var popObject = new GameObject("Pop");
+            _pop = popObject.transform;
+            _pop.SetParent(_root, false);
+
+            _attackRow = CreateRow("Attack");
+            _buffRow = CreateRow("Buff");
+            _debuffRow = CreateRow("Debuff");
+            _defendRow = CreateRow("Defend");
+            _screenScale = new ScreenScaleKeeper(_root);
+            TryGetComponent(out _bar);
 
             ApplyStyle();
             Refresh();
+        }
+
+        private void Start()
+        {
+            ServiceLocator.TryGet(out _ticks);
+            SetLateRegistered(isActiveAndEnabled);
         }
 
         private void OnEnable()
@@ -58,6 +84,9 @@ namespace JourneyToLanka.CombatScene
             {
                 _style.Changed += HandleStyleChanged;
             }
+
+            ListenToLayout(true);
+            SetLateRegistered(true);
         }
 
         private void OnDisable()
@@ -66,10 +95,77 @@ namespace JourneyToLanka.CombatScene
             {
                 _style.Changed -= HandleStyleChanged;
             }
+
+            ListenToLayout(false);
+            SetLateRegistered(false);
+        }
+
+        // After this frame's motion: keeps the intent the same size on screen, then sits its lowest row a fixed number
+        // of reference pixels above the top of the fighter's health bar. Skipped while the intent is hidden.
+        public void LateTick(float deltaTime)
+        {
+            if (_style == null || _root == null || !_root.gameObject.activeSelf)
+            {
+                return;
+            }
+
+            CombatCameraAnchorSO anchor = _style.CameraAnchor;
+            if (anchor == null || !anchor.TryGetValue(out Camera camera))
+            {
+                return;
+            }
+
+            if (_style.IntentScreenScale > 0f)
+            {
+                _screenScale.Apply(camera, _style.IntentScreenScale);
+            }
+
+            if (_style.IntentBarGap < 0f || _bar == null || !_bar.TryGetBarTop(out Vector3 barTop))
+            {
+                return;
+            }
+
+            float gap = _style.IntentBarGap * ScreenScaleKeeper.WorldPerReferencePixel(camera, barTop);
+            IntentLayoutSO layout = _style.IntentLayout;
+            float halfHeight = layout != null ? layout.RowHalfHeight(_style) : _style.IntentIconSize * 0.5f;
+            _root.position = barTop + Vector3.up * (gap + halfHeight * _root.lossyScale.y);
+        }
+
+        private void ListenToLayout(bool listen)
+        {
+            if (_layout != null)
+            {
+                _layout.Changed -= HandleStyleChanged;
+            }
+
+            _layout = listen && _style != null ? _style.IntentLayout : null;
+            if (_layout != null)
+            {
+                _layout.Changed += HandleStyleChanged;
+            }
+        }
+
+        private void SetLateRegistered(bool registered)
+        {
+            if (_ticks == null || _lateRegistered == registered)
+            {
+                return;
+            }
+
+            _lateRegistered = registered;
+            if (registered)
+            {
+                _ticks.AddLateTickable(this);
+            }
+            else
+            {
+                _ticks.RemoveLateTickable(this);
+            }
         }
 
         private void OnDestroy()
         {
+            StopPop();
             Unbind();
         }
 
@@ -113,6 +209,7 @@ namespace JourneyToLanka.CombatScene
         private void HandleIntentChanged(EnemyCombatant enemy)
         {
             Refresh();
+            PlayPop();
         }
 
         private void HandleModifiersChanged()
@@ -127,6 +224,7 @@ namespace JourneyToLanka.CombatScene
 
         private void HandleStyleChanged()
         {
+            ListenToLayout(isActiveAndEnabled);
             ApplyStyle();
             Refresh();
         }
@@ -146,39 +244,50 @@ namespace JourneyToLanka.CombatScene
 
             MoveIntent intent = _enemy.GetIntent(_model.Resolver, _model.Player);
             _root.gameObject.SetActive(!intent.IsEmpty);
-            _attackRow.gameObject.SetActive(intent.HasAttack);
-            _buffRow.gameObject.SetActive(intent.HasBuff);
-            _debuffRow.gameObject.SetActive(intent.HasDebuff);
-            _defendRow.gameObject.SetActive(intent.HasBlock);
+            _attackRow.Root.gameObject.SetActive(intent.HasAttack);
+            _buffRow.Root.gameObject.SetActive(intent.HasBuff);
+            _debuffRow.Root.gameObject.SetActive(intent.HasDebuff);
+            _defendRow.Root.gameObject.SetActive(intent.HasBlock);
+            if (_style == null)
+            {
+                return;
+            }
 
             if (intent.HasAttack)
             {
                 if (intent.ShowsHits)
                 {
-                    _attackLabel.SetText("{0}x{1}", (float)intent.DamagePerHit, (float)intent.Hits);
+                    _attackRow.Label.SetText("{0}x{1}", (float)intent.DamagePerHit, (float)intent.Hits);
                 }
                 else
                 {
-                    _attackLabel.SetText("{0}", (float)intent.TotalDamage);
+                    _attackRow.Label.SetText("{0}", (float)intent.TotalDamage);
                 }
+
+                Sprite icon = _style.AttackIconFor(intent.TotalDamage, out float scale);
+                SetIcon(_attackRow, icon, Color.white, scale);
+                Layout(_attackRow);
             }
 
             if (intent.HasBuff)
             {
-                ShowStatus(_buffIcon, _buffLabel, intent.FirstBuff, intent.FirstBuffAmount);
+                ShowStatus(_buffRow, intent.FirstBuff, intent.FirstBuffAmount);
             }
 
             if (intent.HasDebuff)
             {
-                ShowStatus(_debuffIcon, _debuffLabel, intent.FirstDebuff, intent.FirstDebuffAmount);
+                ShowStatus(_debuffRow, intent.FirstDebuff, intent.FirstDebuffAmount);
             }
 
             if (intent.HasBlock)
             {
-                _defendLabel.SetText("{0}", (float)intent.Block);
+                _defendRow.Label.SetText("{0}", (float)intent.Block);
+                SetIcon(_defendRow, _style.DefendIcon, Color.white, 1f);
+                Layout(_defendRow);
             }
 
-            float spacing = _style != null ? _style.IntentRowSpacing : 0f;
+            IntentLayoutSO layout = _style.IntentLayout;
+            float spacing = layout != null ? layout.RowSpacing : _style.IntentRowSpacing;
             int stacked = 0;
             stacked = Stack(_defendRow, intent.HasBlock, stacked, spacing);
             stacked = Stack(_debuffRow, intent.HasDebuff, stacked, spacing);
@@ -186,22 +295,48 @@ namespace JourneyToLanka.CombatScene
             Stack(_attackRow, intent.HasAttack, stacked, spacing);
         }
 
-        private void ShowStatus(SpriteRenderer icon, TextMeshPro label, StatusDefinitionSO status, int amount)
+        private void ShowStatus(IntentRow row, StatusDefinitionSO status, int amount)
         {
-            label.SetText("{0}", (float)amount);
-            if (_style == null || status == null)
+            row.Label.SetText("{0}", (float)amount);
+            if (status == null)
             {
+                SetIcon(row, null, Color.white, 1f);
+                Layout(row);
                 return;
             }
 
             bool hasIcon = status.Icon != null;
             Sprite sprite = hasIcon ? status.Icon : _style.StatusIntentSprite;
-            icon.sprite = sprite;
-            icon.enabled = sprite != null;
-            icon.color = hasIcon ? Color.white : status.Color;
-            label.color = status.Color;
-            float iconSize = _style.IntentIconSize;
-            label.transform.localPosition = sprite != null ? new Vector3(iconSize * 0.5f, 0f, 0f) : Vector3.zero;
+            SetIcon(row, sprite, hasIcon ? Color.white : status.Color, 1f);
+            row.Label.color = status.Color;
+            Layout(row);
+        }
+
+        private void SetIcon(IntentRow row, Sprite sprite, Color colour, float scale)
+        {
+            row.Icon.sprite = sprite;
+            row.Icon.enabled = sprite != null;
+            row.Icon.color = colour;
+            row.IconScale = scale;
+        }
+
+        // Hands the row to the style's layout strategy. Without one, the icon sits left of a centred number, no plate.
+        private void Layout(IntentRow row)
+        {
+            IntentLayoutSO layout = _style.IntentLayout;
+            if (layout != null)
+            {
+                layout.Layout(row, _style);
+                return;
+            }
+
+            row.Plate.enabled = false;
+            float iconSize = _style.IntentIconSize * row.IconScale;
+            Sprite sprite = row.Icon.sprite;
+            float spriteSize = sprite != null ? Mathf.Max(sprite.bounds.size.x, sprite.bounds.size.y) : 1f;
+            row.Icon.transform.localScale = Vector3.one * (iconSize / Mathf.Max(spriteSize, 0.0001f));
+            row.Icon.transform.localPosition = new Vector3(-iconSize, 0f, 0f);
+            row.Label.transform.localPosition = new Vector3(iconSize * 0.5f, 0f, 0f);
         }
 
         private void ApplyStyle()
@@ -211,59 +346,97 @@ namespace JourneyToLanka.CombatScene
                 return;
             }
 
+            StopPop();
             _root.localPosition = _style.IntentOffset;
             _root.localScale = CombatantHealthBar.UniformWorldScale(transform, 1f);
-            StyleRow(_attackIcon, _attackLabel, _style.AttackIcon, _style.AttackColor);
-            StyleRow(_buffIcon, _buffLabel, _style.StatusIntentSprite, Color.white);
-            StyleRow(_debuffIcon, _debuffLabel, _style.StatusIntentSprite, Color.white);
-            StyleRow(_defendIcon, _defendLabel, _style.DefendIcon, _style.DefendColor);
+            _screenScale?.Reset();
+            StyleRow(_attackRow, _style.AttackColor);
+            StyleRow(_buffRow, Color.white);
+            StyleRow(_debuffRow, Color.white);
+            StyleRow(_defendRow, _style.DefendColor);
         }
 
-        private void StyleRow(SpriteRenderer icon, TextMeshPro label, Sprite sprite, Color color)
+        private void StyleRow(IntentRow row, Color colour)
         {
-            float iconSize = _style.IntentIconSize;
-            icon.sprite = sprite;
-            icon.enabled = sprite != null;
-            icon.transform.localPosition = new Vector3(-iconSize, 0f, 0f);
-            icon.transform.localScale = Vector3.one * iconSize;
-
             if (_style.IntentFont != null)
             {
-                label.font = _style.IntentFont;
+                row.Label.font = _style.IntentFont;
             }
 
-            label.fontSize = _style.IntentFontSize;
-            label.color = color;
-            label.rectTransform.sizeDelta = _style.IntentLabelSize;
-            label.transform.localPosition = sprite != null ? new Vector3(iconSize * 0.5f, 0f, 0f) : Vector3.zero;
+            if (_style.IntentNumberMaterial != null)
+            {
+                row.Label.fontSharedMaterial = _style.IntentNumberMaterial;
+            }
+
+            row.Label.fontSize = _style.IntentFontSize;
+            row.Label.color = colour;
+            row.Label.rectTransform.sizeDelta = _style.IntentLabelSize;
+
+            row.Plate.sprite = _style.IntentPlateSprite;
+            row.Plate.color = _style.IntentPlateColor;
+            row.Plate.drawMode = SpriteDrawMode.Sliced;
         }
 
-        private static int Stack(Transform row, bool active, int stacked, float spacing)
+        private void PlayPop()
+        {
+            if (_style == null || _pop == null || !_root.gameObject.activeInHierarchy || _style.IntentPopScale <= 0f)
+            {
+                return;
+            }
+
+            StopPop();
+            _popTween = _pop.DOPunchScale(Vector3.one * _style.IntentPopScale, _style.IntentPopDuration, PopVibrato,
+                PopElasticity);
+        }
+
+        private void StopPop()
+        {
+            if (_popTween != null && _popTween.IsActive())
+            {
+                _popTween.Kill();
+            }
+
+            _popTween = null;
+            if (_pop != null)
+            {
+                _pop.localScale = Vector3.one;
+            }
+        }
+
+        private static int Stack(IntentRow row, bool active, int stacked, float spacing)
         {
             if (!active)
             {
                 return stacked;
             }
 
-            row.localPosition = new Vector3(0f, spacing * stacked, 0f);
+            row.Root.localPosition = new Vector3(0f, spacing * stacked, 0f);
             return stacked + 1;
         }
 
-        private Transform CreateRow(string rowName, out SpriteRenderer icon, out TextMeshPro label)
+        private IntentRow CreateRow(string rowName)
         {
-            var row = new GameObject(rowName).transform;
-            row.SetParent(_root, false);
+            var root = new GameObject(rowName).transform;
+            root.SetParent(_pop, false);
+
+            var plateObject = new GameObject("Plate");
+            plateObject.transform.SetParent(root, false);
+            var plate = plateObject.AddComponent<SpriteRenderer>();
+            plate.sortingOrder = PlateSortingOrder;
+            plate.drawMode = SpriteDrawMode.Sliced;
 
             var iconObject = new GameObject("Icon");
-            iconObject.transform.SetParent(row, false);
-            icon = iconObject.AddComponent<SpriteRenderer>();
+            iconObject.transform.SetParent(root, false);
+            var icon = iconObject.AddComponent<SpriteRenderer>();
 
             var labelObject = new GameObject("Value");
-            labelObject.transform.SetParent(row, false);
-            label = labelObject.AddComponent<TextMeshPro>();
+            labelObject.transform.SetParent(root, false);
+            var label = labelObject.AddComponent<TextMeshPro>();
             label.alignment = TextAlignmentOptions.Center;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
             label.raycastTarget = false;
-            return row;
+
+            return new IntentRow(root, plate, icon, label);
         }
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CombatFeedbackStyle
   m_EditorClassIdentifier: JourneyToLanka.CombatScene::JourneyToLanka.CombatScene.CombatFeedbackStyleSO
   _numberFont: {fileID: 11400000, guid: d70f485aa27dc43f79a8fd168f58435c, type: 2}
-  _numberFontSize: 7
+  _numberFontSize: 4.5
   _healthLossColor: {r: 1, g: 0.3, b: 0.25, a: 1}
   _blockedColor: {r: 0.45, g: 0.75, b: 1, a: 1}
   _healColor: {r: 0.45, g: 0.95, b: 0.55, a: 1}
@@ -26,13 +26,34 @@ MonoBehaviour:
   _arrowPopupFontSize: 6
   _arrowPopupOffset: {x: 0, y: 1.1, z: 0}
   _intentFont: {fileID: 11400000, guid: d70f485aa27dc43f79a8fd168f58435c, type: 2}
-  _intentFontSize: 5
+  _intentFontSize: 3.5
   _intentOffset: {x: 0, y: 1.15, z: 0}
+  _intentLayout: {fileID: 11400000, guid: b42eb938ea0ff624683f277881654492, type: 2}
+  _intentNumberMaterial: {fileID: 2100000, guid: 5afd376af27d9194f947d05866a08f2a, type: 2}
+  _intentBarGap: 14
+  _intentScreenScale: 90
+  _cameraAnchor: {fileID: 11400000, guid: d70b816e01fcec8428526dbe13c00e9a, type: 2}
   _intentRowSpacing: 0.6
   _intentLabelSize: {x: 3, y: 0.8}
   _attackColor: {r: 1, g: 0.45, b: 0.35, a: 1}
   _defendColor: {r: 0.45, g: 0.75, b: 1, a: 1}
-  _attackIcon: {fileID: 0}
-  _defendIcon: {fileID: 0}
+  _attackIcon: {fileID: 21300000, guid: dd7fb9ae27486314c98e047f7a4ea3cf, type: 3}
+  _defendIcon: {fileID: 21300000, guid: e866bf538e422f44abb230f3f099cc2a, type: 3}
   _intentIconSize: 0.5
   _statusIntentSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
+  _attackTiers:
+  - _minDamage: 0
+    _icon: {fileID: 21300000, guid: b3011e55db9158c46a44b9aeebe47d63, type: 3}
+    _scale: 0.9
+  - _minDamage: 10
+    _icon: {fileID: 21300000, guid: dd7fb9ae27486314c98e047f7a4ea3cf, type: 3}
+    _scale: 1
+  - _minDamage: 20
+    _icon: {fileID: 21300000, guid: 9288729dc6437dd4083f966c49bb5d94, type: 3}
+    _scale: 1.12
+  _intentIconGap: 0.08
+  _intentPlateSprite: {fileID: 21300000, guid: fada26d4a5b40f2488a58f8a3f6a8ec9, type: 3}
+  _intentPlateColor: {r: 1, g: 1, b: 1, a: 1}
+  _intentPlatePadding: {x: 0.14, y: 0.08}
+  _intentPopScale: 0.3
+  _intentPopDuration: 0.35

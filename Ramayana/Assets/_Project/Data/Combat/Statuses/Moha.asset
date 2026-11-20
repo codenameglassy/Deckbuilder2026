@@ -16,10 +16,11 @@ MonoBehaviour:
   _nameKey: status.moha.name
   _descriptionKey: status.moha.description
   _shortNameKey: status.moha.short
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 52cd4e2a10e03f741a72a7f1225a7101, type: 3}
   _color: {r: 0.62, g: 0.45, b: 0.95, a: 1}
   _isDebuff: 1
   _maxAmount: 3
   _defaultDuration: 0
   _decay: {fileID: 11400000, guid: 994e38441f600f04aacfe82e3f6b5438, type: 2}
   _damageRule: {fileID: 11400000, guid: c434eac7a0e57ea499532c02e0d0455a, type: 2}
+  _trigger: {fileID: 0}

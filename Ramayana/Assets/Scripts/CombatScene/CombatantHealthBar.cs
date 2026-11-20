@@ -11,7 +11,9 @@
 // the number it would leave and the Kavach it would end with in the preview colours, and, when the blow is lethal,
 // the border and ghost in the lethal colour with a pulsing tag above the bar. ClearPreview restores the live view.
 // The pulse is one looping DOTween core tween on unscaled time, run only while a preview shows.
-// Root is exposed so the fighter's status chips can sit under the bar on the same small canvas.
+// Root is exposed so the fighter's status chips can sit under the bar on the same small canvas. ShowThreat marks the
+// damage the fighter is about to take on the bar (striped segment and a "-11" tag, see HealthBarThreat); ClearThreat
+// removes it.
 using System;
 using DG.Tweening;
 using DG.Tweening.Core;
@@ -36,6 +38,7 @@ namespace JourneyToLanka.CombatScene
         private readonly TextMeshProUGUI _badgeValue;
         private readonly Image _ghost;
         private readonly TextMeshProUGUI _lethalTag;
+        private readonly HealthBarThreat _threat;
         private readonly DOGetter<float> _getPulse;
         private readonly DOSetter<float> _setPulse;
         private readonly DOGetter<float> _getTrail;
@@ -61,8 +64,10 @@ namespace JourneyToLanka.CombatScene
         private bool _hasValues;
 
         private CombatantHealthBar(RectTransform root, Image border, Image background, Image trail, Image fill,
-            TextMeshProUGUI value, Image badge, TextMeshProUGUI badgeValue, Image ghost, TextMeshProUGUI lethalTag)
+            TextMeshProUGUI value, Image badge, TextMeshProUGUI badgeValue, Image ghost, TextMeshProUGUI lethalTag,
+            HealthBarThreat threat)
         {
+            _threat = threat;
             _root = root;
             _border = border;
             _background = background;
@@ -96,6 +101,7 @@ namespace JourneyToLanka.CombatScene
             Image background = CreateImage("Background", root);
             Image trail = CreateImage("Trail", root);
             Image fill = CreateImage("Fill", root);
+            HealthBarThreat threat = HealthBarThreat.Create(root);
             Image ghost = CreateImage("PreviewGhost", root);
             TextMeshProUGUI value = CreateText("Value", root);
             TextMeshProUGUI lethalTag = CreateText("LethalTag", root);
@@ -115,7 +121,8 @@ namespace JourneyToLanka.CombatScene
             ghost.enabled = false;
             lethalTag.gameObject.SetActive(false);
 
-            return new CombatantHealthBar(root, border, background, trail, fill, value, badge, badgeValue, ghost, lethalTag);
+            return new CombatantHealthBar(root, border, background, trail, fill, value, badge, badgeValue, ghost, lethalTag,
+                threat);
         }
 
         public void ApplyStyle(CombatantViewStyleSO style)
@@ -159,6 +166,18 @@ namespace JourneyToLanka.CombatScene
             {
                 ApplyPreview();
             }
+
+            _threat.ApplyStyle(style);
+        }
+
+        public void ShowThreat(int loss, bool lethal, bool previewing)
+        {
+            _threat.Show(loss, lethal, previewing);
+        }
+
+        public void ClearThreat()
+        {
+            _threat.Clear();
         }
 
         public void SetVisible(bool visible)
@@ -202,6 +221,7 @@ namespace JourneyToLanka.CombatScene
                 PunchBadge();
             }
 
+            _threat.Refresh(health, maxHealth);
             _hasValues = true;
             if (_previewing)
             {
@@ -256,6 +276,7 @@ namespace JourneyToLanka.CombatScene
 
         public void Dispose()
         {
+            _threat.Dispose();
             _trailTween?.Kill();
             _badgePunch?.Kill();
             StopPulse();

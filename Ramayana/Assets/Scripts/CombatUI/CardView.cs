@@ -1,24 +1,28 @@
-// One card in the hand: frame, Prana cost badge, and localized name, type and description. It presents a
-// CardInstance and reports clicks through Clicked; it never plays cards itself. Pooled: OnTakenFromPool resets
-// it, OnReturnedToPool drops every listener, localization binding and tween. Built by CardViewFactory, styled here.
-// Its text bindings are created on first use, so a view can be bound while its parent is still inactive
-// (before Awake has run), as the reward screen does. A hand card can be hidden while its drawn copy is still
-// flying in (SetRevealed), hidden behind its zoomed copy while it keeps receiving the pointer (SetZoomHidden), and
+// One card in the hand: frame, Prana cost orb, art window, and localized name, type and description. It presents a
+// CardInstance and reports clicks through Clicked; it never plays cards itself. Pooled: OnTakenFromPool resets it,
+// OnReturnedToPool drops every listener, localization binding and tween. Built by CardViewFactory, styled here. Its
+// text bindings are created on first use, so a view can be bound while its parent is still inactive (before Awake has
+// run), as the reward screen does. A hand card can be hidden while its drawn copy is still flying in (SetRevealed), and
 // wiggles when a click is rejected (PlayRejected, a DOTween core rotation punch). It reports pointer hover and UI
-// selection through FocusChanged, and selection alone through Selected, so the hand can zoom it and the pile viewer
+// selection through FocusChanged, and selection alone through Selected, so the hand can raise it and the pile viewer
 // can scroll to it. In the hand, hover is decided by the hand itself (SetExternalHover) instead of this card's own
-// pointer events, because fanned cards overlap. Lifting for targeting is state (IsLifted, LiftScale, LiftChanged)
-// that the hand's layout animator applies; the view never moves its own transform. SetCostAffordable switches the
-// cost badge to the style's unaffordable colours when the player lacks the Prana for the card. The description is a
-// localized pattern filled with the card's live numbers: SetTextContext tells the card how to preview them (the
-// hand passes the combat resolver, Rama and the chosen enemy), and values that differ from the authored base show in
-// the style's buffed or weakened colour. Without a context (reward screen, pile viewer) it shows the base values.
-// The frame is drawn by the Card Frame shader in its card type's accent (CardTypeVisualsSO via the style), with the
-// type label in the type's colour, an optional type icon, and a panel behind the description for readability. A Card
-// Sprite on the style replaces the shader frame. SetGlow fades a soft halo in or out behind the card (the hand turns
-// it on only for the playable card the player is considering); every card shares the glow material and fades only its
-// own vertex alpha. IsPlayable remembers the last SetPlayable call so the hand can decide the glow without asking the
-// combat model again.
+// pointer events, because fanned cards overlap. Lifting for targeting is state (IsLifted, LiftScale, LiftChanged) that
+// the hand's layout animator applies; the view never moves its own transform. SetCostAffordable switches the cost badge
+// to the style's unaffordable colours when the player lacks the Prana for the card. The description is a localized
+// pattern filled with the card's live numbers: SetTextContext tells the card how to preview them (the hand passes the
+// combat resolver, Rama and the chosen enemy), and values that differ from the authored base show in the style's buffed
+// or weakened colour. Without a context (reward screen, pile viewer) it shows the base values. The face follows
+// CardFaceLayout: a name banner (the name shrinks to stay on one line), an art window (the card's painting, or the
+// type's accent times the style's placeholder tint until it has one), a type ribbon in the type's accent with the label
+// (one line, shrinking to fit) in the type's label colour and an optional icon, and a description box whose text
+// shrinks to fit, over a readability panel. The frame, banner and art socket are drawn by the Card Frame shader in the
+// type's accent (CardTypeVisualsSO via the style); the art window, ribbon and cost orb by the Card Art shader. The
+// trim, banner edge and art rim take the card's rarity colour (CardRarityVisualsSO via the style), with a slow shimmer
+// on rarer cards. Keywords in the description (Kavach, the status names and others on the style's Card Keywords) show
+// in their own colours. A Card Sprite on the style replaces the shader frame, and a Cost Badge Sprite replaces the
+// round orb. SetGlow fades a soft halo in or out behind the card (the hand turns it on only for the playable card the
+// player is considering); every card shares the glow material and fades only its own vertex alpha. IsPlayable remembers
+// the last SetPlayable call so the hand can decide the glow without asking the combat model again.
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -53,6 +57,8 @@ namespace JourneyToLanka.CombatUI
         [SerializeField] private Image _typeIcon;
         [SerializeField] private Image _descriptionPanel;
         [SerializeField] private Image _glow;
+        [SerializeField] private Image _art;
+        [SerializeField] private Image _typeRibbon;
 
         private LocalizedText _nameText;
         private LocalizedText _typeText;
@@ -71,7 +77,6 @@ namespace JourneyToLanka.CombatUI
         private Tween _reject;
         private float _playableAlpha = 1f;
         private bool _revealed = true;
-        private bool _zoomHidden;
         private bool _externalHover;
         private bool _costAffordable = true;
         private bool _costStyled;
@@ -116,7 +121,7 @@ namespace JourneyToLanka.CombatUI
 
         internal void Initialize(Image frame, Button button, CanvasGroup group, LayoutElement layoutElement,
             Image costBadge, TextMeshProUGUI cost, TextMeshProUGUI cardName, TextMeshProUGUI type, TextMeshProUGUI description,
-            Image typeIcon, Image descriptionPanel, Image glow)
+            Image typeIcon, Image descriptionPanel, Image glow, Image art, Image typeRibbon)
         {
             _frame = frame;
             _button = button;
@@ -130,6 +135,8 @@ namespace JourneyToLanka.CombatUI
             _typeIcon = typeIcon;
             _descriptionPanel = descriptionPanel;
             _glow = glow;
+            _art = art;
+            _typeRibbon = typeRibbon;
         }
 
         private void Awake()
@@ -261,12 +268,6 @@ namespace JourneyToLanka.CombatUI
             ApplyCostColors();
         }
 
-        public void SetZoomHidden(bool hidden)
-        {
-            _zoomHidden = hidden;
-            ApplyAlpha();
-        }
-
         public void SetRevealed(bool revealed)
         {
             _revealed = revealed;
@@ -301,9 +302,7 @@ namespace JourneyToLanka.CombatUI
             _glow.enabled = glowMaterial != null;
             SetGlowAlpha(_glowAlpha);
             _descriptionText.SetColors(style.CardValueBuffedColor, style.CardValueWeakenedColor);
-            float padding = style.CardPadding;
-            float badge = style.CostBadgeSize;
-            float typeHeight = style.CardTypeFontSize * 1.4f;
+            _descriptionText.SetKeywords(CardKeywordSet.For(style.CardKeywords));
 
             _layoutElement.preferredWidth = style.CardSize.x;
             _layoutElement.preferredHeight = style.CardSize.y;
@@ -311,9 +310,15 @@ namespace JourneyToLanka.CombatUI
 
             _button.colors = CreateTint(style);
 
+            CardFaceLayout layout = CardFaceLayout.From(style);
+            Material round = CardFrameMaterials.GetRound(style);
+
+            float badge = style.CostBadgeSize;
+            bool roundBadge = style.CostBadgeSprite == null;
             UIBuildUtility.StyleImage(_costBadge, style.CostBadgeSprite, style.CostBadgeColor);
-            UIBuildUtility.Place(_costBadge.rectTransform, new Vector2(0f, 1f), new Vector2(0f, 1f),
-                new Vector2(padding, -padding), new Vector2(badge, badge));
+            _costBadge.material = roundBadge ? round : null;
+            UIBuildUtility.Place(_costBadge.rectTransform, Vector2.zero, new Vector2(0.5f, 0.5f), layout.CostCentre,
+                new Vector2(badge, badge));
             UIBuildUtility.StyleText(_cost, style.Font, style.CostFontSize, style.CostTextColor);
             _costBadgeColor = style.CostBadgeColor;
             _costTextColor = style.CostTextColor;
@@ -323,26 +328,34 @@ namespace JourneyToLanka.CombatUI
             ApplyCostColors();
 
             UIBuildUtility.StyleText(_name, style.Font, style.CardNameFontSize, style.CardTextColor);
-            UIBuildUtility.SetOffsets(_name.rectTransform, new Vector2(0f, 1f), Vector2.one,
-                new Vector2(badge + padding * 2f, -(padding + badge)), new Vector2(-padding, -padding));
+            SetFitting(_name, style.CardNameMinFontSize, style.CardNameFontSize, TextWrappingModes.NoWrap);
+            PlaceRect(_name.rectTransform, layout.Name);
 
+            _art.material = CardFrameMaterials.GetArt(style);
+            PlaceRect(_art.rectTransform, layout.Art);
+
+            _typeRibbon.material = round;
+            PlaceRect(_typeRibbon.rectTransform, layout.Ribbon);
             UIBuildUtility.StyleText(_type, style.Font, style.CardTypeFontSize, style.CardTextColor);
-            UIBuildUtility.SetOffsets(_type.rectTransform, new Vector2(0f, 1f), Vector2.one,
-                new Vector2(padding, -(padding * 2f + badge + typeHeight)), new Vector2(-padding, -(padding * 2f + badge)));
-
+            SetFitting(_type, style.CardTypeMinFontSize, style.CardTypeFontSize, TextWrappingModes.NoWrap);
             float iconSize = style.TypeIconSize;
-            UIBuildUtility.Place(_typeIcon.rectTransform, new Vector2(0f, 1f), new Vector2(0f, 0.5f),
-                new Vector2(padding, -(padding * 2f + badge + typeHeight * 0.5f)), new Vector2(iconSize, iconSize));
+            float iconInset = layout.Ribbon.height * 0.25f;
+            UIBuildUtility.Place(_typeIcon.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f),
+                new Vector2(iconInset, 0f), new Vector2(iconSize, iconSize));
 
             UIBuildUtility.StyleText(_description, style.Font, style.CardDescriptionFontSize, style.CardTextColor);
-            Vector2 descriptionMin = new Vector2(padding, padding);
-            Vector2 descriptionMax = new Vector2(-padding, -(padding * 3f + badge + typeHeight));
-            UIBuildUtility.SetOffsets(_description.rectTransform, Vector2.zero, Vector2.one, descriptionMin, descriptionMax);
+            SetFitting(_description, style.CardDescriptionMinFontSize, style.CardDescriptionFontSize,
+                TextWrappingModes.Normal);
+            PlaceRect(_description.rectTransform, layout.Description);
 
             float panelPadding = style.DescriptionPanelPadding;
+            Rect panel = layout.Description;
+            panel.xMin -= panelPadding;
+            panel.yMin -= panelPadding;
+            panel.xMax += panelPadding;
+            panel.yMax += panelPadding;
             UIBuildUtility.StyleImage(_descriptionPanel, style.DescriptionPanelSprite, style.DescriptionPanelColor);
-            UIBuildUtility.SetOffsets(_descriptionPanel.rectTransform, Vector2.zero, Vector2.one,
-                descriptionMin - new Vector2(panelPadding, panelPadding), descriptionMax + new Vector2(panelPadding, panelPadding));
+            PlaceRect(_descriptionPanel.rectTransform, panel);
             _descriptionPanel.enabled = style.DescriptionPanelColor.a > 0f;
 
             RefreshFrame();
@@ -361,7 +374,6 @@ namespace JourneyToLanka.CombatUI
             _playableAlpha = 1f;
             IsPlayable = false;
             _revealed = true;
-            _zoomHidden = false;
             _externalHover = false;
             _costAffordable = true;
             ApplyCostColors();
@@ -390,7 +402,6 @@ namespace JourneyToLanka.CombatUI
             _textContext = default;
             _values.Clear();
             IsPlayable = false;
-            _zoomHidden = false;
             _externalHover = false;
             IsPointerInside = false;
             IsSelected = false;
@@ -460,7 +471,8 @@ namespace JourneyToLanka.CombatUI
             }
 
             CardTypeVisualsSO visuals = _style.FindCardTypeVisuals(Card != null ? Card.Definition.Type : null);
-            Material frameMaterial = _style.CardSprite == null ? CardFrameMaterials.Get(_style, visuals) : null;
+            CardRarityVisualsSO rarity = Card != null ? _style.FindCardRarityVisuals(Card.Definition.Rarity) : null;
+            Material frameMaterial = _style.CardSprite == null ? CardFrameMaterials.Get(_style, visuals, rarity) : null;
             if (frameMaterial != null)
             {
                 _frame.sprite = null;
@@ -473,6 +485,13 @@ namespace JourneyToLanka.CombatUI
                 _frame.material = null;
                 UIBuildUtility.StyleImage(_frame, _style.CardSprite, _style.CardColor);
             }
+
+            Color accent = visuals != null ? visuals.AccentColor : _style.CardColor;
+            _typeRibbon.color = accent;
+
+            Sprite art = Card != null ? Card.Definition.Art : null;
+            _art.sprite = art;
+            _art.color = art != null ? Color.white : accent * _style.CardArtPlaceholderTint;
 
             Color labelColor = visuals != null ? visuals.TypeLabelColor : _style.CardTextColor;
             _type.color = labelColor;
@@ -495,7 +514,7 @@ namespace JourneyToLanka.CombatUI
 
         private void ApplyAlpha()
         {
-            _group.alpha = _revealed && !_zoomHidden ? _playableAlpha : 0f;
+            _group.alpha = _revealed ? _playableAlpha : 0f;
         }
 
         private void SetGlowAlpha(float alpha)
@@ -529,6 +548,20 @@ namespace JourneyToLanka.CombatUI
             Tween reject = _reject;
             _reject = null;
             reject.Kill(true);
+        }
+
+        private static void PlaceRect(RectTransform rect, Rect area)
+        {
+            UIBuildUtility.Place(rect, Vector2.zero, Vector2.zero, area.position, area.size);
+        }
+
+        private static void SetFitting(TMP_Text text, float minSize, float maxSize, TextWrappingModes wrapping)
+        {
+            text.textWrappingMode = wrapping;
+            text.overflowMode = TextOverflowModes.Ellipsis;
+            text.fontSizeMin = minSize;
+            text.fontSizeMax = maxSize;
+            text.enableAutoSizing = true;
         }
 
         private void EnsureTexts()

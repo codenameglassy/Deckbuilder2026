@@ -16,7 +16,11 @@
 // the statuses a considered card would leave on the chips (new ones as ghosts, changed counts in the preview colour);
 // ClearOutcome clears it with the bar's preview. PointerEntered and PointerExited report the pointer over the
 // fighter's collider (through the scene camera's PhysicsRaycaster), so inspect widgets can show it, and TopCenter is
-// the top of that collider in world space (the transform position without one).
+// the top of that collider in world space (the transform position without one). While enabled it late-ticks to keep
+// the bar, and the chips on it, the same size on screen through the style's camera anchor (ScreenScaleKeeper); with
+// Bar Screen Scale at zero the bar keeps its world size instead. TryGetBarTop gives the bar's top centre in world space
+// so the enemy intent can sit just above it. ShowThreat and ClearThreat mark the health the fighter is about to lose
+// to coming attacks on its bar, for the HUD.
 using System;
 using DG.Tweening;
 using DG.Tweening.Core;
@@ -32,7 +36,8 @@ namespace JourneyToLanka.CombatScene
 {
     [DisallowMultipleComponent]
     [AddComponentMenu("Journey to Lanka/Combat/Combatant View")]
-    public sealed class CombatantView : MonoBehaviour, ITickable, IPointerEnterHandler, IPointerExitHandler
+    public sealed class CombatantView : MonoBehaviour, ITickable, ILateTickable, IPointerEnterHandler,
+        IPointerExitHandler
     {
         private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
 
@@ -50,6 +55,8 @@ namespace JourneyToLanka.CombatScene
         private Color _baseColor = Color.white;
         private ITickService _ticks;
         private bool _registered;
+        private bool _lateRegistered;
+        private ScreenScaleKeeper _barScale;
         private float _flashRemaining;
         private float _shakeRemaining;
         private Vector3 _shakeOffset;
@@ -102,6 +109,7 @@ namespace JourneyToLanka.CombatScene
             _propertyBlock = new MaterialPropertyBlock();
             _bar = CombatantHealthBar.Create(_transform);
             _statusChips = StatusChipRow.Create(_bar.Root);
+            _barScale = new ScreenScaleKeeper(_bar.Root);
             ApplyStyle();
             Refresh();
         }
@@ -109,6 +117,7 @@ namespace JourneyToLanka.CombatScene
         private void Start()
         {
             ServiceLocator.TryGet(out _ticks);
+            SetLateRegistered(isActiveAndEnabled);
         }
 
         private void OnEnable()
@@ -117,6 +126,8 @@ namespace JourneyToLanka.CombatScene
             {
                 _style.Changed += HandleStyleChanged;
             }
+
+            SetLateRegistered(true);
         }
 
         private void OnDisable()
@@ -126,6 +137,7 @@ namespace JourneyToLanka.CombatScene
                 _style.Changed -= HandleStyleChanged;
             }
 
+            SetLateRegistered(false);
             StopReactions();
         }
 
@@ -171,6 +183,32 @@ namespace JourneyToLanka.CombatScene
             _combatant.Died -= HandleDied;
             _combatant = null;
             _statusChips?.Bind(null);
+        }
+
+        // World position of the top centre of the health bar, for widgets that sit above it (the enemy intent).
+        public bool TryGetBarTop(out Vector3 top)
+        {
+            top = default;
+            if (_bar == null || !_bar.Root.gameObject.activeInHierarchy)
+            {
+                return false;
+            }
+
+            RectTransform root = _bar.Root;
+            Rect rect = root.rect;
+            top = root.TransformPoint(new Vector3(rect.center.x, rect.yMax, 0f));
+            return true;
+        }
+
+        // Marks the health this fighter is about to lose to the coming attacks on its bar; zero clears it.
+        public void ShowThreat(int loss, bool lethal, bool previewing)
+        {
+            _bar?.ShowThreat(loss, lethal, previewing);
+        }
+
+        public void ClearThreat()
+        {
+            _bar?.ClearThreat();
         }
 
         public void ShowOutcome(in CombatantOutcome outcome, string lethalLabel)
@@ -229,6 +267,21 @@ namespace JourneyToLanka.CombatScene
             sequence.Append(DOTween.To(_getMotion, _setMotion, 0f, _style.ThrustReturnDuration).SetEase(Ease.InOutQuad));
             sequence.OnComplete(_clearMotion);
             _motionSequence = sequence;
+        }
+
+        // Keeps the health bar (and the status chips under it) the same size on screen, after this frame's motion.
+        public void LateTick(float deltaTime)
+        {
+            if (_style == null || _barScale == null || _style.BarScreenScale <= 0f)
+            {
+                return;
+            }
+
+            CombatCameraAnchorSO anchor = _style.CameraAnchor;
+            if (anchor != null && anchor.TryGetValue(out Camera camera))
+            {
+                _barScale.Apply(camera, _style.BarScreenScale);
+            }
         }
 
         public void Tick(float deltaTime)
@@ -373,6 +426,7 @@ namespace JourneyToLanka.CombatScene
             }
 
             _bar.ApplyStyle(_style);
+            _barScale?.Reset();
             _statusChips?.ApplyStyle(_style);
             ApplyTint();
         }
@@ -464,6 +518,24 @@ namespace JourneyToLanka.CombatScene
             Sequence sequence = _motionSequence;
             _motionSequence = null;
             sequence.Kill();
+        }
+
+        private void SetLateRegistered(bool registered)
+        {
+            if (_ticks == null || _lateRegistered == registered)
+            {
+                return;
+            }
+
+            _lateRegistered = registered;
+            if (registered)
+            {
+                _ticks.AddLateTickable(this);
+            }
+            else
+            {
+                _ticks.RemoveLateTickable(this);
+            }
         }
 
         private void SetRegistered(bool registered)

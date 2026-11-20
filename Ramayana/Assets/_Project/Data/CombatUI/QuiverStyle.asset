@@ -12,17 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f138449f65594f478154e9556d2215c, type: 3}
   m_Name: QuiverStyle
   m_EditorClassIdentifier: JourneyToLanka.CombatUI::JourneyToLanka.CombatUI.QuiverStyleSO
-  _offset: {x: 40, y: 418}
+  _anchor: {x: 0, y: 1}
+  _offset: {x: 40, y: -40}
   _padding: 10
-  _captionGap: 4
-  _slotSize: 72
+  _railHeight: 32
+  _railColor: {r: 0.1, g: 0.075, b: 0.055, a: 0.92}
+  _railTrimColor: {r: 0.95, g: 0.78, b: 0.42, a: 0.85}
+  _railTrimWidth: 3
+  _slotSize: 64
   _slotSpacing: 12
   _slotSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
   _slotColor: {r: 0.16, g: 0.13, b: 0.1, a: 0.95}
   _emptySlotColor: {r: 0.16, g: 0.13, b: 0.1, a: 0.45}
+  _socketRimColor: {r: 0.95, g: 0.78, b: 0.42, a: 0.55}
   _arrowIconFraction: 0.72
   _fallbackArrowSprite: {fileID: 21300000, guid: 9f51e97bcfe726241b3fafe552044888, type: 3}
   _inactiveAlpha: 0.55
+  _showCaption: 1
+  _captionFontSize: 18
+  _captionColor: {r: 0.95, g: 0.82, b: 0.55, a: 0.9}
+  _captionGap: 4
   _highlightColor: {r: 1, g: 0.85, b: 0.45, a: 0.9}
   _highlightThickness: 5
   _punchScale: 0.12
@@ -30,7 +39,7 @@ MonoBehaviour:
   _showKeyHints: 1
   _keyHintFontSize: 16
   _keyHintColor: {r: 0.96, g: 0.91, b: 0.8, a: 0.8}
-  _keyHintOffset: {x: 4, y: -2}
+  _keyHintGap: 4
   _tooltipWidth: 340
   _tooltipOffset: {x: 0, y: 10}
   _tooltipPadding: 12

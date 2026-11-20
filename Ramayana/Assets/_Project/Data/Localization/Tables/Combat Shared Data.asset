@@ -587,6 +587,18 @@ MonoBehaviour:
     m_Key: chain.ring.hint
     m_Metadata:
       m_Items: []
+  - m_Id: 13013809634656256
+    m_Key: keyword.kavach
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13013810171527168
+    m_Key: keyword.prana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13013810171527169
+    m_Key: keyword.exhaust
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

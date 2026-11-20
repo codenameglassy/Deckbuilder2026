@@ -1,8 +1,9 @@
-// Every value for the Prana orb row on the combat HUD: the Prana Orb shader's material, orb size, gap and cap, the
-// orb's colours and shape, how it swirls and pulses, how orbs drain when spent and light up when refilled (durations,
-// stagger, flash), how quickly a card's cost preview fades in and out, the shake and red flash when a card is
-// rejected for lack of Prana, and the panel's padding and number size. Referenced by the Combat HUD style.
-// Read-only at runtime; in the Editor, changing a value raises Changed so the orbs re-apply it live in Play mode.
+// Every value for Prana on the combat HUD: the Prana Orb shader's material, orb size and cap, the arc the orbs sit on
+// around the medallion (radius, spacing, direction), the medallion's size, gold ring and face, the "current/per turn"
+// number in it, the orb's colours and shape, how it swirls and pulses, how orbs drain when spent and light up when
+// refilled (durations, stagger, flash), how quickly a card's cost preview fades in and out, and the shake and red flash
+// when a card is rejected for lack of Prana. Referenced by the Combat HUD style. Read-only at runtime; in the Editor,
+// changing a value raises Changed so the orbs re-apply it live in Play mode.
 using System;
 using UnityEngine;
 
@@ -16,10 +17,21 @@ namespace JourneyToLanka.CombatUI
 
         [Header("Layout (canvas units)")]
         [SerializeField, Min(4f)] private float _orbDiameter = 34f;
-        [SerializeField] private float _orbGap = 8f;
         [SerializeField, Range(1, 20)] private int _maxOrbs = 10;
-        [SerializeField, Min(0f)] private float _panelPadding = 12f;
+        [Tooltip("Distance from the medallion's centre to each orb's centre.")]
+        [SerializeField, Min(0f)] private float _arcRadius = 70f;
+        [Tooltip("Angle between neighbouring orbs. It shrinks on its own when bonus orbs would wrap past a full circle.")]
+        [SerializeField, Range(5f, 90f)] private float _arcStepDegrees = 38f;
+        [Tooltip("Direction of the middle of the arc: 0 points right (toward the hand), 90 up.")]
+        [SerializeField, Range(-180f, 180f)] private float _arcCentreDegrees;
+
+        [Header("Medallion")]
+        [SerializeField, Min(8f)] private float _medallionDiameter = 84f;
+        [SerializeField, Min(0f)] private float _medallionRingWidth = 4f;
+        [SerializeField] private Color _medallionRingColor = new Color(0.95f, 0.78f, 0.42f, 1f);
+        [SerializeField] private Color _medallionFaceColor = new Color(0.08f, 0.06f, 0.045f, 0.95f);
         [SerializeField, Min(1f)] private float _valueFontSize = 26f;
+        [SerializeField] private Color _valueColor = new Color(0.96f, 0.91f, 0.8f);
 
         [Header("Look")]
         [SerializeField] private Color _coreColor = new Color(1f, 0.96f, 0.8f);
@@ -53,10 +65,17 @@ namespace JourneyToLanka.CombatUI
         public Material OrbMaterial => _orbMaterial;
 
         public float OrbDiameter => _orbDiameter;
-        public float OrbGap => _orbGap;
         public int MaxOrbs => _maxOrbs;
-        public float PanelPadding => _panelPadding;
+        public float ArcRadius => _arcRadius;
+        public float ArcStepDegrees => _arcStepDegrees;
+        public float ArcCentreDegrees => _arcCentreDegrees;
+
+        public float MedallionDiameter => _medallionDiameter;
+        public float MedallionRingWidth => _medallionRingWidth;
+        public Color MedallionRingColor => _medallionRingColor;
+        public Color MedallionFaceColor => _medallionFaceColor;
         public float ValueFontSize => _valueFontSize;
+        public Color ValueColor => _valueColor;
 
         public Color CoreColor => _coreColor;
         public Color GlowColor => _glowColor;

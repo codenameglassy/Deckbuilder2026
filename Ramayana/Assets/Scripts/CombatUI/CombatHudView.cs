@@ -1,36 +1,36 @@
-// The combat HUD: the hand of pooled cards, Prana, draw and discard counts, the threat panel, the End Turn button,
-// card motion and zoom, the rejected-card message, the targeting line, the turn banner, the result banner, the pile
-// viewer and the enemy info panel. It builds its hierarchy in code under seven child canvases split by update rate
-// (the hand changes on every play, the HUD panels on events, the enemy info panel follows its enemy, card flights,
-// zoom and the message animate every frame while shown, as do the targeting line and the turn banner; the pile viewer
-// is a modal overlay on top), applies every visual value from its styles (the Combat HUD, Combat Inspect and Targeting
-// Line styles, and the card type visuals the HUD style lists), and re-applies them live in the Editor. The targeting line and the enemy info panel project enemies
-// through the combat camera anchor. It only presents and
-// forwards input to CombatFlow; it holds no combat rules. The threat panel shows during the player's turn while an
-// attack is coming, and refreshes when an intent, Rama's Kavach or health (lost or healed), or an enemy's life changes.
-// It finds the fight through the CombatController anchor when the CombatStarted channel fires, and hands the
-// controller's enemy target views to the targeting presenter for select-then-confirm card targeting.
-// Cards are played by clicking or by dragging (HandInputSurface over the hand, HandDragController behind it). End Turn
-// glows gently once nothing in the hand is playable during the player's turn (EndTurnNudge). Prana shows as a row of
-// orbs (PranaPanel) that drain and refill with the pool, preview the cost of the card being considered, and shake
-// when a card is rejected for lack of Prana. The card being considered is also previewed on the fighters' health
-// bars (OutcomePreviewPresenter), and the threat panel shows the threat as it would be after it.
-// End Turn also responds to E on the keyboard and the north face button on a gamepad. The draw pile opens in the
-// viewer from its panel, Q or the left shoulder; the discard pile from its panel, R or the right shoulder. The draw
-// pile is shown sorted by cost then name so it never reveals the draw order; the discard pile shows newest first.
-// Holding Tab or clicking in the left stick shows Rama's info panel (health, Kavach and his statuses explained) while
-// held; hovering any fighter shows theirs.
-// Rama's special arrows sit in the quiver panel (QuiverPanel) in the left column. During the player's turn an arrow
-// fires from a click on its slot, from the submit button on a selected slot (move up from the hand to reach the
-// quiver), or from the 1 to 3 keys. An arrow that needs an enemy starts arrow targeting from its slot when more than
-// one enemy lives (the same highlight, keys and line as cards); otherwise it fires at once, at the only living enemy
-// or untargeted. Cancelling arrow targeting puts the selection back on the slot. The arrow being considered is
-// previewed on the fighters like a card (it takes priority), with its name and live description above the quiver.
-// The combo chain bar (ChainBarPanel) sits above the hand on its own child canvas: it follows the model's ComboChain
-// during the fight and hides once the fight is over.
-// While the viewer is open the hand, targeting, the quiver and End Turn are blocked. While a special arrow is in
-// flight (CombatFlow.CanPlayerAct is false) presses on the quiver, the arrow keys and End Turn are ignored; nothing
-// dims, since the flight is too short for that to read as anything but a flicker.
+// The combat HUD: the hand of pooled cards, Prana, the draw and discard piles as small stacks of card backs with their
+// counts (PileStackView), the incoming damage marked on Rama's health bar (ThreatPresenter), the End Turn button, card
+// motion, the rejected-card message, the targeting line, the turn banner, the result banner, the pile viewer and the
+// enemy info panel. It builds its hierarchy in code under seven child canvases split by update rate (the hand changes
+// on every play, the HUD panels on events, the enemy info panel follows its enemy, card flights and the message animate
+// every frame while shown, as do the targeting line and the turn banner; the pile viewer is a modal overlay on top),
+// applies every visual value from its styles (the Combat HUD, Combat Inspect and Targeting Line styles, and the card
+// type visuals the HUD style lists), and re-applies them live in the Editor. The targeting line and the enemy info
+// panel project enemies through the combat camera anchor. It only presents and forwards input to CombatFlow; it holds
+// no combat rules. The incoming-damage mark shows during the player's turn while an attack is coming, and refreshes
+// when an intent, Rama's Kavach or health (lost or healed), or an enemy's life changes. It finds the fight through the
+// CombatController anchor when the CombatStarted channel fires, and hands the controller's enemy target views to the
+// targeting presenter for select-then-confirm card targeting. Cards are played by clicking or by dragging
+// (HandInputSurface over the hand, HandDragController behind it). End Turn glows gently once nothing in the hand is
+// playable during the player's turn (EndTurnNudge). Prana shows as a medallion ringed by orbs (PranaPanel) that drain
+// and refill with the pool, preview the cost of the card being considered, and shake when a card is rejected for lack
+// of Prana. The card being considered is also previewed on the fighters' health bars (OutcomePreviewPresenter), and
+// Rama's bar marks the threat as it would be after it. End Turn also responds to E on the keyboard and the north face
+// button on a gamepad. The draw pile opens in the viewer from its stack, Q or the left shoulder; the discard pile from
+// its panel, R or the right shoulder. The draw pile is shown sorted by cost then name so it never reveals the draw
+// order; the discard pile shows newest first. Holding Tab or clicking in the left stick shows Rama's info panel
+// (health, Kavach and his statuses explained) while held; hovering any fighter shows theirs. Rama's special arrows sit
+// in the quiver rail (QuiverPanel), pinned top-left by its style. The draw pile and Prana stack on one centre line in
+// the left column (LayoutLeftColumn), re-stacked when Prana's height changes. During the player's turn an arrow fires
+// from a click on its slot, from the submit button on a selected slot (move up from the hand to reach the quiver), or
+// from the 1 to 3 keys. An arrow that needs an enemy starts arrow targeting from its slot when more than one enemy
+// lives (the same highlight, keys and line as cards); otherwise it fires at once, at the only living enemy or
+// untargeted. Cancelling arrow targeting puts the selection back on the slot. The arrow being considered is previewed
+// on the fighters like a card (it takes priority), with its name and live description above the quiver. The combo chain
+// bar (ChainBarPanel) sits above the hand on its own child canvas: it follows the model's ComboChain during the fight
+// and hides once the fight is over. While the viewer is open the hand, targeting, the quiver and End Turn are blocked.
+// While a special arrow is in flight (CombatFlow.CanPlayerAct is false) presses on the quiver, the arrow keys and End
+// Turn are ignored; nothing dims, since the flight is too short for that to read as anything but a flicker.
 using System;
 using System.Collections.Generic;
 using JourneyToLanka.Combat.Arrows;
@@ -76,8 +76,8 @@ namespace JourneyToLanka.CombatUI
         private PranaPanel _prana;
         private QuiverPanel _quiver;
         private ChainBarPanel _chainBar;
-        private StatPanel _drawPile;
-        private StatPanel _discardPile;
+        private PileStackView _drawPile;
+        private PileStackView _discardPile;
         private Button _endTurn;
         private Image _endTurnImage;
         private TextMeshProUGUI _endTurnLabel;
@@ -86,11 +86,11 @@ namespace JourneyToLanka.CombatUI
         private Image _banner;
         private TextMeshProUGUI _bannerLabel;
         private LocalizedText _bannerText;
-        private ThreatPanel _threat;
+        private readonly ThreatPresenter _threat = new ThreatPresenter();
         private TurnBanner _turnBanner;
         private CardMotionPresenter _motion;
         private HudToast _toast;
-        private CardZoomPresenter _zoom;
+        private HandFocusTracker _focus;
         private PileViewer _pileViewer;
         private EnemyInfoPresenter _enemyInfo;
         private TargetingLinePresenter _targetingLine;
@@ -305,13 +305,12 @@ namespace JourneyToLanka.CombatUI
 
             _enemyInfo?.Dispose();
             _targetingLine?.Dispose();
-            _zoom?.Dispose();
+            _focus?.Dispose();
             _motion?.Dispose();
             _toast?.Dispose();
             _targeting?.Dispose();
             _endTurnText?.Clear();
             _bannerText?.Clear();
-            _threat?.Dispose();
             _turnBanner?.Dispose();
             _prana?.Dispose();
             _drawPile?.Dispose();
@@ -327,10 +326,10 @@ namespace JourneyToLanka.CombatUI
 
             RectTransform hudCanvas = CreateChildCanvas("HudCanvas", true);
             _prana = PranaPanel.Create(hudCanvas);
+            _prana.ColumnChanged += LayoutLeftColumn;
             _quiver = QuiverPanel.Create(hudCanvas);
-            _drawPile = StatPanel.Create("DrawPile", hudCanvas, LocalizationTableNames.UI, CombatUIKeys.DrawPile);
-            _discardPile = StatPanel.Create("DiscardPile", hudCanvas, LocalizationTableNames.UI, CombatUIKeys.DiscardPile);
-            _threat = ThreatPanel.Create(hudCanvas);
+            _drawPile = PileStackView.Create("DrawPile", hudCanvas, LocalizationTableNames.UI, CombatUIKeys.DrawPile);
+            _discardPile = PileStackView.Create("DiscardPile", hudCanvas, LocalizationTableNames.UI, CombatUIKeys.DiscardPile);
 
             RectTransform chainCanvas = CreateChildCanvas("ChainBarCanvas", false);
             _chainBar = ChainBarPanel.Create(chainCanvas);
@@ -373,12 +372,12 @@ namespace JourneyToLanka.CombatUI
             _discardPile.EnableButton(ToggleDiscardPile);
 
             _motion = new CardMotionPresenter(template, motionCanvas, _drawPile, _discardPile);
-            _zoom = new CardZoomPresenter(template, motionCanvas);
+            _focus = new HandFocusTracker();
             _toast = HudToast.Create(motionCanvas);
             _enemyInfo = EnemyInfoPresenter.Create(enemyInfoCanvas);
             _targeting = new TargetingPresenter();
             _hand = new HandPresenter(template, _handArea, _handInput, handGroup, _endTurn, _targeting, _targetingLine,
-                _motion, _zoom);
+                _motion, _focus);
             _hand.PlayRejected += HandlePlayRejected;
             _hand.PlayableChanged += RefreshEndTurnNudge;
             _hand.ConsideredCardChanged += HandleConsideredCardChanged;
@@ -419,11 +418,13 @@ namespace JourneyToLanka.CombatUI
             UIBuildUtility.Place(_handArea, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f),
                 new Vector2(0f, _style.HandBottomMargin), new Vector2(_style.HandMaxWidth, _style.CardSize.y));
 
-            _prana.ApplyStyle(_style, _style.PranaOrbs, _style.PranaOffset);
+            _prana.ApplyStyle(_style, _style.PranaOrbs);
             _quiver.ApplyStyle(_style, _style.Quiver);
             _chainBar.ApplyStyle(_style, _style.ChainBar);
-            _drawPile.ApplyStyle(_style, Vector2.zero, _style.DrawPileOffset);
-            _discardPile.ApplyStyle(_style, new Vector2(1f, 0f), _style.DiscardPileOffset);
+            _drawPile.ApplyStyle(_style, Vector2.zero,
+                new Vector2(_style.LeftColumnCentreX - _style.PileCardSize.x * 0.5f, _style.LeftColumnBottom), Color.white);
+            LayoutLeftColumn();
+            _discardPile.ApplyStyle(_style, new Vector2(1f, 0f), _style.DiscardPileOffset, _style.DiscardPileTint);
 
             UIBuildUtility.Place(_endTurnImage.rectTransform, new Vector2(1f, 0f), new Vector2(1f, 0f),
                 _style.EndTurnOffset, _style.EndTurnSize);
@@ -437,10 +438,8 @@ namespace JourneyToLanka.CombatUI
             UIBuildUtility.StyleImage(_banner, null, _style.BannerColor);
             UIBuildUtility.StyleText(_bannerLabel, _style.Font, _style.BannerFontSize, _style.VictoryTextColor);
 
-            _threat.ApplyStyle(_style);
             _turnBanner.ApplyStyle(_style);
             _motion.SetStyle(_style);
-            _zoom.SetStyles(_style, _inspectStyle);
             _pileViewer.ApplyStyle(_style, _inspectStyle);
             _enemyInfo.ApplyStyle(_style, _inspectStyle);
             _targetingLine.SetStyle(_targetingLineStyle, _cameraAnchor);
@@ -466,6 +465,11 @@ namespace JourneyToLanka.CombatUI
             for (int i = 0; i < _style.CardTypeVisualsCount; i++)
             {
                 SetVisualsListening(_style.GetCardTypeVisuals(i), listening);
+            }
+
+            for (int i = 0; i < _style.CardRarityVisualsCount; i++)
+            {
+                SetRarityListening(_style.GetCardRarityVisuals(i), listening);
             }
         }
 
@@ -543,6 +547,20 @@ namespace JourneyToLanka.CombatUI
             }
         }
 
+        private void SetRarityListening(CardRarityVisualsSO visuals, bool listening)
+        {
+            if (visuals == null)
+            {
+                return;
+            }
+
+            visuals.Changed -= HandleStyleChanged;
+            if (listening)
+            {
+                visuals.Changed += HandleStyleChanged;
+            }
+        }
+
         private void HandleCombatStarted()
         {
             TryAttachToRunningCombat();
@@ -587,6 +605,7 @@ namespace JourneyToLanka.CombatUI
             _quiver.Attach(model, _targeting);
             _chainBar.Attach(model.Chain);
             _enemyInfo.Attach(flow, controller, _targeting, _cameraAnchor);
+            _threat.Attach(controller);
             _targetingLine.Attach(_targeting, controller);
             _outcomes.Attach(flow, controller, _targeting);
 
@@ -618,8 +637,8 @@ namespace JourneyToLanka.CombatUI
             _pileViewer.Close();
             _outcomes.Detach();
             _enemyInfo.Detach();
+            _threat.Detach();
             _targetingLine.Detach();
-            _zoom.HideNow();
             _targeting.Detach();
             _quiver.Detach();
             _chainBar.Detach();
@@ -759,7 +778,6 @@ namespace JourneyToLanka.CombatUI
             if (open)
             {
                 _targeting.Abort();
-                _zoom.HideNow();
             }
 
             _hand.SetBlocked(open);
@@ -827,6 +845,19 @@ namespace JourneyToLanka.CombatUI
             RefreshPrana(false);
             RefreshPiles();
             RefreshPhase();
+        }
+
+        private void LayoutLeftColumn()
+        {
+            if (_style == null || _prana == null || _drawPile == null)
+            {
+                return;
+            }
+
+            float centreX = _style.LeftColumnCentreX;
+            float gap = _style.LeftColumnGap;
+            float y = _style.LeftColumnBottom + _drawPile.Height + gap;
+            _prana.PlaceAt(new Vector2(centreX, y + _prana.ColumnHalfHeight));
         }
 
         private void RefreshPrana(bool animate)

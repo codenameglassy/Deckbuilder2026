@@ -1,9 +1,9 @@
-// Every visual value for the combat inspect widgets: the card zoom (delay, scale, lift, timing), the pile viewer
-// (backdrop, panel, title and count, grid, empty text, Close button, fade) and the fighter info panel (how far above
-// the fighter it sits, its screen offset and edge margin, size, colours, text sizes, and the size and colour of each
-// status's description). Text uses the Combat HUD style's font so every combat widget shares one typeface. Sprites
-// are optional; without one an element draws as a flat colour. Read-only at runtime. In the Editor, changing a value
-// raises Changed so the widgets re-apply it in Play mode without rebuilding.
+// Every visual value for the combat inspect widgets: the pile viewer (backdrop, panel, title and count, grid, empty
+// text, Close button, fade) and the fighter info panel (how far above the fighter it sits, its screen offset and edge
+// margin, size, colours, text sizes, and the size and colour of each status's description). Text uses the Combat HUD
+// style's font so every combat widget shares one typeface. Sprites are optional; without one an element draws as a flat
+// colour. Read-only at runtime. In the Editor, changing a value raises Changed so the widgets re-apply it in Play mode
+// without rebuilding.
 using System;
 using UnityEngine;
 
@@ -12,13 +12,6 @@ namespace JourneyToLanka.CombatUI
     [CreateAssetMenu(menuName = "Journey to Lanka/UI/Combat Inspect Style", fileName = "CombatInspectStyle")]
     public sealed class CombatInspectStyleSO : ScriptableObject
     {
-        [Header("Card Zoom")]
-        [SerializeField, Min(0f)] private float _zoomDelay = 0.08f;
-        [SerializeField, Min(1f)] private float _zoomScale = 1.45f;
-        [SerializeField] private float _zoomLift = 16f;
-        [SerializeField, Min(0.01f)] private float _zoomDuration = 0.12f;
-        [SerializeField, Min(0f)] private float _zoomScreenMargin = 24f;
-
         [Header("Pile Viewer")]
         [SerializeField] private Color _viewerBackdropColor = new Color(0f, 0f, 0f, 0.75f);
         [SerializeField] private Sprite _viewerPanelSprite;
@@ -64,12 +57,6 @@ namespace JourneyToLanka.CombatUI
         [SerializeField] private Color _infoStatusDescriptionColor = new Color(0.82f, 0.78f, 0.7f);
 
         public event Action Changed;
-
-        public float ZoomDelay => _zoomDelay;
-        public float ZoomScale => _zoomScale;
-        public float ZoomLift => _zoomLift;
-        public float ZoomDuration => _zoomDuration;
-        public float ZoomScreenMargin => _zoomScreenMargin;
 
         public Color ViewerBackdropColor => _viewerBackdropColor;
         public Sprite ViewerPanelSprite => _viewerPanelSprite;
